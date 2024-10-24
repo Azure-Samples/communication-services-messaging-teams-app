@@ -396,3 +396,7 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+Server/dist/server.js
+# Don't accidentally commit sensitive config
+Server/appsettings.json
