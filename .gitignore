@@ -396,18 +396,3 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
-
-# TeamsFx files
-TeamsApp/env/.env.*.user
-TeamsApp/env/.env.local
-TeamsApp/.DS_Store
-TeamsApp/build
-TeamsApp/appPackage/build
-TeamsApp/.deployment
-TeamsApp/.localConfigs
-
-# Dev tool directories
-/devTools/
-
-# Don't accidentally commit sensitive config
-Server/appsettings.json
