@@ -8,8 +8,6 @@ import {
   TabValue,
 } from "@fluentui/react-components";
 import "./Welcome.css";
-import { EditCode } from "./EditCode";
-import { AzureFunctions } from "./AzureFunctions";
 import { CurrentUser } from "./CurrentUser";
 import { useData } from "@microsoft/teamsfx-react";
 import { Deploy } from "./Deploy";
@@ -17,9 +15,8 @@ import { Publish } from "./Publish";
 import { TeamsFxContext } from "../Context";
 import { app } from "@microsoft/teams-js";
 
-export function Welcome(props: { showFunction?: boolean; environment?: string }) {
-  const { showFunction, environment } = {
-    showFunction: true,
+export function Welcome(props: {environment?: string }) {
+  const { environment } = {
     environment: window.location.hostname === "localhost" ? "local" : "azure",
     ...props,
   };
@@ -70,9 +67,7 @@ export function Welcome(props: { showFunction?: boolean; environment?: string })
           <div>
             {selectedValue === "local" && (
               <div>
-                <EditCode showFunction={showFunction} />
                 <CurrentUser userName={userName} />
-                {showFunction && <AzureFunctions />}
               </div>
             )}
             {selectedValue === "azure" && (
