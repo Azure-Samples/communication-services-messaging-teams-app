@@ -194,10 +194,6 @@ export const ConfigurationScreen = ((props: ConfigurationScreenProps): JSX.Eleme
     return <Spinner label={spinnerLabel} ariaLive="assertive" labelPosition="top" />;
   };
 
-  const richTextEditorToggle = (): JSX.Element => {
-    return <></>;
-  };
-
   const displayJoinChatArea = (): JSX.Element => {
     return (
       <Stack
@@ -250,7 +246,6 @@ export const ConfigurationScreen = ((props: ConfigurationScreenProps): JSX.Eleme
             setEmptyWarning={setEmptyWarning}
             validateName={validateName}
             isEmpty={emptyWarning} />
-          {richTextEditorToggle()}
           <PrimaryButton
             disabled={disableJoinChatButton}
             className={buttonStyle}

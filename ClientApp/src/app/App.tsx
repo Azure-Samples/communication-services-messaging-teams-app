@@ -21,8 +21,16 @@ const ERROR_PAGE_TITLE_REMOVED = 'You have been removed from the chat.';
 
 const webAppTitle = document.title;
 
+enum Page {
+  Home = 'home',
+  Configuration = 'configuration',
+  Chat = 'chat',
+  End = 'end',
+  Removed = 'removed'
+}
+
 export const App = (): JSX.Element => {
-  const [page, setPage] = useState('home');
+  const [page, setPage] = useState(Page.Home);
   const [token, setToken] = useState('');
   const [userId, setUserId] = useState('');
   const [displayName, setDisplayName] = useState('');
@@ -31,16 +39,16 @@ export const App = (): JSX.Element => {
 
   const renderPage = (): JSX.Element => {
     switch (page) {
-      case 'home':{
+      case Page.Home:{
           document.title = `home - ${webAppTitle}`;
           return <HomeScreen />;
         }
-      case 'configuration':{
+      case Page.Configuration:{
           document.title = `configuration - ${webAppTitle}`;
           return (
             <ConfigurationScreen
               joinChatHandler={() => {
-                setPage('chat');
+                setPage(Page.Chat);
               }}
               setToken={setToken}
               setUserId={setUserId}
@@ -48,7 +56,7 @@ export const App = (): JSX.Element => {
               setThreadId={setThreadId}
               setEndpointUrl={setEndpointUrl} />);
         }
-      case 'chat':{
+      case Page.Chat:{
           document.title = `chat - ${webAppTitle}`;
           if (token && userId && displayName && threadId && endpointUrl) {
             return (
@@ -60,21 +68,21 @@ export const App = (): JSX.Element => {
                 threadId={threadId}
                 endChatHandler={(isParticipantRemoved) => {
                   if (isParticipantRemoved) {
-                    setPage('removed');
+                    setPage(Page.Removed);
                   } else {
-                    setPage('end');
+                    setPage(Page.End);
                   }
                 }} />);
           }
 
           return <Spinner label={'Loading...'} ariaLive="assertive" labelPosition="top" />;
         }
-      case 'end':{
+      case Page.End:{
           document.title = `end chat - ${webAppTitle}`;
           return (
             <EndScreen
               rejoinHandler={() => {
-                setPage('chat'); // use stored information to attempt to rejoin the chat thread
+                setPage(Page.Chat); // use stored information to attempt to rejoin the chat thread
               }}
               homeHandler={() => {
                 window.location.href = window.location.origin;
@@ -82,7 +90,7 @@ export const App = (): JSX.Element => {
               userId={userId}
               displayName={displayName} />);
         }
-      case 'removed':{
+      case Page.Removed:{
           document.title = `removed - ${webAppTitle}`;
           return (
             <ErrorScreen
@@ -98,7 +106,7 @@ export const App = (): JSX.Element => {
   };
 
   if (getExistingThreadIdFromURL() && page === 'home') {
-    setPage('configuration');
+    setPage(Page.Configuration);
   }
 
   return renderPage();
