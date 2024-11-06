@@ -30,7 +30,7 @@ router.post('/:threadId', async function (req, res, next) {
 
   // create a user from the adminUserId and create a credential around that
   const credential = new AzureCommunicationTokenCredential({
-    tokenRefresher: async () => (await getToken(getAdminUser(), ['chat', 'voip'])).token,
+    tokenRefresher: async () => (await getToken(getAdminUser(), ['chat'])).token,
     refreshProactively: true
   });
 
