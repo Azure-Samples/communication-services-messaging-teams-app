@@ -27,7 +27,7 @@ router.post('/:id', async function (req, res, next) {
   const user: CommunicationUserIdentifier = {
     communicationUserId: req.params['id'] as string
   };
-  const token = await getToken(user, ['chat', 'voip']);
+  const token = await getToken(user, ['chat']);
   const userToken: CommunicationUserToken = {
     user,
     ...token

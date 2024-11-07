@@ -23,17 +23,17 @@ beforeAll(() => {
 });
 
 describe('app route tests', () => {
-  test('/token should return a token with chat and voip scopes with GET and POST requests', async () => {
+  test('/token should return a token with chat scopes with GET and POST requests', async () => {
     const getResponse = await request(app).get('/token');
     expect(getResponse.status).toEqual(200);
     expect(getResponse.text).toEqual(JSON.stringify(mockUserToken));
-    expect(createUserAndTokenSpy).toHaveBeenLastCalledWith(['chat', 'voip']);
+    expect(createUserAndTokenSpy).toHaveBeenLastCalledWith(['chat']);
     createUserAndTokenSpy.mockClear();
 
     const postResponse = await request(app).post('/token');
     expect(postResponse.status).toEqual(200);
     expect(postResponse.text).toEqual(JSON.stringify(mockUserToken));
-    expect(createUserAndTokenSpy).toHaveBeenLastCalledWith(['chat', 'voip']);
+    expect(createUserAndTokenSpy).toHaveBeenLastCalledWith(['chat']);
     createUserAndTokenSpy.mockClear();
   });
 

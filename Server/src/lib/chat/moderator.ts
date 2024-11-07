@@ -10,7 +10,7 @@ export const createThread = async (topicName?: string): Promise<string> => {
   const user = await getAdminUser();
 
   const credential = new AzureCommunicationTokenCredential({
-    tokenRefresher: async () => (await getToken(user, ['chat', 'voip'])).token,
+    tokenRefresher: async () => (await getToken(user, ['chat'])).token,
     refreshProactively: true
   });
   const chatClient = new ChatClient(getEndpoint(), credential);
