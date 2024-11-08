@@ -15,7 +15,6 @@ import userConfig from './routes/userConfig';
 import createThread from './routes/createThread';
 import addUser from './routes/addUser';
 import uploadToAzureBlobStorage from './routes/uploadToAzureBlobStorage';
-import assignAgentUserToThread from './routes/assignAgentUserToThread';
 
 const app = express();
 
@@ -74,12 +73,6 @@ app.use('/userConfig', cors(), userConfig);
  * purpose: Get tokens and endpoints for uploading logs to Azure Blob Storage
  */
 app.use('/uploadToAzureBlobStorage', cors(), uploadToAzureBlobStorage);
-
-/**
- * route: /assignAgentUserToThread
- * purpose: assign an customer support agent to the chat thread
- */
-app.use('/assignAgentUserToThread', cors(), assignAgentUserToThread);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

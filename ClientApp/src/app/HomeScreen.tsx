@@ -40,7 +40,6 @@ import { getExistingThreadIdFromURL } from './utils/getParametersFromURL';
 import { createThread } from './utils/createThread';
 import { ThemeSelector } from './theming/ThemeSelector';
 import { useSwitchableFluentTheme } from './theming/SwitchableFluentThemeProvider';
-import { assignAgentUserToThread } from './utils/assignAgentUserToThread';
 
 const imageStyleProps: IImageStyles = {
   image: {
@@ -90,12 +89,6 @@ export const HomeScreen = (): JSX.Element => {
       console.error('Failed to create a thread, returned threadId is undefined or empty string');
       return;
     } 
-
-    const result = await assignAgentUserToThread(threadId);
-    if (!result) {
-      console.error('Failed to assign agent user to thread');
-      return;
-    }
 
     window.location.href += `?threadId=${threadId}`;
   };

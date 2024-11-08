@@ -3,7 +3,7 @@
 
 import { AzureCommunicationTokenCredential } from '@azure/communication-common';
 import { ChatClient, CreateChatThreadOptions, CreateChatThreadRequest } from '@azure/communication-chat';
-import { getEndpoint } from '../envHelper';
+import { getAgentUserList, getEndpoint } from '../envHelper';
 import { getAdminUser, getToken } from '../identityClient';
 
 export const createThread = async (topicName?: string): Promise<string> => {  
@@ -18,12 +18,20 @@ export const createThread = async (topicName?: string): Promise<string> => {
   const request: CreateChatThreadRequest = {
     topic: topicName ?? 'Your Chat sample'
   };
+
+  // Select an agent user to add to the chat thread
+  const agentUser = getAgentUser();
+
   const options: CreateChatThreadOptions = {
     participants: [
       {
         id: {
           communicationUserId: user.communicationUserId
         }
+      },
+      {
+        id: { communicationUserId: agentUser.ACSUserId },
+        displayName: agentUser.DisplayName
       }
     ]
   };
@@ -36,3 +44,12 @@ export const createThread = async (topicName?: string): Promise<string> => {
 
   return threadID;
 };
+
+const getAgentUser = () => {
+  // Select a random agent user to add to the chat thread
+  // This is a simple implementation. In a production scenario, you would want to implement a more sophisticated way to select an agent user.
+  const agentUserList = getAgentUserList();
+  const agentUserIndex = Math.floor(Math.random() * agentUserList.length);  
+  const agentUser = agentUserList[agentUserIndex];
+  return agentUser;
+}
