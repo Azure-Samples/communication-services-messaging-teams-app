@@ -11,7 +11,7 @@
   "EndpointUrl": "REPLACE_WITH_ENDPOINT_URL",
   "AdminUserId": "REPLACE_WITH_ADMIN_USER_ID",
   "AzureBlobStorageConnectionString": "REPLACE_WITH_BLOB_STORAGE_CONNECTION_STRING",
-  "AgentUserList": [
+  "AgentUsers": [
     {
       "TeamsUserId": "REPLACE_WITH_TEAMS_USER_ID_OF_THE_AGENT",
       "ACSUserId": "REPLACE_WITH_ACS_USER_ID_OF_THE_AGENT",

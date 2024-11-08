@@ -4,12 +4,19 @@
 import * as fs from 'fs';
 import * as path from 'path';
 const appSettingsPath = path.join(__dirname, '../../appsettings.json');
+
+export interface AgentUserType {
+  TeamsUserId: string;
+  ACSUserId: string;
+  DisplayName: string;
+}
+
 let appSettings: {
   ResourceConnectionString: string;
   EndpointUrl: string;
   AdminUserId: string;
   AzureBlobStorageConnectionString: string;
-  AgentUserList: { [key: string]: string }[]
+  AgentUsers: AgentUserType[]
 };
 if (
   !(
@@ -68,12 +75,12 @@ export const getAzureBlobStorageConnectionString = (): string => {
   return accountName;
 };
 
-export const getAgentUserList = (): { [key: string]: string }[] => {
-  const agentUserList = process.env['AgentUserList'] || appSettings.AgentUserList;
+export const getAgentUsers = (): AgentUserType[] => {
+  const AgentUsers = process.env['AgentUsers'] ? JSON.parse(process.env['AgentUsers']) : appSettings.AgentUsers;
 
-  if (!agentUserList) {
+  if (!AgentUsers) {
     throw new Error('No Agent user list provided');
   }  
 
-  return agentUserList as { [key: string]: string }[];
+  return AgentUsers;
 };
