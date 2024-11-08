@@ -9,6 +9,7 @@ let appSettings: {
   EndpointUrl: string;
   AdminUserId: string;
   AzureBlobStorageConnectionString: string;
+  AgentUserList: { [key: string]: string }[]
 };
 if (
   !(
@@ -65,4 +66,14 @@ export const getAzureBlobStorageConnectionString = (): string => {
   }
 
   return accountName;
+};
+
+export const getAgentUserList = (): { [key: string]: string }[] => {
+  const agentUserList = process.env['AgentUserList'] || appSettings.AgentUserList;
+
+  if (!agentUserList) {
+    throw new Error('No Agent user list provided');
+  }  
+
+  return agentUserList as { [key: string]: string }[];
 };

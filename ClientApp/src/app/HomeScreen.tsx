@@ -40,6 +40,7 @@ import { getExistingThreadIdFromURL } from './utils/getParametersFromURL';
 import { createThread } from './utils/createThread';
 import { ThemeSelector } from './theming/ThemeSelector';
 import { useSwitchableFluentTheme } from './theming/SwitchableFluentThemeProvider';
+import { assignAgentUserToThread } from './utils/assignAgentUserToThread';
 
 const imageStyleProps: IImageStyles = {
   image: {
@@ -76,11 +77,11 @@ export const HomeScreen = (): JSX.Element => {
   const imageProps = { src: currentTheme.name === 'Light' ? heroSVG.toString() : heroDarkModeSVG.toString() };
 
   const onCreateThread = async (): Promise<void> => {
-    const exisitedThreadId = getExistingThreadIdFromURL();
+    const existedThreadId = getExistingThreadIdFromURL();
     setHomeScreenState(HOMESCREEN_SHOWING_LOADING_SPINNER_CREATE_THREAD);
 
-    if (exisitedThreadId && exisitedThreadId.length > 0) {
-      window.location.href += `?threadId=${exisitedThreadId}`;
+    if (existedThreadId && existedThreadId.length > 0) {
+      window.location.href += `?threadId=${existedThreadId}`;
       return;
     }
 
@@ -88,9 +89,15 @@ export const HomeScreen = (): JSX.Element => {
     if (!threadId) {
       console.error('Failed to create a thread, returned threadId is undefined or empty string');
       return;
-    } else {
-      window.location.href += `?threadId=${threadId}`;
+    } 
+
+    const result = await assignAgentUserToThread(threadId);
+    if (!result) {
+      console.error('Failed to assign agent user to thread');
+      return;
     }
+
+    window.location.href += `?threadId=${threadId}`;
   };
 
   const displayLoadingSpinner = (spinnerLabel: string): JSX.Element => {
