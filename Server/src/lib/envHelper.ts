@@ -5,7 +5,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 const appSettingsPath = path.join(__dirname, '../../appsettings.json');
 
-export interface AgentUserType {
+export interface AgentUser {
   TeamsUserId: string;
   ACSUserId: string;
   DisplayName: string;
@@ -16,7 +16,7 @@ let appSettings: {
   EndpointUrl: string;
   AdminUserId: string;
   AzureBlobStorageConnectionString: string;
-  AgentUsers: AgentUserType[]
+  AgentUsers: AgentUser[]
 };
 if (
   !(
@@ -75,7 +75,7 @@ export const getAzureBlobStorageConnectionString = (): string => {
   return accountName;
 };
 
-export const getAgentUsers = (): AgentUserType[] => {
+export const getAgentUsers = (): AgentUser[] => {
   const AgentUsers = process.env['AgentUsers'] ? JSON.parse(process.env['AgentUsers']) : appSettings.AgentUsers;
 
   if (!AgentUsers) {
