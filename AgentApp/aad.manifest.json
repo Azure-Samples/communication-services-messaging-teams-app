@@ -1,0 +1,115 @@
+{
+    "id": "${{AAD_APP_OBJECT_ID}}",
+    "appId": "${{AAD_APP_CLIENT_ID}}",
+    "name": "AgentApp-aad",
+    "accessTokenAcceptedVersion": 2,
+    "signInAudience": "AzureADMyOrg",
+    "optionalClaims": {
+        "idToken": [],
+        "accessToken": [
+            {
+                "name": "idtyp",
+                "source": null,
+                "essential": false,
+                "additionalProperties": []
+            }
+        ],
+        "saml2Token": []
+    },
+    "requiredResourceAccess": [
+        {
+            "resourceAppId": "Microsoft Graph",
+            "resourceAccess": [
+                {
+                    "id": "User.Read",
+                    "type": "Scope"
+                }
+            ]
+        }
+    ],
+    "oauth2Permissions": [
+        {
+            "adminConsentDescription": "Allows Teams to call the app's web APIs as the current user.",
+            "adminConsentDisplayName": "Teams can access app's web APIs",
+            "id": "${{AAD_APP_ACCESS_AS_USER_PERMISSION_ID}}",
+            "isEnabled": true,
+            "type": "User",
+            "userConsentDescription": "Enable Teams to call this app's web APIs with the same rights that you have",
+            "userConsentDisplayName": "Teams can access app's web APIs and make requests on your behalf",
+            "value": "access_as_user"
+        }
+    ],
+    "preAuthorizedApplications": [
+        {
+            "appId": "${{TEAMS_MOBILE_OR_DESKTOP_APP_CLIENT_ID}}",
+            "permissionIds": [
+                "${{AAD_APP_ACCESS_AS_USER_PERMISSION_ID}}"
+            ]
+        },
+        {
+            "appId": "${{TEAMS_WEB_APP_CLIENT_ID}}",
+            "permissionIds": [
+                "${{AAD_APP_ACCESS_AS_USER_PERMISSION_ID}}"
+            ]
+        },
+        {
+            "appId": "${{OUTLOOK_DESKTOP_APP_CLIENT_ID}}",
+            "permissionIds": [
+                "${{AAD_APP_ACCESS_AS_USER_PERMISSION_ID}}"
+            ]
+        },
+        {
+            "appId": "${{OUTLOOK_WEB_APP_CLIENT_ID}}",
+            "permissionIds": [
+                "${{AAD_APP_ACCESS_AS_USER_PERMISSION_ID}}"
+            ]
+        },
+        {
+            "appId": "${{OUTLOOK_ONLINE_ADD_IN_APP_CLIENT_ID}}",
+            "permissionIds": [
+                "${{AAD_APP_ACCESS_AS_USER_PERMISSION_ID}}"
+            ]
+        },
+        {
+            "appId": "${{OFFICE_UWP_PWA_CLIENT_ID}}",
+            "permissionIds": [
+                "${{AAD_APP_ACCESS_AS_USER_PERMISSION_ID}}"
+            ]
+        },
+        {
+            "appId": "${{OFFICE_WEB_APP_CLIENT_ID_2}}",
+            "permissionIds": [
+                "${{AAD_APP_ACCESS_AS_USER_PERMISSION_ID}}"
+            ]
+        },
+        {
+            "appId": "${{OFFICE_WEB_APP_CLIENT_ID_1}}",
+            "permissionIds": [
+                "${{AAD_APP_ACCESS_AS_USER_PERMISSION_ID}}"
+            ]
+        },
+        {
+            "appId": "${{OUTLOOK_MOBILE_APP_CLIENT_ID}}",
+            "permissionIds": [
+                "${{AAD_APP_ACCESS_AS_USER_PERMISSION_ID}}"
+            ]
+        }
+    ],
+    "identifierUris": [
+        "api://${{TAB_DOMAIN}}/${{AAD_APP_CLIENT_ID}}"
+    ],
+    "replyUrlsWithType": [
+        {
+            "url": "${{TAB_ENDPOINT}}/auth-end.html",
+            "type": "Web"
+        },
+        {
+            "url": "${{TAB_ENDPOINT}}/auth-end.html?clientId=${{AAD_APP_CLIENT_ID}}",
+            "type": "Spa"
+        },
+        {
+            "url": "${{TAB_ENDPOINT}}/blank-auth-end.html",
+            "type": "Spa"
+        }
+    ]
+}
