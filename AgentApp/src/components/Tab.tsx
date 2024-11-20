@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { Welcome } from "./sample/Welcome";
+import { AgentScreen } from "./chat/AgentScreen";
 import { TeamsFxContext } from "./Context";
 
 export default function Tab() {
@@ -8,7 +8,7 @@ export default function Tab() {
     <div
       className={themeString === "default" ? "light" : themeString === "dark" ? "dark" : "contrast"}
     >
-      <Welcome />
+      <AgentScreen />
     </div>
   );
 }
