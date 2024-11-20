@@ -6,7 +6,7 @@ import { ChatClient, CreateChatThreadOptions, CreateChatThreadRequest } from '@a
 import { getEndpoint } from '../envHelper';
 import { getAdminUser, getToken } from '../identityClient';
 
-export const createThread = async (topicName?: string): Promise<string> => {  
+export const createThread = async (topicName?: string): Promise<string> => {
   const user = await getAdminUser();
 
   const credential = new AzureCommunicationTokenCredential({
