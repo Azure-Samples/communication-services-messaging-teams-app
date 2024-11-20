@@ -1,6 +1,8 @@
-import { TeamsUserCredential } from "@microsoft/teamsfx";
-import { createContext } from "react";
-import { Theme } from "@fluentui/react-components";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+import { TeamsUserCredential } from '@microsoft/teamsfx';
+import { createContext } from 'react';
+import { Theme } from '@fluentui/react-components';
 
 export const TeamsFxContext = createContext<{
   theme?: Theme;
@@ -8,6 +10,6 @@ export const TeamsFxContext = createContext<{
   teamsUserCredential?: TeamsUserCredential;
 }>({
   theme: undefined,
-  themeString: "",
-  teamsUserCredential: undefined,
+  themeString: '',
+  teamsUserCredential: undefined
 });

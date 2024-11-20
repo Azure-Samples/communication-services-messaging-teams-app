@@ -12,7 +12,7 @@
 
 export const getExistingThreadIdFromURL = (): string | null => {
   const urlParams = new URLSearchParams(window.location.search);
-  const threadId = urlParams.get("threadId");
+  const threadId = urlParams.get('threadId');
 
   return threadId;
 };
@@ -28,7 +28,7 @@ export const getExistingThreadIdFromURL = (): string | null => {
 
 export const getExistingUserIdFromURL = (): string | null => {
   const urlParams = new URLSearchParams(window.location.search);
-  const userId = urlParams.get("userId");
+  const userId = urlParams.get('userId');
 
   return userId;
 };
@@ -44,7 +44,7 @@ export const getExistingUserIdFromURL = (): string | null => {
 
 export const getExistingEndpointURLFromURL = (): string | null => {
   const urlParams = new URLSearchParams(window.location.search);
-  const endpointUrl = urlParams.get("endpointUrl");
+  const endpointUrl = urlParams.get('endpointUrl');
 
   return endpointUrl;
 };
@@ -60,6 +60,6 @@ export const getExistingEndpointURLFromURL = (): string | null => {
 
 export const getExistingDisplayNameFromURL = (): string | null => {
   const urlParams = new URLSearchParams(window.location.search);
-  const displayName = urlParams.get("displayName");
+  const displayName = urlParams.get('displayName');
   return displayName;
 };
