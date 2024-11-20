@@ -12,8 +12,8 @@ import {
   endChatContainerStyle,
   endChatTitleStyle,
   mainStackTokens,
-  upperStackTokens } from
-'./styles/EndChat.styles';
+  upperStackTokens
+} from './styles/EndChat.styles';
 import { Chat20Filled } from '@fluentui/react-icons';
 import { getExistingThreadIdFromURL } from './utils/getParametersFromURL';
 import { joinThread } from './utils/joinThread';
@@ -55,7 +55,7 @@ export const EndScreen = (props: EndCallProps): JSX.Element => {
   }, [isRejoiningThread, displayName, userId, rejoinHandler]);
 
   const feedbackLink =
-  'https://docs.microsoft.com/answers/search.html?c=&includeChildren=&f=&type=question+OR+idea+OR+kbentry+OR+answer+OR+topic+OR+user&redirect=search%2Fsearch&sort=relevance&q=azure-communication-services';
+    'https://docs.microsoft.com/answers/search.html?c=&includeChildren=&f=&type=question+OR+idea+OR+kbentry+OR+answer+OR+topic+OR+user&redirect=search%2Fsearch&sort=relevance&q=azure-communication-services';
 
   return (
     <Stack
@@ -64,8 +64,8 @@ export const EndScreen = (props: EndCallProps): JSX.Element => {
       horizontalAlign="center"
       verticalAlign="center"
       tokens={mainStackTokens}
-      className={endChatContainerStyle}>
-
+      className={endChatContainerStyle}
+    >
       <Stack tokens={upperStackTokens}>
         <Text role={'heading'} aria-level={1} aria-label={leftCall} aria-live={'polite'} className={endChatTitleStyle}>
           {leftCall}
@@ -79,19 +79,21 @@ export const EndScreen = (props: EndCallProps): JSX.Element => {
             onClick={async () => {
               await rejoinThread();
             }}
-            onRenderIcon={() => <Chat20Filled className={chatIconStyle} />} />
+            onRenderIcon={() => <Chat20Filled className={chatIconStyle} />}
+          />
 
           <DefaultButton
             className={buttonStyle}
             styles={buttonWithIconStyles}
             text={goHomePage}
-            onClick={props.homeHandler} />
-
+            onClick={props.homeHandler}
+          />
         </Stack>
         <div className={bottomStackFooterStyle}>
           <Link href={feedbackLink}>Give Feedback</Link>
           &nbsp;on this sample app at Microsoft Q&amp;A
         </div>
       </Stack>
-    </Stack>);
+    </Stack>
+  );
 };
