@@ -11,8 +11,8 @@ import {
   leaveIcon,
   leaveIconStyle,
   paneButtonContainerStyle,
-  smallLeaveButtonContainerStyle } from
-'./styles/ChatHeader.styles';
+  smallLeaveButtonContainerStyle
+} from './styles/ChatHeader.styles';
 import { useTheme } from '@azure/communication-react';
 
 export interface ChatHeaderProps {
@@ -29,11 +29,9 @@ export const ChatHeader = (props: ChatHeaderProps): JSX.Element => {
       verticalAlign={'center'}
       horizontalAlign="end"
       className={chatHeaderContainerStyle}
-      role="banner">
-
-      <div className={paneButtonContainerStyle}>
-        {}
-      </div>
+      role="banner"
+    >
+      <div className={paneButtonContainerStyle}>{}</div>
       <DefaultButton
         className={mergeStyles(largeLeaveButtonContainerStyle, leaveButtonStyle, {
           color: theme.palette.neutralPrimaryAlt
@@ -43,7 +41,8 @@ export const ChatHeader = (props: ChatHeaderProps): JSX.Element => {
         onClick={() => props.onEndChat()}
         onRenderIcon={() => <Icon iconName={leaveIcon.iconName} className={leaveIconStyle} />}
         aria-live={'polite'}
-        aria-label={leaveString} />
+        aria-label={leaveString}
+      />
       <IconButton
         iconProps={leaveIcon}
         className={mergeStyles(smallLeaveButtonContainerStyle, greyIconButtonStyle, {
@@ -51,6 +50,8 @@ export const ChatHeader = (props: ChatHeaderProps): JSX.Element => {
         })}
         onClick={() => props.onEndChat()}
         ariaLabel={leaveString}
-        aria-live={'polite'} />
-    </Stack>);
+        aria-live={'polite'}
+      />
+    </Stack>
+  );
 };

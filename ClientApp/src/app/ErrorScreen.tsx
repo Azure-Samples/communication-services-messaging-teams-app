@@ -10,8 +10,8 @@ import {
   endChatContainerStyle,
   endChatTitleStyle,
   mainStackTokens,
-  upperStackTokens } from
-'./styles/EndChat.styles';
+  upperStackTokens
+} from './styles/EndChat.styles';
 
 export interface ErrorEndCallProps {
   title: string;
@@ -28,8 +28,8 @@ export const ErrorScreen = (props: ErrorEndCallProps): JSX.Element => {
       horizontalAlign="center"
       verticalAlign="center"
       tokens={mainStackTokens}
-      className={endChatContainerStyle}>
-
+      className={endChatContainerStyle}
+    >
       <Stack tokens={upperStackTokens}>
         <Text role={'heading'} aria-level={1} className={endChatTitleStyle}>
           {props.title}
@@ -39,14 +39,15 @@ export const ErrorScreen = (props: ErrorEndCallProps): JSX.Element => {
             className={buttonStyle}
             styles={buttonWithIconStyles}
             text={goHomePage}
-            onClick={props.homeHandler} />
-
+            onClick={props.homeHandler}
+          />
         </Stack>
         <div className={bottomStackFooterStyle}>
-          { /*TODO: Change the feedback link after setting up the repo*/ }
-          <a href="https://github.com/Azure/Communication/issues">Give Feedback</a> 
+          {/*TODO: Change the feedback link after setting up the repo*/}
+          <a href="https://github.com/Azure/Communication/issues">Give Feedback</a>
           &nbsp;on this sample app on Github
         </div>
       </Stack>
-    </Stack>);
+    </Stack>
+  );
 };

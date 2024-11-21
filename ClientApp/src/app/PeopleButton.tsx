@@ -16,8 +16,10 @@ export const PeopleButton = (props: PeopleButtonProps): JSX.Element => {
   const participantListCollapsedString = 'Participants list Button Collapsed';
   return (
     <IconButton
-      onRenderIcon={() => props.isParticipantsDisplayed ? <People20Filled /> : <People20Regular />}
+      onRenderIcon={() => (props.isParticipantsDisplayed ? <People20Filled /> : <People20Regular />)}
       className={mergeStyles({ color: theme.palette.neutralPrimaryAlt })}
       onClick={() => props.setHideParticipants(props.isParticipantsDisplayed)}
-      ariaLabel={props.isParticipantsDisplayed ? participantListExpandedString : participantListCollapsedString} />);
+      ariaLabel={props.isParticipantsDisplayed ? participantListExpandedString : participantListCollapsedString}
+    />
+  );
 };

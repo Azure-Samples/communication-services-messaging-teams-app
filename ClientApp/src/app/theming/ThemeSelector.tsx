@@ -25,9 +25,9 @@ export const ThemeSelector = (props: ThemeSelectorProps): JSX.Element => {
   const { currentTheme, setCurrentTheme, themeStore } = useSwitchableFluentTheme();
 
   const onChange = (
-  ev?: React.FormEvent<HTMLElement | HTMLInputElement> | undefined,
-  option?: IChoiceGroupOption | undefined)
-  : void => {
+    ev?: React.FormEvent<HTMLElement | HTMLInputElement> | undefined,
+    option?: IChoiceGroupOption | undefined
+  ): void => {
     if (option) {
       const themeName = option.key.toString();
       const theme = themeStore[themeName];
@@ -51,5 +51,7 @@ export const ThemeSelector = (props: ThemeSelectorProps): JSX.Element => {
       styles={concatStyleSets(
         { label: { padding: '0' } },
         horizontal ? { flexContainer: { display: 'flex' } } : undefined
-      )} />);
+      )}
+    />
+  );
 };

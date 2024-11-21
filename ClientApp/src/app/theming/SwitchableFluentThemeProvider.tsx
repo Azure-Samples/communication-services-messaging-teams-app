@@ -138,8 +138,8 @@ export const SwitchableFluentThemeProvider = (props: SwitchableFluentThemeProvid
       <FluentThemeProvider fluentTheme={currentTheme.theme} rtl={currentRtl}>
         {children}
       </FluentThemeProvider>
-    </SwitchableFluentThemeContext.Provider>);
-
+    </SwitchableFluentThemeContext.Provider>
+  );
 };
 
 /**
