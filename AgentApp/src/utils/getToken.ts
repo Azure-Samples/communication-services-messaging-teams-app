@@ -14,7 +14,7 @@ export const getToken: (userId: string) => Promise<UserToken> = async (
   userId?: string
 ) => {
   const getTokenRequestOptions = {
-    method: "POST",
+    method: 'POST'
   };
   const getTokenResponse = await fetch(
     `/token/user/${userId}?scope=chat`,
@@ -24,6 +24,6 @@ export const getToken: (userId: string) => Promise<UserToken> = async (
   return {
     expiresOn: responseJson.expiresOn,
     identity: responseJson.user.communicationUserId,
-    token: responseJson.token,
+    token: responseJson.token
   };
 };

@@ -11,8 +11,8 @@ import {
   Spinner,
   Stack,
   Text,
-  mergeStyles } from
-'@fluentui/react';
+  mergeStyles
+} from '@fluentui/react';
 import { useCallback, useState } from 'react';
 import {
   buttonStyle,
@@ -30,8 +30,8 @@ import {
   nestedStackTokens,
   infoContainerStyle,
   infoContainerStackTokens,
-  videoCameraIconStyle } from
-'./styles/HomeScreen.styles';
+  videoCameraIconStyle
+} from './styles/HomeScreen.styles';
 import { useTheme } from '@azure/communication-react';
 import { Chat20Filled } from '@fluentui/react-icons';
 import heroSVG from '../assets/hero.svg';
@@ -64,11 +64,11 @@ export const HomeScreen = (): JSX.Element => {
   const headerTitle = 'Exceptionally simple chat app';
   const startChatButtonText = 'Start chat';
   const listItems = [
-  'Launch a conversation with a single click',
-  'Real-time messaging with indicators',
-  'Invite up to 250 participants',
-  'Learn more about this'];
-
+    'Launch a conversation with a single click',
+    'Real-time messaging with indicators',
+    'Invite up to 250 participants',
+    'Learn more about this'
+  ];
 
   const [homeScreenState, setHomeScreenState] = useState<number>(HOMESCREEN_SHOWING_START_CHAT_BUTTON);
   const { currentTheme } = useSwitchableFluentTheme();
@@ -88,7 +88,7 @@ export const HomeScreen = (): JSX.Element => {
     if (!threadId) {
       console.error('Failed to create a thread, returned threadId is undefined or empty string');
       return;
-    } 
+    }
 
     window.location.href += `?threadId=${threadId}`;
   };
@@ -102,21 +102,23 @@ export const HomeScreen = (): JSX.Element => {
   const onRenderListItem = useCallback(
     (item?: string, index?: number): JSX.Element => {
       const listText =
-      index !== 3 ?
-      <Text>{item}</Text> :
-      <Text>
+        index !== 3 ? (
+          <Text>{item}</Text>
+        ) : (
+          <Text>
             {item}{' '}
             <Link href="https://docs.microsoft.com/azure/communication-services/overview" aria-label={`${item} sample`}>
               {'sample'}
             </Link>
-          </Text>;
+          </Text>
+        );
 
       return (
         <Stack horizontal tokens={listItemStackTokens} className={listItemStyle}>
           <Icon className={mergeStyles(listIconStyle, { color: themePrimary })} iconName={iconName} />
           {listText}
-        </Stack>);
-
+        </Stack>
+      );
     },
     [themePrimary]
   );
@@ -129,8 +131,8 @@ export const HomeScreen = (): JSX.Element => {
         horizontalAlign="center"
         verticalAlign="center"
         tokens={containerTokens}
-        className={containerStyle}>
-
+        className={containerStyle}
+      >
         <Stack className={infoContainerStyle} tokens={infoContainerStackTokens}>
           <Text role={'heading'} aria-level={1} className={headerStyle}>
             {headerTitle}
@@ -148,14 +150,15 @@ export const HomeScreen = (): JSX.Element => {
               onClick={() => {
                 onCreateThread();
               }}
-              onRenderIcon={() => <Chat20Filled className={videoCameraIconStyle} />} />
+              onRenderIcon={() => <Chat20Filled className={videoCameraIconStyle} />}
+            />
 
             <ThemeSelector label="Theme" horizontal={true} />
           </Stack>
         </Stack>
         <Image styles={imageStyleProps} alt="Welcome to the ACS Chat sample app" className={imgStyle} {...imageProps} />
-      </Stack>);
-
+      </Stack>
+    );
   };
 
   if (homeScreenState === HOMESCREEN_SHOWING_START_CHAT_BUTTON) {

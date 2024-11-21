@@ -12,16 +12,13 @@ export type UserToken = {
  */
 export const getToken = async (): Promise<UserToken> => {
   const getTokenRequestOptions = {
-    method: "POST",
+    method: 'POST'
   };
-  const getTokenResponse = await fetch(
-    "/token/newUser?scope=chat",
-    getTokenRequestOptions
-  );
+  const getTokenResponse = await fetch('/token/newUser?scope=chat', getTokenRequestOptions);
   const responseJson = await getTokenResponse.json();
   return {
     expiresOn: responseJson.expiresOn,
     identity: responseJson.user.communicationUserId,
-    token: responseJson.token,
+    token: responseJson.token
   };
 };

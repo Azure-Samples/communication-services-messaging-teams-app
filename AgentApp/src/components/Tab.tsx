@@ -1,14 +1,14 @@
-import { useContext } from "react";
-import { AgentScreen } from "./chat/AgentScreen";
-import { TeamsFxContext } from "./Context";
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+import { useContext } from 'react';
+import { AgentScreen } from './chat/AgentScreen';
+import { TeamsFxContext } from './Context';
 
-export default function Tab() {
+export const Tab = (): JSX.Element => {
   const { themeString } = useContext(TeamsFxContext);
   return (
-    <div
-      className={themeString === "default" ? "light" : themeString === "dark" ? "dark" : "contrast"}
-    >
+    <div className={themeString === 'default' ? 'light' : themeString === 'dark' ? 'dark' : 'contrast'}>
       <AgentScreen />
     </div>
   );
-}
+};

@@ -5,11 +5,11 @@ const emojiCache = new Map<string, Promise<string>>();
 
 const getEmoji = (userId: string): Promise<string> => {
   const getTokenRequestOptions = {
-    headers: { "Content-Type": "application/json" },
-    method: "GET",
+    headers: { 'Content-Type': 'application/json' },
+    method: 'GET'
   };
   return new Promise<string>((resolve) => {
-    fetch("/userConfig/" + userId, getTokenRequestOptions)
+    fetch('/userConfig/' + userId, getTokenRequestOptions)
       .then((data) => {
         return data.json();
       })
@@ -17,9 +17,9 @@ const getEmoji = (userId: string): Promise<string> => {
         resolve(json.emoji);
       })
       .catch((error) => {
-        console.error("Failed at getting emoji, Error: ", error);
+        console.error('Failed at getting emoji, Error: ', error);
         // Emoji defaults to '' if there was an error retrieving it from server.
-        resolve("");
+        resolve('');
       });
   });
 };

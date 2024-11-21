@@ -95,4 +95,4 @@ export const AgentScreen = (): JSX.Element => {
       </div>
     </div>
   );
-}
+};

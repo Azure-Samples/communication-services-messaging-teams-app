@@ -9,8 +9,8 @@ import {
   buttonStyle,
   buttonWithIconStyles,
   chatIconStyle,
-  mainContainerStyle } from
-'./styles/ConfigurationScreen.styles';
+  mainContainerStyle
+} from './styles/ConfigurationScreen.styles';
 import {
   avatarListContainerStackTokens,
   avatarListContainerStyle,
@@ -26,15 +26,14 @@ import {
   rightInputContainerStackTokens,
   rightInputContainerStyle,
   smallAvatarContainerStyle,
-  smallAvatarStyle } from
-'./styles/ConfigurationScreen.styles';
+  smallAvatarStyle
+} from './styles/ConfigurationScreen.styles';
 
 import { Chat20Filled } from '@fluentui/react-icons';
 import { DisplayNameField } from './DisplayNameField';
 import { sendEmojiRequest } from './utils/setEmoji';
 import { getToken } from './utils/getToken';
-import { getExistingThreadIdFromURL } from
-'./utils/getParametersFromURL';
+import { getExistingThreadIdFromURL } from './utils/getParametersFromURL';
 import { joinThread } from './utils/joinThread';
 import { getEndpointUrl } from './utils/getEndpointUrl';
 
@@ -73,7 +72,7 @@ const PROFILE_LABEL = 'Your profile';
  *
  * @param props
  */
-export const ConfigurationScreen = ((props: ConfigurationScreenProps): JSX.Element => {
+export const ConfigurationScreen = (props: ConfigurationScreenProps): JSX.Element => {
   const avatarsList = [CAT, MOUSE, KOALA, OCTOPUS, MONKEY, FOX];
   const [name, setName] = useState('');
   const [emptyWarning, setEmptyWarning] = useState(false);
@@ -129,7 +128,7 @@ export const ConfigurationScreen = ((props: ConfigurationScreenProps): JSX.Eleme
           setConfigurationScreenState(CONFIGURATIONSCREEN_SHOWING_INVALID_THREAD);
           return;
         }
-        
+
         setConfigurationScreenState(CONFIGURATIONSCREEN_SHOWING_JOIN_CHAT);
       };
       setScreenState();
@@ -170,8 +169,8 @@ export const ConfigurationScreen = ((props: ConfigurationScreenProps): JSX.Eleme
         horizontalAlign="center"
         verticalAlign="center"
         tokens={responsiveLayoutStackTokens}
-        className={responsiveLayoutStyle}>
-
+        className={responsiveLayoutStyle}
+      >
         <Stack horizontalAlign="center" tokens={leftPreviewContainerStackTokens} className={leftPreviewContainerStyle}>
           <Text role={'heading'} aria-level={1} className={headerStyle}>
             {PROFILE_LABEL}
@@ -193,53 +192,55 @@ export const ConfigurationScreen = ((props: ConfigurationScreenProps): JSX.Eleme
               className={avatarListContainerStyle}
               tokens={avatarListContainerStackTokens}
               role="list"
-              aria-labelledby={'avatar-list-label'}>
-
-              {avatarsList.map((avatar, index) =>
-              <div
-                role="listitem"
-                id={avatar}
-                key={index}
-                data-is-focusable={true}
-                className={smallAvatarContainerClassName(avatar)}
-                onClick={() => onAvatarChange(avatar)}>
-
+              aria-labelledby={'avatar-list-label'}
+            >
+              {avatarsList.map((avatar, index) => (
+                <div
+                  role="listitem"
+                  id={avatar}
+                  key={index}
+                  data-is-focusable={true}
+                  className={smallAvatarContainerClassName(avatar)}
+                  onClick={() => onAvatarChange(avatar)}
+                >
                   <div className={smallAvatarStyle}>{avatar}</div>
                 </div>
-              )}
+              ))}
             </Stack>
           </FocusZone>
           <DisplayNameField
             setName={setName}
             setEmptyWarning={setEmptyWarning}
             validateName={validateName}
-            isEmpty={emptyWarning} />
+            isEmpty={emptyWarning}
+          />
           <PrimaryButton
             disabled={disableJoinChatButton}
             className={buttonStyle}
             styles={buttonWithIconStyles}
             text={JOIN_BUTTON_TEXT}
             onClick={validateName}
-            onRenderIcon={() => <Chat20Filled className={chatIconStyle} />} />
+            onRenderIcon={() => <Chat20Filled className={chatIconStyle} />}
+          />
         </Stack>
-      </Stack>);
-
+      </Stack>
+    );
   };
 
   const displayInvalidThreadError = (): JSX.Element => {
     return (
       <div>
         <p>{ERROR_TEXT_THREAD_INVALID}</p>
-      </div>);
-
+      </div>
+    );
   };
 
   const displayWithStack = (child: JSX.Element): JSX.Element => {
     return (
       <Stack className={mainContainerStyle} horizontalAlign="center" verticalAlign="center">
         {child}
-      </Stack>);
-
+      </Stack>
+    );
   };
 
   if (configurationScreenState === CONFIGURATIONSCREEN_SHOWING_SPINNER_LOADING) {
@@ -253,4 +254,4 @@ export const ConfigurationScreen = ((props: ConfigurationScreenProps): JSX.Eleme
   } else {
     throw new Error('configuration screen state ' + configurationScreenState.toString() + ' is invalid');
   }
-});
+};
