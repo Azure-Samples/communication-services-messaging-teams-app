@@ -88,7 +88,7 @@ export const HomeScreen = (): JSX.Element => {
     if (!threadId) {
       console.error('Failed to create a thread, returned threadId is undefined or empty string');
       return;
-    } 
+    }
 
     window.location.href += `?threadId=${threadId}`;
   };

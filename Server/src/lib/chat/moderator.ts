@@ -30,8 +30,8 @@ export const createThread = async (topicName?: string): Promise<string> => {
         }
       },
       {
-        id: { communicationUserId: agentUser.ACSUserId },
-        displayName: agentUser.DisplayName
+        id: { communicationUserId: agentUser.acsUserId },
+        displayName: agentUser.displayName
       }
     ]
   };
@@ -49,7 +49,7 @@ const getAgentUser = (): AgentUser => {
   // Select a random agent user to add to the chat thread
   // This is a simple implementation. In a production scenario, you would want to implement a more sophisticated way to select an agent user.
   const AgentUsers = getAgentUsers();
-  const agentUserIndex = Math.floor(Math.random() * AgentUsers.length);  
+  const agentUserIndex = Math.floor(Math.random() * AgentUsers.length);
   const agentUser = AgentUsers[agentUserIndex];
   return agentUser;
-}
+};

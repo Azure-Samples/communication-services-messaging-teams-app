@@ -6,9 +6,9 @@ import * as path from 'path';
 const appSettingsPath = path.join(__dirname, '../../appsettings.json');
 
 export interface AgentUser {
-  TeamsUserId: string;
-  ACSUserId: string;
-  DisplayName: string;
+  teamsUserId: string;
+  acsUserId: string;
+  displayName: string;
 }
 
 let appSettings: {
@@ -16,7 +16,7 @@ let appSettings: {
   EndpointUrl: string;
   AdminUserId: string;
   AzureBlobStorageConnectionString: string;
-  AgentUsers: AgentUser[]
+  AgentUsers: AgentUser[];
 };
 if (
   !(
@@ -80,7 +80,7 @@ export const getAgentUsers = (): AgentUser[] => {
 
   if (!AgentUsers) {
     throw new Error('No Agent user list provided');
-  }  
+  }
 
   return AgentUsers;
 };

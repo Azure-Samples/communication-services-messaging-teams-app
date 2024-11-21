@@ -13,9 +13,9 @@
   "AzureBlobStorageConnectionString": "REPLACE_WITH_BLOB_STORAGE_CONNECTION_STRING",
   "AgentUsers": [
     {
-      "TeamsUserId": "REPLACE_WITH_TEAMS_USER_ID_OF_THE_AGENT",
-      "ACSUserId": "REPLACE_WITH_ACS_USER_ID_OF_THE_AGENT",
-      "DisplayName": "REPLACE_WITH_DISPLAY_NAME_OF_THE_AGENT"
+      "teamsUserId": "REPLACE_WITH_TEAMS_USER_ID_OF_THE_AGENT",
+      "acsUserId": "REPLACE_WITH_ACS_USER_ID_OF_THE_AGENT",
+      "displayName": "REPLACE_WITH_DISPLAY_NAME_OF_THE_AGENT"
     }
   ]
 }
