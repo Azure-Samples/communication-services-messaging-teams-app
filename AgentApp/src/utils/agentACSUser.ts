@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { StatusCode } from "./constants";
+import { StatusCode } from './constants';
 
 export interface AgentUser {
   TeamsUserId: string;
@@ -12,26 +12,19 @@ export interface AgentUser {
 /**
  * Get the Azure Communication Services user info for a given Teams user.
  */
-export const getAgentACSUser = async (
-  teamsUserId: string
-): Promise<AgentUser> => {
+export const getAgentACSUser = async (teamsUserId: string): Promise<AgentUser> => {
   try {
     const options = {
-      method: "GET",
+      method: 'GET'
     };
-    const response = await fetch(
-      `/agentACSUser/?teamsUserId=${teamsUserId}`,
-      options
-    );
+    const response = await fetch(`/agentACSUser/?teamsUserId=${teamsUserId}`, options);
 
     if (response.status === StatusCode.OK) {
       return await response.json();
     } else {
-      throw new Error(
-        "Failed at getting agent's ACS user, Error: " + response.status
-      );
+      throw new Error("Failed at getting agent's ACS user, Error: " + response.status);
     }
   } catch (error) {
-    throw new Error("Failed at getting agent ACS user, Error: " + error);
+    throw new Error('Failed at getting agent ACS user, Error: ' + error);
   }
 };

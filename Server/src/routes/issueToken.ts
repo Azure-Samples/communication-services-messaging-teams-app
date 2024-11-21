@@ -1,12 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import {
-  CommunicationUserToken,
-  TokenScope,
-} from "@azure/communication-identity";
-import * as express from "express";
-import { createUserAndToken, getToken } from "../lib/identityClient";
+import { CommunicationUserToken, TokenScope } from '@azure/communication-identity';
+import * as express from 'express';
+import { createUserAndToken, getToken } from '../lib/identityClient';
 
 const router = express.Router();
 
@@ -14,12 +11,8 @@ const router = express.Router();
  * handleNewUserTokenRequest will create a new user and return a default scoped token if no scopes are provided.
  * @param requestedScope [optional] string from the request, this should be a comma separated list of scopes.
  */
-const handleNewUserTokenRequest = async (
-  requestedScope?: string
-): Promise<CommunicationUserToken> => {
-  const scopes: TokenScope[] = requestedScope
-    ? (requestedScope.split(",") as TokenScope[])
-    : ["chat"];
+const handleNewUserTokenRequest = async (requestedScope?: string): Promise<CommunicationUserToken> => {
+  const scopes: TokenScope[] = requestedScope ? (requestedScope.split(',') as TokenScope[]) : ['chat'];
   return await createUserAndToken(scopes);
 };
 
@@ -28,13 +21,8 @@ const handleNewUserTokenRequest = async (
  * @param userId string from the request, this should be a string of an ACS user id.
  * @param requestedScope [optional] string from the request, this should be a comma separated list of scopes.
  */
-const handleUserTokenRequest = async (
-  userId: string,
-  requestedScope?: string
-): Promise<CommunicationUserToken> => {
-  const scopes: TokenScope[] = requestedScope
-    ? (requestedScope.split(",") as TokenScope[])
-    : ["chat"];
+const handleUserTokenRequest = async (userId: string, requestedScope?: string): Promise<CommunicationUserToken> => {
+  const scopes: TokenScope[] = requestedScope ? (requestedScope.split(',') as TokenScope[]) : ['chat'];
   const user = { communicationUserId: userId };
   const token = await getToken(user, scopes);
   return { ...token, user: { communicationUserId: user.communicationUserId } };
@@ -55,8 +43,8 @@ const handleUserTokenRequest = async (
  * e.g. ?scope=chat
  *
  */
-router.post("/newUser", async (req, res, next) =>
-  res.send(await handleNewUserTokenRequest((req.query.scope as string) ?? ""))
+router.post('/newUser', async (req, res, next) =>
+  res.send(await handleNewUserTokenRequest((req.query.scope as string) ?? ''))
 );
 
 /**
@@ -75,11 +63,11 @@ router.post("/newUser", async (req, res, next) =>
  * e.g. ?scope=chat
  *
  */
-router.post("/user/:userId", async (req, res, next) => {
+router.post('/user/:userId', async (req, res, next) => {
   const userId = req.params.userId;
   const scope = req.query.scope;
   if (!userId) {
-    return res.status(400).json({ error: "userId is required" });
+    return res.status(400).json({ error: 'userId is required' });
   }
   res.send(await handleUserTokenRequest(userId, scope as string | undefined));
 });

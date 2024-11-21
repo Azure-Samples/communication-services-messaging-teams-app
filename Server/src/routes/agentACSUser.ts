@@ -1,9 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import * as express from "express";
-import { getAgentUsers } from "../lib/envHelper";
-import { AgentUser } from "../lib/envHelper";
+import * as express from 'express';
+import { getAgentUsers } from '../lib/envHelper';
+import { AgentUser } from '../lib/envHelper';
 
 const router = express.Router();
 
@@ -18,27 +18,25 @@ const router = express.Router();
  *
  */
 
-router.get("/", async function (req, res, next) {
+router.get('/', async function (req, res, next) {
   const teamsUserId = req.query.teamsUserId;
 
   if (!teamsUserId) {
-    res.status(404).send("TeamsUserId is not provided.");
+    res.status(404).send('TeamsUserId is not provided.');
     return;
   }
 
   const agentUsers: AgentUser[] = await getAgentUsers();
 
   if (!agentUsers) {
-    res.status(404).send("Agent users not found");
+    res.status(404).send('Agent users not found');
     return;
   }
 
   const agentUser = agentUsers.find((user) => user.TeamsUserId === teamsUserId);
 
   if (!agentUser) {
-    res
-      .status(404)
-      .send(`No linked ACS user found for TeamsUserId: ${teamsUserId}`);
+    res.status(404).send(`No linked ACS user found for TeamsUserId: ${teamsUserId}`);
     return;
   }
 
