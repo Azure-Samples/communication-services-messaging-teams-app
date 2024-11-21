@@ -23,7 +23,7 @@ export interface ThreadListProps {
 
 export const ThreadList = (props: ThreadListProps): JSX.Element => {
   const { userId, token, endpointUrl, setSelectedThreadId } = props;
-  const [threads, setThreads] = useState<ThreadItem[]>([]);
+  const [threads, setThreads] = useState<Set<ThreadItem>>(new Set());
 
   const chatClient = useMemo(() => {
     if (!endpointUrl) {
@@ -57,7 +57,8 @@ export const ThreadList = (props: ThreadListProps): JSX.Element => {
           deletedOn: undefined,
           lastMessageReceivedOn: Date.now()
         };
-        setThreads([threadItem, ...threads]);
+        // Add new thread to the beginning of the list
+        setThreads((prevThreads) => new Set([threadItem, ...Array.from(prevThreads)]));
       });
     };
     addChatClientListeners();
@@ -82,7 +83,7 @@ export const ThreadList = (props: ThreadListProps): JSX.Element => {
   return (
     <div style={{ width: '400px' }}>
       <h1 style={{ marginLeft: '15px' }}>Thread List</h1>
-      {threads.map((thread) => threadItem(thread))}
+      {Array.from(threads).map((thread) => threadItem(thread))}
     </div>
   );
 };
