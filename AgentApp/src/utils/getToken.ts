@@ -8,14 +8,16 @@ export type UserToken = {
 };
 
 /**
- * This is implemented by contoso and passed to createAzureCommunicationChatAdapter
+ * This gets the token for a given user
  */
-export const getToken = async (): Promise<UserToken> => {
+export const getToken: (userId: string) => Promise<UserToken> = async (
+  userId?: string
+) => {
   const getTokenRequestOptions = {
     method: "POST",
   };
   const getTokenResponse = await fetch(
-    "/token?scope=chat",
+    `/token/user/${userId}?scope=chat`,
     getTokenRequestOptions
   );
   const responseJson = await getTokenResponse.json();

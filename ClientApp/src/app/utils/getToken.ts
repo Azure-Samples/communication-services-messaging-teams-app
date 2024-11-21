@@ -15,7 +15,7 @@ export const getToken = async (): Promise<UserToken> => {
     method: "POST",
   };
   const getTokenResponse = await fetch(
-    "/token?scope=chat",
+    "/token/newUser?scope=chat",
     getTokenRequestOptions
   );
   const responseJson = await getTokenResponse.json();
