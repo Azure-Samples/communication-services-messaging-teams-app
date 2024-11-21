@@ -33,15 +33,9 @@ import { Chat20Filled } from '@fluentui/react-icons';
 import { DisplayNameField } from './DisplayNameField';
 import { sendEmojiRequest } from './utils/setEmoji';
 import { getToken } from './utils/getToken';
-import {
-  getExistingDisplayNameFromURL,
-  getExistingEndpointURLFromURL,
-  getExistingThreadIdFromURL,
-  getExistingUserIdFromURL
-} from './utils/getParametersFromURL';
+import { getExistingThreadIdFromURL } from './utils/getParametersFromURL';
 import { joinThread } from './utils/joinThread';
 import { getEndpointUrl } from './utils/getEndpointUrl';
-import { refreshToken } from './utils/refreshToken';
 
 // These props are set by the caller of ConfigurationScreen in the JSX and not found in context
 export interface ConfigurationScreenProps {
@@ -122,21 +116,6 @@ export const ConfigurationScreen = (props: ConfigurationScreenProps): JSX.Elemen
     internalSetupAndJoinChatThread();
   }, [name, joinChatHandler, selectedAvatar, setDisplayName, setEndpointUrl, setThreadId, setToken, setUserId]);
 
-  const joinChatThreadWithExistingUser = useCallback(
-    (token: string, userId: string, displayName: string, threadId: string, endpointUrl: string) => {
-      setToken(token);
-      setUserId(userId);
-      setDisplayName(displayName);
-      setThreadId(threadId);
-      setEndpointUrl(endpointUrl);
-
-      setEmptyWarning(false);
-      setConfigurationScreenState(CONFIGURATIONSCREEN_SHOWING_SPINNER_INITIALIZE_CHAT);
-      joinChatHandler();
-    },
-    [joinChatHandler, setDisplayName, setEndpointUrl, setThreadId, setToken, setUserId]
-  );
-
   useEffect(() => {
     if (configurationScreenState === CONFIGURATIONSCREEN_SHOWING_SPINNER_LOADING) {
       const setScreenState = async (): Promise<void> => {
@@ -149,24 +128,12 @@ export const ConfigurationScreen = (props: ConfigurationScreenProps): JSX.Elemen
           setConfigurationScreenState(CONFIGURATIONSCREEN_SHOWING_INVALID_THREAD);
           return;
         }
-        // Check if we have all the required parameters supplied as query search params.
-        const threadId = getExistingThreadIdFromURL();
-        const userId = getExistingUserIdFromURL();
-        const displayName = getExistingDisplayNameFromURL();
-        const endpointUrl = getExistingEndpointURLFromURL();
 
-        if (userId && displayName && threadId && endpointUrl) {
-          const token = await refreshToken(userId);
-          joinChatThreadWithExistingUser(token, userId, displayName, threadId, endpointUrl);
-          return;
-        }
-
-        // Else show the join chat screen where a user enters there display name and the other args are collected from the server
         setConfigurationScreenState(CONFIGURATIONSCREEN_SHOWING_JOIN_CHAT);
       };
       setScreenState();
     }
-  }, [configurationScreenState, joinChatThreadWithExistingUser]);
+  }, [configurationScreenState]);
 
   const smallAvatarContainerClassName = useCallback(
     (avatar: string) => {

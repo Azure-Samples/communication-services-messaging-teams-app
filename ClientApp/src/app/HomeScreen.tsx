@@ -76,11 +76,11 @@ export const HomeScreen = (): JSX.Element => {
   const imageProps = { src: currentTheme.name === 'Light' ? heroSVG.toString() : heroDarkModeSVG.toString() };
 
   const onCreateThread = async (): Promise<void> => {
-    const exisitedThreadId = getExistingThreadIdFromURL();
+    const existedThreadId = getExistingThreadIdFromURL();
     setHomeScreenState(HOMESCREEN_SHOWING_LOADING_SPINNER_CREATE_THREAD);
 
-    if (exisitedThreadId && exisitedThreadId.length > 0) {
-      window.location.href += `?threadId=${exisitedThreadId}`;
+    if (existedThreadId && existedThreadId.length > 0) {
+      window.location.href += `?threadId=${existedThreadId}`;
       return;
     }
 
@@ -88,9 +88,9 @@ export const HomeScreen = (): JSX.Element => {
     if (!threadId) {
       console.error('Failed to create a thread, returned threadId is undefined or empty string');
       return;
-    } else {
-      window.location.href += `?threadId=${threadId}`;
     }
+
+    window.location.href += `?threadId=${threadId}`;
   };
 
   const displayLoadingSpinner = (spinnerLabel: string): JSX.Element => {
