@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { StatusCode } from "./constants";
+import { StatusCode } from './constants';
 
 /**
  * This is a Contoso specific method. Specific to Sample App Heroes. Its meant to be called by Sample App Heroes
@@ -11,18 +11,14 @@ import { StatusCode } from "./constants";
  * @param userId the acs communication user id
  * @param displayName the new participant's display name
  */
-export const joinThread = async (
-  threadId: string,
-  userId: string,
-  displayName: string
-): Promise<boolean> => {
+export const joinThread = async (threadId: string, userId: string, displayName: string): Promise<boolean> => {
   try {
     const requestOptions = {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ Id: userId, DisplayName: displayName }),
+      body: JSON.stringify({ Id: userId, DisplayName: displayName })
     };
     const response = await fetch(`/addUser/${threadId}`, requestOptions);
     if (response.status === StatusCode.CREATED) {
@@ -35,7 +31,7 @@ export const joinThread = async (
       return false;
     }
   } catch (error) {
-    console.error("Failed at adding user, Error: ", error);
+    console.error('Failed at adding user, Error: ', error);
   }
   return false;
 };

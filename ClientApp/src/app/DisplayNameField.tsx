@@ -24,9 +24,9 @@ const DisplayNameFieldComponent = (props: DisplayNameFieldProps): JSX.Element =>
   const { setName, setEmptyWarning, isEmpty, defaultName, validateName } = props;
 
   const onNameTextChange = (
-  event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
-  newValue?: string)
-  : void => {
+    event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
+    newValue?: string
+  ): void => {
     if (newValue === undefined) {
       return;
     }
@@ -56,7 +56,9 @@ const DisplayNameFieldComponent = (props: DisplayNameFieldProps): JSX.Element =>
       }}
       styles={TextFieldStyleProps}
       errorMessage={isEmpty ? TEXTFIELD_EMPTY_ERROR_MSG : undefined}
-      required={true} />);
+      required={true}
+    />
+  );
 };
 
 export const DisplayNameField = (props: DisplayNameFieldProps): JSX.Element => <DisplayNameFieldComponent {...props} />;

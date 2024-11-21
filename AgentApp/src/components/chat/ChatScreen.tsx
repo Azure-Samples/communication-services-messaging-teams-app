@@ -8,8 +8,8 @@ import {
   ChatComposite,
   fromFlatCommunicationIdentifier,
   toFlatCommunicationIdentifier,
-  useAzureCommunicationChatAdapter } from
-'@azure/communication-react';
+  useAzureCommunicationChatAdapter
+} from '@azure/communication-react';
 import { Stack } from '@fluentui/react';
 import { useCallback, useEffect, useMemo } from 'react';
 import { ChatHeader } from './ChatHeader';
@@ -28,14 +28,7 @@ interface ChatScreenProps {
 }
 
 export const ChatScreen = (props: ChatScreenProps): JSX.Element => {
-  const {
-    displayName,
-    endpointUrl,
-    threadId,
-    token,
-    userId,
-    endChatHandler
-  } = props;
+  const { displayName, endpointUrl, threadId, token, userId, endChatHandler } = props;
 
   // Disables pull down to refresh. Prevents accidental page refresh when scrolling through chat messages
   // Another alternative: set body style touch-action to 'none'. Achieves same result.
@@ -84,15 +77,15 @@ export const ChatScreen = (props: ChatScreenProps): JSX.Element => {
 
   if (adapter) {
     const onFetchAvatarPersonaData = (userId: string): Promise<AvatarPersonaData> =>
-    fetchEmojiForUser(userId).then(
-      (emoji) =>
-      new Promise((resolve) => {
-        return resolve({
-          imageInitials: emoji,
-          initialsColor: emoji ? getBackgroundColor(emoji)?.backgroundColor : undefined
-        });
-      })
-    );
+      fetchEmojiForUser(userId).then(
+        (emoji) =>
+          new Promise((resolve) => {
+            return resolve({
+              imageInitials: emoji,
+              initialsColor: emoji ? getBackgroundColor(emoji)?.backgroundColor : undefined
+            });
+          })
+      );
     return (
       <Stack className={chatScreenContainerStyle}>
         <Stack.Item className={chatCompositeContainerStyle} role="main">
@@ -101,12 +94,12 @@ export const ChatScreen = (props: ChatScreenProps): JSX.Element => {
             options={{
               autoFocus: 'sendBoxTextField'
             }}
-            onFetchAvatarPersonaData={onFetchAvatarPersonaData} />
+            onFetchAvatarPersonaData={onFetchAvatarPersonaData}
+          />
         </Stack.Item>
-        <ChatHeader
-          onEndChat={() => adapter.removeParticipant(userId)} />
-      </Stack>);
-
+        <ChatHeader onEndChat={() => adapter.removeParticipant(userId)} />
+      </Stack>
+    );
   }
   return <>Initializing...</>;
 };
