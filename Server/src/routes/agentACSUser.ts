@@ -33,7 +33,7 @@ router.get('/', async function (req, res, next) {
     return;
   }
 
-  const agentUser = agentUsers.find((user) => user.TeamsUserId === teamsUserId);
+  const agentUser = agentUsers.find((user) => user.teamsUserId === teamsUserId);
 
   if (!agentUser) {
     res.status(404).send(`No linked ACS user found for TeamsUserId: ${teamsUserId}`);

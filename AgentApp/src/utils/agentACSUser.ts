@@ -4,9 +4,9 @@
 import { StatusCode } from './constants';
 
 export interface AgentUser {
-  TeamsUserId: string;
-  ACSUserId: string;
-  DisplayName: string;
+  teamsUserId: string;
+  acsUserId: string;
+  displayName: string;
 }
 
 /**

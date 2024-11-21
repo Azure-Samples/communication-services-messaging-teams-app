@@ -42,10 +42,10 @@ export const AgentScreen = (): JSX.Element => {
         return;
       }
       const endpointUrl = await getEndpointUrl();
-      const token = await getToken(agentACSUser.ACSUserId);
-      const displayName = agentACSUser.DisplayName;
+      const token = await getToken(agentACSUser.acsUserId);
+      const displayName = agentACSUser.displayName;
 
-      setUserId(agentACSUser.ACSUserId);
+      setUserId(agentACSUser.acsUserId);
       setEndpointUrl(endpointUrl);
       setToken(token.token);
       setDisplayName(displayName);
