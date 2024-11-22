@@ -66,6 +66,7 @@ export const ThreadList = (props: ThreadListProps): JSX.Element => {
       });
 
       client.on('chatMessageReceived', (event: ChatMessageReceivedEvent) => {
+        // Bubble up the thread with new message to the top of the list
         const threadId = event.threadId;
         setThreads((prevThreads: ThreadItem[]) => {
           const threadIndex = prevThreads.findIndex((thread) => thread.id === threadId);
