@@ -3,15 +3,14 @@
 import './AgentScreen.css';
 
 import { ChatClient } from '@azure/communication-chat';
-import type { ChatThreadCreatedEvent } from '@azure/communication-chat';
+import type { ChatThreadCreatedEvent, ChatThreadItem, ChatMessageReceivedEvent } from '@azure/communication-chat';
 import { AzureCommunicationTokenCredential } from '@azure/communication-common';
 import { useEffect, useMemo, useState } from 'react';
 
 export interface ThreadItem {
   id: string;
   topic: string;
-  isUnread: boolean;
-  lastReceivedMessageId?: string;
+  lastMessageReceivedOn?: Date;
 }
 
 export interface ThreadListProps {
@@ -52,10 +51,8 @@ export const ThreadList = (props: ThreadListProps): JSX.Element => {
       client.on('chatThreadCreated', (event: ChatThreadCreatedEvent) => {
         const threadItem = {
           id: event.threadId,
-          isUnread: true,
           topic: event.properties.topic,
-          deletedOn: undefined,
-          lastMessageReceivedOn: Date.now()
+          lastMessageReceivedOn: new Date()
         };
 
         setThreads((prevThreads: ThreadItem[]) => {
@@ -67,8 +64,49 @@ export const ThreadList = (props: ThreadListProps): JSX.Element => {
           return prevThreads;
         });
       });
+
+      client.on('chatMessageReceived', (event: ChatMessageReceivedEvent) => {
+        // Bubble up the thread with new message to the top of the list
+        const threadId = event.threadId;
+        setThreads((prevThreads: ThreadItem[]) => {
+          const threadIndex = prevThreads.findIndex((thread) => thread.id === threadId);
+          if (threadIndex === -1) {
+            console.error(`Received message for unknown thread: ${threadId}`);
+            return prevThreads;
+          }
+          const [updatedThread] = prevThreads.splice(threadIndex, 1);
+          updatedThread.lastMessageReceivedOn = new Date();
+          return [updatedThread, ...prevThreads];
+        });
+      });
     };
     addChatClientListeners();
+  }, [chatClient, userId]);
+
+  useEffect(() => {
+    const fetchThreads = async (): Promise<void> => {
+      const client = await chatClient;
+      if (!client) {
+        return;
+      }
+
+      const threadsRespond = await client.listChatThreads().byPage().next();
+      const threads = threadsRespond.value;
+      const threadItems = threads.map((thread: ChatThreadItem) => {
+        return {
+          id: thread.id,
+          topic: thread.topic,
+          lastMessageReceivedOn: thread.lastMessageReceivedOn
+        };
+      });
+
+      setThreads((prevThreads) => {
+        const existingThreadIds = new Set(prevThreads.map((thread) => thread.id));
+        const newThreads = threadItems.filter((thread: ThreadItem) => !existingThreadIds.has(thread.id));
+        return [...prevThreads, ...newThreads];
+      });
+    };
+    fetchThreads();
   }, [chatClient, userId]);
 
   const onThreadSelected = (threadId: string): void => {

@@ -6,6 +6,9 @@ import { ChatClient, CreateChatThreadOptions, CreateChatThreadRequest } from '@a
 import { AgentUser, getAgentUsers, getEndpoint } from '../envHelper';
 import { getAdminUser, getToken } from '../identityClient';
 
+// TODO: Remove this when topicName can be passed in
+let count = 0;
+
 export const createThread = async (topicName?: string): Promise<string> => {
   const user = await getAdminUser();
 
@@ -16,8 +19,11 @@ export const createThread = async (topicName?: string): Promise<string> => {
   const chatClient = new ChatClient(getEndpoint(), credential);
 
   const request: CreateChatThreadRequest = {
-    topic: topicName ?? 'Your Chat sample'
+    topic: topicName ?? `Your Chat sample thread ${count}`
   };
+
+  // TODO: Remove this when topicName can be passed in
+  count++;
 
   // Select an agent user to add to the chat thread
   const agentUser = getAgentUser();
