@@ -99,7 +99,12 @@ export const ThreadList = (props: ThreadListProps): JSX.Element => {
           lastMessageReceivedOn: thread.lastMessageReceivedOn
         };
       });
-      setThreads(threadItems);
+
+      setThreads((prevThreads) => {
+        const existingThreadIds = new Set(prevThreads.map((thread) => thread.id));
+        const newThreads = threadItems.filter((thread: ThreadItem) => !existingThreadIds.has(thread.id));
+        return [...prevThreads, ...newThreads];
+      });
     };
     fetchThreads();
   }, [chatClient, userId]);
