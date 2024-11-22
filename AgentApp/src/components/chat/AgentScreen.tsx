@@ -1,34 +1,101 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+import { useCallback, useContext, useEffect, useState } from 'react';
 import './AgentScreen.css';
 import { ChatScreen } from './ChatScreen';
+import { ThreadList } from './ThreadList';
+import { getToken } from '../../utils/getToken';
+import { getEndpointUrl } from '../../utils/getEndpointUrl';
+import { TeamsFxContext } from '../Context';
+import { useData } from '@microsoft/teamsfx-react';
+import { AgentUser, getAgentACSUser } from '../../utils/agentACSUser';
 
 export const AgentScreen = (): JSX.Element => {
-  // Temporary using hard coded value until fetching thread is implemented
-  const ENDPOINT_URL = '<Azure Communication Services Resource Endpoint>';
-  const TOKEN = '<Azure Communication Services Resource Access Token>';
-  const USER_ID = '<User Id associated to the token>';
-  const THREAD_ID = '<Get thread id from chat service>';
-  const DISPLAY_NAME = '<Display Name>';
+  const [token, setToken] = useState('');
+  const [userId, setUserId] = useState('');
+  const [displayName, setDisplayName] = useState('');
+  const [endpointUrl, setEndpointUrl] = useState('');
+  const [selectedThreadId, setSelectedThreadId] = useState<string | undefined>(undefined);
+  const { teamsUserCredential } = useContext(TeamsFxContext);
+
+  const { loading, data, error } = useData(async () => {
+    if (teamsUserCredential) {
+      const userInfo = await teamsUserCredential.getUserInfo();
+      return userInfo;
+    }
+  });
+
+  const getACSUser = useCallback(async (): Promise<AgentUser | undefined> => {
+    const teamsUserId = loading || error || !data ? '' : data.objectId;
+    // Fetch ACS user from the server
+    if (teamsUserId) {
+      const agentACSUser = await getAgentACSUser(teamsUserId);
+      return agentACSUser;
+    }
+  }, [data, error, loading]);
+
+  useEffect(() => {
+    const setScreenState = async (): Promise<void> => {
+      const agentACSUser = await getACSUser();
+      if (!agentACSUser) {
+        // TODO: Display error screen if user ID is not found
+        return;
+      }
+      const endpointUrl = await getEndpointUrl();
+      const token = await getToken(agentACSUser.acsUserId);
+      const displayName = agentACSUser.displayName;
+
+      setUserId(agentACSUser.acsUserId);
+      setEndpointUrl(endpointUrl);
+      setToken(token.token);
+      setDisplayName(displayName);
+    };
+    setScreenState();
+  }, [getACSUser]);
+
+  // TODO: UI will be handled in the future
+  const emptyChatScreen = (): JSX.Element => {
+    return (
+      <div className="empty-screen">
+        <h1>Welcome to the chat app</h1>
+        <p>Select a thread to start chatting</p>
+      </div>
+    );
+  };
+
+  // TODO: UI will be handled in the future
+  const chatScreen = useCallback(() => {
+    if (!selectedThreadId || !token || !endpointUrl || !userId || !displayName) {
+      return emptyChatScreen();
+    }
+    return (
+      <ChatScreen
+        token={token}
+        userId={userId}
+        displayName={displayName}
+        endpointUrl={endpointUrl}
+        threadId={selectedThreadId}
+        endChatHandler={function (isParticipantRemoved: boolean): void {
+          console.log('End chat handler called', isParticipantRemoved);
+        }}
+      />
+    );
+  }, [selectedThreadId, token, endpointUrl, userId, displayName]);
 
   return (
     <div className="welcome page">
       <div style={{ display: 'flex', flexDirection: 'row', height: '100%' }}>
-        <div style={{ width: '400px' }}>
-          <h1 style={{ marginLeft: '15px' }}>Thread List</h1>
-        </div>
-        <div className="narrow">
-          <ChatScreen
-            token={TOKEN}
-            userId={USER_ID}
-            displayName={DISPLAY_NAME}
-            endpointUrl={ENDPOINT_URL}
-            threadId={THREAD_ID}
-            endChatHandler={function (isParticipantRemoved: boolean): void {
-              console.log('End chat handler called', isParticipantRemoved);
-            }}
+        {endpointUrl ? (
+          <ThreadList
+            userId={userId}
+            token={token}
+            endpointUrl={endpointUrl}
+            setSelectedThreadId={setSelectedThreadId}
           />
-        </div>
+        ) : (
+          <div>Loading...</div>
+        )}
+        <div className="narrow">{chatScreen()}</div>
       </div>
     </div>
   );

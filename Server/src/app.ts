@@ -15,6 +15,7 @@ import userConfig from './routes/userConfig';
 import createThread from './routes/createThread';
 import addUser from './routes/addUser';
 import uploadToAzureBlobStorage from './routes/uploadToAzureBlobStorage';
+import agentACSUser from './routes/agentACSUser';
 
 const app = express();
 
@@ -69,14 +70,20 @@ app.use('/token', cors(), issueToken);
 app.use('/userConfig', cors(), userConfig);
 
 /**
- * route: /getLogUploadData
+ * route: /uploadToAzureBlobStorage
  * purpose: Get tokens and endpoints for uploading logs to Azure Blob Storage
  */
 app.use('/uploadToAzureBlobStorage', cors(), uploadToAzureBlobStorage);
 
+/**
+ * route: /agentACSUser
+ * purpose: Get the Azure Communication Services user info for a given Teams user
+ */
+app.use('/agentACSUser', cors(), agentACSUser);
+
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
-  next(createError(404));
+  next(createError(404, `Request url: ${req.url} is not found`));
 });
 
 export default app;
