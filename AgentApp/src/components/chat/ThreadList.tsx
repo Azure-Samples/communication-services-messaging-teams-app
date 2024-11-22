@@ -23,7 +23,7 @@ export interface ThreadListProps {
 
 export const ThreadList = (props: ThreadListProps): JSX.Element => {
   const { userId, token, endpointUrl, setSelectedThreadId } = props;
-  const [threads, setThreads] = useState<Set<ThreadItem>>(new Set());
+  const [threads, setThreads] = useState<Array<ThreadItem>>([]);
 
   const chatClient = useMemo(() => {
     if (!endpointUrl) {
@@ -57,12 +57,19 @@ export const ThreadList = (props: ThreadListProps): JSX.Element => {
           deletedOn: undefined,
           lastMessageReceivedOn: Date.now()
         };
-        // Add new thread to the beginning of the list
-        setThreads((prevThreads) => new Set([threadItem, ...Array.from(prevThreads)]));
+
+        setThreads((prevThreads: ThreadItem[]) => {
+          const existingThreadIndex = prevThreads.findIndex((thread) => thread.id === threadItem.id);
+          if (existingThreadIndex === -1) {
+            // Thread does not exist, add it to the beginning of the list
+            return [threadItem, ...prevThreads];
+          }
+          return prevThreads;
+        });
       });
     };
     addChatClientListeners();
-  }, [chatClient, threads, userId]);
+  }, [chatClient, userId]);
 
   const onThreadSelected = (threadId: string): void => {
     setSelectedThreadId(threadId);
@@ -83,7 +90,7 @@ export const ThreadList = (props: ThreadListProps): JSX.Element => {
   return (
     <div style={{ width: '400px' }}>
       <h1 style={{ marginLeft: '15px' }}>Thread List</h1>
-      {Array.from(threads).map((thread) => threadItem(thread))}
+      {threads.map((thread) => threadItem(thread))}
     </div>
   );
 };
