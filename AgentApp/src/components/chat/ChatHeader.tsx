@@ -16,13 +16,13 @@ import {
 import { useTheme } from '@azure/communication-react';
 
 export interface ChatHeaderProps {
-  onEndChat(): void;
+  onResolveChat(): void;
 }
 
 export const ChatHeader = (props: ChatHeaderProps): JSX.Element => {
   const theme = useTheme();
 
-  const leaveString = 'Leave';
+  const resolveString = 'Resolve';
   return (
     <Stack
       horizontal={true}
@@ -37,19 +37,19 @@ export const ChatHeader = (props: ChatHeaderProps): JSX.Element => {
           color: theme.palette.neutralPrimaryAlt
         })}
         styles={buttonWithIconStyles}
-        text={leaveString}
-        onClick={() => props.onEndChat()}
+        text={resolveString}
+        onClick={() => props.onResolveChat()}
         onRenderIcon={() => <Icon iconName={leaveIcon.iconName} className={leaveIconStyle} />}
         aria-live={'polite'}
-        aria-label={leaveString}
+        aria-label={resolveString}
       />
       <IconButton
         iconProps={leaveIcon}
         className={mergeStyles(smallLeaveButtonContainerStyle, greyIconButtonStyle, {
           color: theme.palette.neutralPrimaryAlt
         })}
-        onClick={() => props.onEndChat()}
-        ariaLabel={leaveString}
+        onClick={() => props.onResolveChat()}
+        ariaLabel={resolveString}
         aria-live={'polite'}
       />
     </Stack>

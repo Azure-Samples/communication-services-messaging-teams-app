@@ -16,6 +16,7 @@ import createThread from './routes/createThread';
 import addUser from './routes/addUser';
 import uploadToAzureBlobStorage from './routes/uploadToAzureBlobStorage';
 import agentACSUser from './routes/agentACSUser';
+import agentWorkItem from './routes/agentWorkItem';
 
 const app = express();
 
@@ -80,6 +81,8 @@ app.use('/uploadToAzureBlobStorage', cors(), uploadToAzureBlobStorage);
  * purpose: Get the Azure Communication Services user info for a given Teams user
  */
 app.use('/agentACSUser', cors(), agentACSUser);
+
+app.use('/agentWorkItem', cors(), agentWorkItem);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

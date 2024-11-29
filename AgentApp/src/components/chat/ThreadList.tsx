@@ -1,113 +1,15 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import './AgentScreen.css';
-
-import { ChatClient } from '@azure/communication-chat';
-import type { ChatThreadCreatedEvent, ChatThreadItem, ChatMessageReceivedEvent } from '@azure/communication-chat';
-import { AzureCommunicationTokenCredential } from '@azure/communication-common';
-import { useEffect, useMemo, useState } from 'react';
-
-export interface ThreadItem {
-  id: string;
-  topic: string;
-  lastMessageReceivedOn?: Date;
-}
+import { ThreadItem } from './useThreads';
 
 export interface ThreadListProps {
-  userId: string;
-  token: string;
-  endpointUrl: string;
+  threads: Array<ThreadItem>;
   setSelectedThreadId(threadId: string): void;
 }
 
 export const ThreadList = (props: ThreadListProps): JSX.Element => {
-  const { userId, token, endpointUrl, setSelectedThreadId } = props;
-  const [threads, setThreads] = useState<Array<ThreadItem>>([]);
-
-  const chatClient = useMemo(() => {
-    if (!endpointUrl) {
-      return;
-    }
-    const createChatClient = async (): Promise<ChatClient | undefined> => {
-      if (!token) {
-        return;
-      }
-      const tokenCredential = new AzureCommunicationTokenCredential(token);
-      const chatClient = new ChatClient(endpointUrl, tokenCredential);
-      return chatClient;
-    };
-    return createChatClient();
-  }, [endpointUrl, token]);
-
-  useEffect(() => {
-    const addChatClientListeners = async (): Promise<void> => {
-      const client = await chatClient;
-      if (!client) {
-        console.log('Failed to add listeners because client is not initialized');
-        return;
-      }
-      await client.startRealtimeNotifications();
-
-      client.on('chatThreadCreated', (event: ChatThreadCreatedEvent) => {
-        const threadItem = {
-          id: event.threadId,
-          topic: event.properties.topic,
-          lastMessageReceivedOn: new Date()
-        };
-
-        setThreads((prevThreads: ThreadItem[]) => {
-          const existingThreadIndex = prevThreads.findIndex((thread) => thread.id === threadItem.id);
-          if (existingThreadIndex === -1) {
-            // Thread does not exist, add it to the beginning of the list
-            return [threadItem, ...prevThreads];
-          }
-          return prevThreads;
-        });
-      });
-
-      client.on('chatMessageReceived', (event: ChatMessageReceivedEvent) => {
-        // Bubble up the thread with new message to the top of the list
-        const threadId = event.threadId;
-        setThreads((prevThreads: ThreadItem[]) => {
-          const threadIndex = prevThreads.findIndex((thread) => thread.id === threadId);
-          if (threadIndex === -1) {
-            console.error(`Received message for unknown thread: ${threadId}`);
-            return prevThreads;
-          }
-          const [updatedThread] = prevThreads.splice(threadIndex, 1);
-          updatedThread.lastMessageReceivedOn = new Date();
-          return [updatedThread, ...prevThreads];
-        });
-      });
-    };
-    addChatClientListeners();
-  }, [chatClient, userId]);
-
-  useEffect(() => {
-    const fetchThreads = async (): Promise<void> => {
-      const client = await chatClient;
-      if (!client) {
-        return;
-      }
-
-      const threadsRespond = await client.listChatThreads().byPage().next();
-      const threads = threadsRespond.value;
-      const threadItems = threads.map((thread: ChatThreadItem) => {
-        return {
-          id: thread.id,
-          topic: thread.topic,
-          lastMessageReceivedOn: thread.lastMessageReceivedOn
-        };
-      });
-
-      setThreads((prevThreads) => {
-        const existingThreadIds = new Set(prevThreads.map((thread) => thread.id));
-        const newThreads = threadItems.filter((thread: ThreadItem) => !existingThreadIds.has(thread.id));
-        return [...prevThreads, ...newThreads];
-      });
-    };
-    fetchThreads();
-  }, [chatClient, userId]);
+  const { threads, setSelectedThreadId } = props;
 
   const onThreadSelected = (threadId: string): void => {
     setSelectedThreadId(threadId);
@@ -121,6 +23,8 @@ export const ThreadList = (props: ThreadListProps): JSX.Element => {
         style={{ display: 'flex', flexDirection: 'row', padding: '10px', borderBottom: '1px solid #ccc' }}
       >
         <button onClick={() => onThreadSelected(thread.id)}>{thread.topic}</button>
+        {/* TODO: UI will be handled in the future */}
+        {thread.status === 'active' && <div style={{ padding: '5px' }}>Active</div>}
       </div>
     );
   };
