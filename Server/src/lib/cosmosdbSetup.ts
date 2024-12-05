@@ -11,10 +11,7 @@ enum ContainerId {
 
 const client = new CosmosClient({
   endpoint: getCosmosDBEndpoint(),
-  key: getCosmosDBKey(),
-  connectionPolicy: {
-    requestTimeout: 30000
-  }
+  key: getCosmosDBKey()
 });
 
 let database: Database;
