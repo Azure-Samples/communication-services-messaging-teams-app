@@ -1,14 +1,14 @@
-# Communication Services Messaging Teams App
-
-![Homepage](./Media/homepage-teams-custom-app.png)
+# B2C Customer-Agent Messaging Teams App
 
 ## Overview
 
 This is a sample application to show how we can build a custom [Teams App](https://docs.microsoft.com/microsoftteams/platform/overview#build-apps-with-microsoft-teams-platform) that can interface with an Azure Communication Services instance, enabling the two systems to work together while keeping their backend environments and identity configurations separate.
 
-This integration is beneficial for communication scenarios where one party utilizes Microsoft Teams, while the other does not have access to Teams accounts within the same organization. One common example of this type of communication is post-sales support.
+This sample contains three standalone applications that together provide the complete experience of a customer support scenario:
 
-The chat experience of this sample application is built with the `@azure/communication-react` package. Learn more about the [Azure Communication Services UI Library](https://azure.github.io/communication-ui-library/?path=/docs/overview--docs).
+- AgentApp: this is a custom Teams app. The agents, who have access to a Microsoft Teams account, can use this app to view all the incoming customer chats that assigned to them and provide customer support within the Microsoft Teams ecosystem.
+- ClientApp: this is a web-based app that provides quick access to customers who do not have access to a Microsoft Teams account.
+- Server: this is a backend application that supports both the AgentApp and the Client App.
 
 ## Prerequisites
 
@@ -23,8 +23,6 @@ The chat experience of this sample application is built with the `@azure/communi
 - (TODO: add optional prerequisites for file uploading).
 
 ## Code structure
-
-This sample includes three standalone applications that together provide the complete experience of a customer support scenario.
 
 - [AgentApp](./AgentApp) - A custom Teams app for agents to provide customer support
 
