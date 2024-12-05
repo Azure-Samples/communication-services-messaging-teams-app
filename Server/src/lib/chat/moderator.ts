@@ -5,6 +5,8 @@ import { AzureCommunicationTokenCredential } from '@azure/communication-common';
 import { ChatClient, CreateChatThreadOptions, CreateChatThreadRequest } from '@azure/communication-chat';
 import { AgentUser, getAgentUsers, getEndpoint } from '../envHelper';
 import { getAdminUser, getToken } from '../identityClient';
+import { createAgentWorkItem } from '../../services/agentWorkItemService';
+import { AgentWorkItemStatus } from '../../models/agentWorkItem';
 
 // TODO: Remove this when topicName can be passed in
 let count = 0;
@@ -43,12 +45,14 @@ export const createThread = async (topicName?: string): Promise<string> => {
   };
   const result = await chatClient.createChatThread(request, options);
 
-  const threadID = result.chatThread?.id;
-  if (!threadID) {
+  const threadId = result.chatThread?.id;
+  if (!threadId) {
     throw new Error(`Invalid or missing ID for newly created thread ${result.chatThread}`);
   }
 
-  return threadID;
+  saveAgentWorkItemToDatabase(threadId, 'active');
+
+  return threadId;
 };
 
 const getAgentUser = (): AgentUser => {
@@ -58,4 +62,12 @@ const getAgentUser = (): AgentUser => {
   const agentUserIndex = Math.floor(Math.random() * AgentUsers.length);
   const agentUser = AgentUsers[agentUserIndex];
   return agentUser;
+};
+
+const saveAgentWorkItemToDatabase = async (threadId: string, status: AgentWorkItemStatus): Promise<void> => {
+  try {
+    await createAgentWorkItem({ id: threadId, status: status });
+  } catch (error) {
+    console.error(error);
+  }
 };

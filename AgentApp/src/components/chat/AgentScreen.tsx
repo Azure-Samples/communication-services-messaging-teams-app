@@ -9,6 +9,7 @@ import { getEndpointUrl } from '../../utils/getEndpointUrl';
 import { TeamsFxContext } from '../Context';
 import { useData } from '@microsoft/teamsfx-react';
 import { AgentUser, getAgentACSUser } from '../../utils/agentACSUser';
+import useThreads from './useThreads';
 
 export const AgentScreen = (): JSX.Element => {
   const [token, setToken] = useState('');
@@ -16,6 +17,7 @@ export const AgentScreen = (): JSX.Element => {
   const [displayName, setDisplayName] = useState('');
   const [endpointUrl, setEndpointUrl] = useState('');
   const [selectedThreadId, setSelectedThreadId] = useState<string | undefined>(undefined);
+  const { threads, setThreads } = useThreads({ userId, token, endpointUrl });
   const { teamsUserCredential } = useContext(TeamsFxContext);
 
   const { loading, data, error } = useData(async () => {
@@ -78,20 +80,25 @@ export const AgentScreen = (): JSX.Element => {
         endChatHandler={function (isParticipantRemoved: boolean): void {
           console.log('End chat handler called', isParticipantRemoved);
         }}
+        resolveChatHandler={(threadId) => {
+          setThreads((prevThreads) =>
+            prevThreads.map((thread) => {
+              if (thread.id === threadId) {
+                return { ...thread, status: 'resolved' };
+              }
+              return thread;
+            })
+          );
+        }}
       />
     );
-  }, [selectedThreadId, token, endpointUrl, userId, displayName]);
+  }, [selectedThreadId, token, endpointUrl, userId, displayName, setThreads]);
 
   return (
     <div className="welcome page">
       <div style={{ display: 'flex', flexDirection: 'row', height: '100%' }}>
-        {endpointUrl ? (
-          <ThreadList
-            userId={userId}
-            token={token}
-            endpointUrl={endpointUrl}
-            setSelectedThreadId={setSelectedThreadId}
-          />
+        {endpointUrl && threads ? (
+          <ThreadList setSelectedThreadId={setSelectedThreadId} threads={threads} />
         ) : (
           <div>Loading...</div>
         )}

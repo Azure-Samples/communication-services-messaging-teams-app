@@ -17,6 +17,7 @@ import { chatCompositeContainerStyle, chatScreenContainerStyle } from '../../sty
 import { createAutoRefreshingCredential } from '../../utils/credential';
 import { fetchEmojiForUser } from '../../utils/emojiCache';
 import { getBackgroundColor } from '../../utils/utils';
+import { AgentWorkItemStatus } from '../../utils/agentWorkItem';
 // These props are passed in when this component is referenced in JSX and not found in context
 interface ChatScreenProps {
   token: string;
@@ -25,10 +26,11 @@ interface ChatScreenProps {
   endpointUrl: string;
   threadId: string;
   endChatHandler(isParticipantRemoved: boolean): void;
+  resolveChatHandler(threadId: string): void;
 }
 
 export const ChatScreen = (props: ChatScreenProps): JSX.Element => {
-  const { displayName, endpointUrl, threadId, token, userId, endChatHandler } = props;
+  const { displayName, endpointUrl, threadId, token, userId, endChatHandler, resolveChatHandler } = props;
 
   // Disables pull down to refresh. Prevents accidental page refresh when scrolling through chat messages
   // Another alternative: set body style touch-action to 'none'. Achieves same result.
@@ -75,6 +77,18 @@ export const ChatScreen = (props: ChatScreenProps): JSX.Element => {
     return () => window.removeEventListener('beforeunload', disposeAdapter);
   }, [adapter]);
 
+  const handleOnResolveChat = useCallback(() => {
+    const updateAgentWorkItem = async (threadId: string, status: AgentWorkItemStatus): Promise<void> => {
+      try {
+        await updateAgentWorkItem(threadId, status);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    updateAgentWorkItem(threadId, 'resolved');
+    resolveChatHandler(threadId);
+  }, [resolveChatHandler, threadId]);
+
   if (adapter) {
     const onFetchAvatarPersonaData = (userId: string): Promise<AvatarPersonaData> =>
       fetchEmojiForUser(userId).then(
@@ -97,7 +111,7 @@ export const ChatScreen = (props: ChatScreenProps): JSX.Element => {
             onFetchAvatarPersonaData={onFetchAvatarPersonaData}
           />
         </Stack.Item>
-        <ChatHeader onEndChat={() => adapter.removeParticipant(userId)} />
+        <ChatHeader onResolveChat={() => handleOnResolveChat()} />
       </Stack>
     );
   }

@@ -16,6 +16,8 @@ let appSettings: {
   EndpointUrl: string;
   AdminUserId: string;
   AzureBlobStorageConnectionString: string;
+  CosmosDBEndpoint: string;
+  CosmosDBKey: string;
   AgentUsers: AgentUser[];
 };
 if (
@@ -83,4 +85,19 @@ export const getAgentUsers = (): AgentUser[] => {
   }
 
   return AgentUsers;
+};
+
+export const getCosmosDBEndpoint = (): string => {
+  const uri = new URL(process.env['CosmosDBEndpoint'] || appSettings.CosmosDBEndpoint);
+  return `${uri.protocol}//${uri.host}`;
+};
+
+export const getCosmosDBKey = (): string => {
+  const cosmosDBKey = process.env['CosmosDBKey'] || appSettings.CosmosDBKey;
+
+  if (!cosmosDBKey) {
+    throw new Error('No CosmosDB key provided');
+  }
+
+  return cosmosDBKey;
 };
