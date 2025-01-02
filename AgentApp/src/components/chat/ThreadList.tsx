@@ -1,5 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+import { threadStrings } from '../../utils/constants';
+import { formatTimestampForThread } from '../../utils/datetime';
 import './AgentScreen.css';
 import { ThreadItem } from './useThreads';
 
@@ -25,6 +27,11 @@ export const ThreadList = (props: ThreadListProps): JSX.Element => {
         <button onClick={() => onThreadSelected(thread.id)}>{thread.topic}</button>
         {/* TODO: UI will be handled in the future */}
         {thread.status === 'active' && <div style={{ padding: '5px' }}>Active</div>}
+        {
+          <div style={{ padding: '5px' }}>
+            {formatTimestampForThread(thread.lastMessageReceivedOn, new Date(), threadStrings)}
+          </div>
+        }
       </div>
     );
   };

@@ -8,7 +8,7 @@ import {
   ChatThreadItem
 } from '@azure/communication-chat';
 import { AzureCommunicationTokenCredential } from '@azure/communication-common';
-import { createAgentWorkItem, getAgentWorkItems, AgentWorkItem } from '../../utils/agentWorkItem';
+import { createAgentWorkItem, getAgentWorkItems, AgentWorkItem } from '../../utils/fetchRequestUtils/agentWorkItem';
 
 export interface ThreadItem {
   id: string;

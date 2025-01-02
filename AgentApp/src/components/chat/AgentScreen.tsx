@@ -4,11 +4,11 @@ import { useCallback, useContext, useEffect, useState } from 'react';
 import './AgentScreen.css';
 import { ChatScreen } from './ChatScreen';
 import { ThreadList } from './ThreadList';
-import { getToken } from '../../utils/getToken';
-import { getEndpointUrl } from '../../utils/getEndpointUrl';
+import { getToken } from '../../utils/fetchRequestUtils/getToken';
+import { getEndpointUrl } from '../../utils/fetchRequestUtils/getEndpointUrl';
 import { TeamsFxContext } from '../Context';
 import { useData } from '@microsoft/teamsfx-react';
-import { AgentUser, getAgentACSUser } from '../../utils/agentACSUser';
+import { AgentUser, getAgentACSUser } from '../../utils/fetchRequestUtils/agentACSUser';
 import useThreads from './useThreads';
 
 export const AgentScreen = (): JSX.Element => {

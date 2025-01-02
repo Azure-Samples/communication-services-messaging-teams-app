@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { StatusCode } from './constants';
+import { StatusCode } from '../constants';
 
 export type AgentWorkItemStatus = 'active' | 'resolved';
 

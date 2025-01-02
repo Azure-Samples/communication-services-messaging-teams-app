@@ -14,10 +14,10 @@ import { Stack } from '@fluentui/react';
 import { useCallback, useEffect, useMemo } from 'react';
 import { ChatHeader } from './ChatHeader';
 import { chatCompositeContainerStyle, chatScreenContainerStyle } from '../../styles/ChatScreen.styles';
-import { createAutoRefreshingCredential } from '../../utils/credential';
-import { fetchEmojiForUser } from '../../utils/emojiCache';
+import { createAutoRefreshingCredential } from '../../utils/fetchRequestUtils/credential';
+import { fetchEmojiForUser } from '../../utils/fetchRequestUtils/emojiCache';
 import { getBackgroundColor } from '../../utils/utils';
-import { AgentWorkItemStatus } from '../../utils/agentWorkItem';
+import { AgentWorkItemStatus } from '../../utils/fetchRequestUtils/agentWorkItem';
 // These props are passed in when this component is referenced in JSX and not found in context
 interface ChatScreenProps {
   token: string;
