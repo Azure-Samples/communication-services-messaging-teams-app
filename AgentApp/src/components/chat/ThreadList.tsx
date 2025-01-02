@@ -28,7 +28,7 @@ export const ThreadList = (props: ThreadListProps): JSX.Element => {
         {/* TODO: UI will be handled in the future */}
         {thread.status === 'active' && <div style={{ padding: '5px' }}>Active</div>}
         {
-          <div style={{ padding: '5px' }}>
+          <div style={{ padding: '5px', width: '100px' }}>
             {formatTimestampForThread(thread.lastMessageReceivedOn, new Date(), threadStrings)}
           </div>
         }
