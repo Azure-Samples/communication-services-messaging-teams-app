@@ -7,9 +7,7 @@ import { ThreadStrings } from './constants';
  * @private
  */
 export const formatTimeForThread = (threadDate: Date): string => {
-  let timeString = threadDate.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
-  timeString = timeString.replace('a.m.', 'AM').replace('p.m.', 'PM');
-  return timeString;
+  return threadDate.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
 };
 
 /**
