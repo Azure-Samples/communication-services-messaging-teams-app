@@ -69,7 +69,7 @@ export const formatTimestampForThread = (threadDate: Date, todayDate: Date, date
     return dayToDayName(threadDate.getDay(), dateStrings);
   }
 
-  // If thread date date is in previous or older weeks then timestamp string is like 2025-01-2.
+  // If thread date date is in previous or older weeks then timestamp string is like '2025-01-02'.
   return formatDateForThread(threadDate);
 };
 
