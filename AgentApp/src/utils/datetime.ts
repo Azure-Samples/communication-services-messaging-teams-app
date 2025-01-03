@@ -57,7 +57,7 @@ export const formatTimestampForThread = (threadDate: Date, todayDate: Date, date
   }
 
   // If thread date was before Sunday and today is Sunday (start of week) then timestamp string is like
-  // '2025-01-2'.
+  // '2025-01-02'.
   const weekDay = todayDate.getDay();
   if (weekDay === 0) {
     return formatDateForThread(threadDate);
