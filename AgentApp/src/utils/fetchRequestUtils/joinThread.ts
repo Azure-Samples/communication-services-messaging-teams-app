@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { StatusCode } from './constants';
+import { StatusCode } from '../constants';
 
 /**
  * This is a Contoso specific method. Specific to Sample App Heroes. Its meant to be called by Sample App Heroes
