@@ -4,8 +4,8 @@ import { makeStyles } from '@fluentui/react-components';
 
 export const chatFloatingWindowStyles = makeStyles({
   floatingWindow: {
-    width: '16.6875rem', // 267px
-    height: '24.5625rem', // 393px
+    width: '267px',
+    height: '393px',
     backgroundColor: 'blue', // TODO: Remove this line when the content view is added
     boxShadow: '0px 2px 8px 0px #004E8C1A',
     borderTopLeftRadius: '0.5rem', // 8px
