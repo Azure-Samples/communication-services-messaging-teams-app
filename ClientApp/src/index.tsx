@@ -5,7 +5,7 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import './index.css';
 import { App } from './app/App';
-import { SwitchableFluentThemeProvider } from './app/theming/SwitchableFluentThemeProvider';
+import { FluentProvider, webLightTheme } from '@fluentui/react-components';
 
 const domNode = document.getElementById('root');
 if (!domNode) {
@@ -14,10 +14,10 @@ if (!domNode) {
 
 createRoot(domNode).render(
   <React.StrictMode>
-    <SwitchableFluentThemeProvider scopeId="SampleChatApp">
+    <FluentProvider theme={webLightTheme}>
       <div className="wrapper">
         <App />
       </div>
-    </SwitchableFluentThemeProvider>
+    </FluentProvider>
   </React.StrictMode>
 );
