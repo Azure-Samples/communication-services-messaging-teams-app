@@ -1,16 +1,21 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { mergeStyles } from '@fluentui/react';
+import { makeStyles } from '@fluentui/react-components';
 
-export const chatScreenContainerStyle = mergeStyles({
-  height: '100%',
-  width: '100%',
-  paddingTop: '0.5rem',
-  paddingBottom: '0.5rem'
-});
-
-export const chatCompositeContainerStyle = mergeStyles({
-  width: '100%',
-  height: '100%'
+export const useChatScreenStyles = makeStyles({
+  chatScreenContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    height: '100%',
+    width: '100%'
+  },
+  chatCompositeContainer: {
+    width: '100%',
+    height: '100%',
+    paddingTop: '0.5rem',
+    paddingBottom: '0.5rem'
+  }
 });

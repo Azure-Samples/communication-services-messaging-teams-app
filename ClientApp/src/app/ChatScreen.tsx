@@ -7,13 +7,11 @@ import {
   ChatAdapter,
   ChatComposite,
   fromFlatCommunicationIdentifier,
-  toFlatCommunicationIdentifier,
   useAzureCommunicationChatAdapter
 } from '@azure/communication-react';
-import { Stack } from '@fluentui/react';
 import { useCallback, useEffect, useMemo } from 'react';
 import { ChatHeader } from './ChatHeader';
-import { chatCompositeContainerStyle, chatScreenContainerStyle } from './styles/ChatScreen.styles';
+import { useChatScreenStyles } from './styles/ChatScreen.styles';
 import { createAutoRefreshingCredential } from './utils/credential';
 import { fetchEmojiForUser } from './utils/emojiCache';
 import { getBackgroundColor } from './utils/utils';
@@ -26,11 +24,13 @@ interface ChatScreenProps {
   displayName: string;
   endpointUrl: string;
   threadId: string;
-  endChatHandler(isParticipantRemoved: boolean): void;
+  endChatHandler(): void;
+  onErrorHandler?(error: string): void;
 }
 
 export const ChatScreen = (props: ChatScreenProps): JSX.Element => {
-  const { displayName, endpointUrl, threadId, token, userId, endChatHandler } = props;
+  const { displayName, endpointUrl, threadId, token, userId, endChatHandler, onErrorHandler } = props;
+  const styles = useChatScreenStyles();
 
   // Disables pull down to refresh. Prevents accidental page refresh when scrolling through chat messages
   // Another alternative: set body style touch-action to 'none'. Achieves same result.
@@ -43,19 +43,13 @@ export const ChatScreen = (props: ChatScreenProps): JSX.Element => {
 
   const adapterAfterCreate = useCallback(
     async (adapter: ChatAdapter): Promise<ChatAdapter> => {
-      adapter.on('participantsRemoved', (listener) => {
-        const removedParticipantIds = listener.participantsRemoved.map((p) => toFlatCommunicationIdentifier(p.id));
-        if (removedParticipantIds.includes(userId)) {
-          const removedBy = toFlatCommunicationIdentifier(listener.removedBy.id);
-          endChatHandler(removedBy !== userId);
-        }
-      });
       adapter.on('error', (e) => {
         console.error(e);
+        onErrorHandler?.(e.message);
       });
       return adapter;
     },
-    [endChatHandler, userId]
+    [onErrorHandler]
   );
 
   const adapterArgs = useMemo(
@@ -88,19 +82,21 @@ export const ChatScreen = (props: ChatScreenProps): JSX.Element => {
             });
           })
       );
+
     return (
-      <Stack className={chatScreenContainerStyle}>
-        <Stack.Item className={chatCompositeContainerStyle} role="main">
+      <div className={styles.chatScreenContainer}>
+        <ChatHeader personaName="Mona Kane" onEndChat={endChatHandler} /> {/* TODO: Remove hardcoded persona name */}
+        <div className={styles.chatCompositeContainer}>
           <ChatComposite
             adapter={adapter}
             options={{
-              autoFocus: 'sendBoxTextField'
+              autoFocus: 'sendBoxTextField',
+              topic: false
             }}
             onFetchAvatarPersonaData={onFetchAvatarPersonaData}
           />
-        </Stack.Item>
-        <ChatHeader onEndChat={() => adapter.removeParticipant(userId)} />
-      </Stack>
+        </div>
+      </div>
     );
   }
 
