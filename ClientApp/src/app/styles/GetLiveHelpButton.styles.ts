@@ -4,7 +4,7 @@
 import { makeStyles } from '@fluentui/react-components';
 import { tokens } from '@fluentui/react-theme';
 
-export const getLiveHelpButtonStyles = makeStyles({
+export const useGetLiveHelpButtonStyles = makeStyles({
   button: {
     fontWeight: 600,
     fontSize: '0.875rem', // 14px
