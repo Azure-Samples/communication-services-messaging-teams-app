@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 import { makeStyles } from '@fluentui/react-components';
 
-export const chatFloatingWindowStyles = makeStyles({
+export const useChatFloatingWindowStyles = makeStyles({
   floatingWindow: {
     width: '267px',
     height: '393px',
