@@ -8,3 +8,7 @@ export enum StatusCode {
 }
 
 export const ENTER_KEY = 13;
+
+export const strings = {
+  getLiveHelp: 'Get live help'
+};
