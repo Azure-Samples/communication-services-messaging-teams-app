@@ -3,7 +3,7 @@
 
 import { Button } from '@fluentui/react-components';
 import { Chat20Filled } from '@fluentui/react-icons';
-import { getLiveHelpButtonStyles } from './styles/GetLiveHelpButton.styles';
+import { useGetLiveHelpButtonStyles } from './styles/GetLiveHelpButton.styles';
 import { strings } from './utils/constants';
 
 interface GetLiveHelpButtonProps {
