@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { chatFloatingWindowStyles } from './styles/ChatFloatingWindow.styles';
+import { useChatFloatingWindowStyles } from './styles/ChatFloatingWindow.styles';
 
 interface ChatFloatingWindowProps {
   onCloseButtonClick: () => void;
