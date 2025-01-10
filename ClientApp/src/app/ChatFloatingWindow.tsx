@@ -8,6 +8,6 @@ interface ChatFloatingWindowProps {
 }
 
 export const ChatFloatingWindow = (props: ChatFloatingWindowProps): JSX.Element => {
-  const styles = chatFloatingWindowStyles();
+  const styles = useChatFloatingWindowStyles();
   return <div className={styles.floatingWindow}></div>;
 };
