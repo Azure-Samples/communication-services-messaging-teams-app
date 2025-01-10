@@ -12,7 +12,7 @@ interface GetLiveHelpButtonProps {
 
 export const GetLiveHelpButton = (props: GetLiveHelpButtonProps): JSX.Element => {
   const { onGetLiveHelpButtonClick } = props;
-  const styles = getLiveHelpButtonStyles();
+  const styles = useGetLiveHelpButtonStyles();
 
   return (
     <Button
