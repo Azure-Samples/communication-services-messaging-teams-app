@@ -22,5 +22,6 @@ export const strings = {
   configurationQuestionSummaryEmptyErrorMessage: 'This text field cannot be empty',
   initializeChatSpinnerLabel: 'Initializing chat client...',
   failToCreateChatClient: 'Failed to create chat client, please revisit home page to create a new thread',
-  failToJoinChatThread: 'Failed to join the chat thread, please revisit home page to create a new thread'
+  failToJoinChatThread: 'Failed to join the chat thread, please revisit home page to create a new thread',
+  failToAssignAgent: 'Failed to assign an agent to the chat thread, please revisit home page to create a new thread'
 };

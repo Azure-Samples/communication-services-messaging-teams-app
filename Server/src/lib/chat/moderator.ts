@@ -3,7 +3,7 @@
 
 import { AzureCommunicationTokenCredential } from '@azure/communication-common';
 import { ChatClient, CreateChatThreadOptions, CreateChatThreadRequest } from '@azure/communication-chat';
-import { AgentUser, getAgentUsers, getEndpoint } from '../envHelper';
+import { getEndpoint } from '../envHelper';
 import { getAdminUser, getToken } from '../identityClient';
 import { createAgentWorkItem } from '../../services/agentWorkItemService';
 import { AgentWorkItemStatus } from '../../models/agentWorkItem';
@@ -27,19 +27,12 @@ export const createThread = async (topicName?: string): Promise<string> => {
   // TODO: Remove this when topicName can be passed in
   count++;
 
-  // Select an agent user to add to the chat thread
-  const agentUser = getAgentUser();
-
   const options: CreateChatThreadOptions = {
     participants: [
       {
         id: {
           communicationUserId: user.communicationUserId
         }
-      },
-      {
-        id: { communicationUserId: agentUser.acsUserId },
-        displayName: agentUser.displayName
       }
     ]
   };
@@ -53,15 +46,6 @@ export const createThread = async (topicName?: string): Promise<string> => {
   saveAgentWorkItemToDatabase(threadId, 'active');
 
   return threadId;
-};
-
-const getAgentUser = (): AgentUser => {
-  // Select a random agent user to add to the chat thread
-  // This is a simple implementation. In a production scenario, you would want to implement a more sophisticated way to select an agent user.
-  const AgentUsers = getAgentUsers();
-  const agentUserIndex = Math.floor(Math.random() * AgentUsers.length);
-  const agentUser = AgentUsers[agentUserIndex];
-  return agentUser;
 };
 
 const saveAgentWorkItemToDatabase = async (threadId: string, status: AgentWorkItemStatus): Promise<void> => {

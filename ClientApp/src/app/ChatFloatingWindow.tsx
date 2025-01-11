@@ -30,6 +30,7 @@ export const ChatFloatingWindow = (props: ChatFloatingWindowProps): JSX.Element 
   const [displayName, setDisplayName] = useState('');
   const [threadId, setThreadId] = useState('');
   const [endpointUrl, setEndpointUrl] = useState('');
+  const [agentName, setAgentName] = useState('');
   const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
 
   const renderPage = (): JSX.Element => {
@@ -45,6 +46,7 @@ export const ChatFloatingWindow = (props: ChatFloatingWindowProps): JSX.Element 
             setDisplayName={setDisplayName}
             setThreadId={setThreadId}
             setEndpointUrl={setEndpointUrl}
+            setAgentName={setAgentName}
             onCloseButtonClicked={onCloseButtonClick}
             onErrorHandler={(error: string) => {
               setErrorMessage(error);
@@ -63,6 +65,7 @@ export const ChatFloatingWindow = (props: ChatFloatingWindowProps): JSX.Element 
               displayName={displayName}
               endpointUrl={endpointUrl}
               threadId={threadId}
+              agentName={agentName}
               endChatHandler={() => {
                 setPage(Page.EndConfirmation);
               }}

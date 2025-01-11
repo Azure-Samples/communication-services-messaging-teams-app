@@ -13,6 +13,7 @@ import configurationScreenHeroSVG from '../assets/configurationScreenHero.svg';
 import { strings } from './utils/constants';
 import { Dismiss20Regular } from '@fluentui/react-icons';
 import { LoadingSpinner } from './LoadingSpinner';
+import { assignAgentUser } from './utils/assignAgentUser';
 
 export interface ConfigurationScreenProps {
   joinChatHandler(): void;
@@ -21,6 +22,7 @@ export interface ConfigurationScreenProps {
   setDisplayName(displayName: string): void;
   setThreadId(threadId: string): void;
   setEndpointUrl(endpointUrl: string): void;
+  setAgentName(agentName: string): void;
   onCloseButtonClicked(): void;
   onErrorHandler?(error: string): void;
 }
@@ -33,6 +35,7 @@ export const ConfigurationScreen = (props: ConfigurationScreenProps): JSX.Elemen
     setDisplayName,
     setThreadId,
     setEndpointUrl,
+    setAgentName,
     onCloseButtonClicked,
     onErrorHandler
   } = props;
@@ -50,6 +53,7 @@ export const ConfigurationScreen = (props: ConfigurationScreenProps): JSX.Elemen
   // then joins the thread with the newly created user.
   const createAndJoinChatThreadWithNewUser = useCallback(() => {
     const createAndJoinChatThread = async (): Promise<void> => {
+      // Create a new chat thread
       const threadId = await createThread();
       if (!threadId) {
         console.error('Failed to create a thread, returned threadId is undefined or empty string');
@@ -58,6 +62,7 @@ export const ConfigurationScreen = (props: ConfigurationScreenProps): JSX.Elemen
       }
       setThreadId(threadId);
 
+      // Create a new ACS user
       const token = await getToken();
       const endpointUrl = await getEndpointUrl();
 
@@ -66,6 +71,7 @@ export const ConfigurationScreen = (props: ConfigurationScreenProps): JSX.Elemen
       setDisplayName(name);
       setEndpointUrl(endpointUrl);
 
+      // Join the thread with the newly created user
       const result = await joinThread(threadId, token.identity, name);
       if (!result) {
         console.error('Failed to join the thread');
@@ -74,11 +80,30 @@ export const ConfigurationScreen = (props: ConfigurationScreenProps): JSX.Elemen
         return;
       }
 
+      // Assign a random agent
+      const agentDisplayName = await assignAgentUser(threadId);
+      if (agentDisplayName === undefined) {
+        console.error('Failed to assign an agent to the chat thread');
+        onErrorHandler?.(strings.failToAssignAgent);
+        return;
+      }
+      setAgentName(agentDisplayName);
+
       setDisableJoinChatButton(false);
       joinChatHandler();
     };
     createAndJoinChatThread();
-  }, [setThreadId, setToken, setUserId, setDisplayName, name, setEndpointUrl, joinChatHandler, onErrorHandler]);
+  }, [
+    setThreadId,
+    setAgentName,
+    setToken,
+    setUserId,
+    setDisplayName,
+    name,
+    setEndpointUrl,
+    joinChatHandler,
+    onErrorHandler
+  ]);
 
   const validateRequiredFields = (): boolean => {
     if (!name) {
