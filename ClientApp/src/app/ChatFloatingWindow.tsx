@@ -46,7 +46,7 @@ export const ChatFloatingWindow = (props: ChatFloatingWindowProps): JSX.Element 
             setThreadId={setThreadId}
             setEndpointUrl={setEndpointUrl}
             onCloseButtonClicked={onCloseButtonClick}
-            onErrorHandler={(error: string) => {
+            onError={(error: string) => {
               setErrorMessage(error);
               setPage(Page.Error);
             }}
