@@ -14,8 +14,6 @@ export const useChatScreenStyles = makeStyles({
   },
   chatCompositeContainer: {
     width: '100%',
-    height: '100%',
-    paddingTop: '0.5rem',
-    paddingBottom: '0.5rem'
+    height: '100%'
   }
 });
