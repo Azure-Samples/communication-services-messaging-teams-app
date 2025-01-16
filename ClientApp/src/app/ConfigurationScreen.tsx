@@ -24,7 +24,7 @@ export interface ConfigurationScreenProps {
   setEndpointUrl(endpointUrl: string): void;
   setAgentName(agentName: string): void;
   onCloseButtonClicked(): void;
-  onErrorHandler?(error: string): void;
+  onError(error: string): void;
 }
 
 export const ConfigurationScreen = (props: ConfigurationScreenProps): JSX.Element => {
@@ -37,7 +37,7 @@ export const ConfigurationScreen = (props: ConfigurationScreenProps): JSX.Elemen
     setEndpointUrl,
     setAgentName,
     onCloseButtonClicked,
-    onErrorHandler
+    onError
   } = props;
 
   const styles = configurationScreenStyles();
@@ -57,7 +57,7 @@ export const ConfigurationScreen = (props: ConfigurationScreenProps): JSX.Elemen
       const threadId = await createThread();
       if (!threadId) {
         console.error('Failed to create a thread, returned threadId is undefined or empty string');
-        onErrorHandler?.(strings.failToCreateChatClient);
+        onError(strings.failToCreateChatClient);
         return;
       }
       setThreadId(threadId);
@@ -75,7 +75,7 @@ export const ConfigurationScreen = (props: ConfigurationScreenProps): JSX.Elemen
       const result = await joinThread(threadId, token.identity, name);
       if (!result) {
         console.error('Failed to join the thread');
-        onErrorHandler?.(strings.failToJoinChatThread);
+        onError(strings.failToJoinChatThread);
         setDisableJoinChatButton(false);
         return;
       }
@@ -84,7 +84,7 @@ export const ConfigurationScreen = (props: ConfigurationScreenProps): JSX.Elemen
       const agentDisplayName = await assignAgentUser(threadId);
       if (agentDisplayName === undefined) {
         console.error('Failed to assign an agent to the chat thread');
-        onErrorHandler?.(strings.failToAssignAgent);
+        onError?.(strings.failToAssignAgent);
         return;
       }
       setAgentName(agentDisplayName);
@@ -93,17 +93,7 @@ export const ConfigurationScreen = (props: ConfigurationScreenProps): JSX.Elemen
       joinChatHandler();
     };
     createAndJoinChatThread();
-  }, [
-    setThreadId,
-    setAgentName,
-    setToken,
-    setUserId,
-    setDisplayName,
-    name,
-    setEndpointUrl,
-    joinChatHandler,
-    onErrorHandler
-  ]);
+  }, [setThreadId, setToken, setUserId, setDisplayName, name, setEndpointUrl, setAgentName, joinChatHandler, onError]);
 
   const validateRequiredFields = (): boolean => {
     if (!name) {

@@ -48,7 +48,7 @@ export const ChatFloatingWindow = (props: ChatFloatingWindowProps): JSX.Element 
             setEndpointUrl={setEndpointUrl}
             setAgentName={setAgentName}
             onCloseButtonClicked={onCloseButtonClick}
-            onErrorHandler={(error: string) => {
+            onError={(error: string) => {
               setErrorMessage(error);
               setPage(Page.Error);
             }}
