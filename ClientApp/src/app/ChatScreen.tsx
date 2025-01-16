@@ -26,11 +26,11 @@ interface ChatScreenProps {
   threadId: string;
   agentName: string;
   endChatHandler(): void;
-  onErrorHandler?(error: string): void;
+  onError?(error: string): void;
 }
 
 export const ChatScreen = (props: ChatScreenProps): JSX.Element => {
-  const { displayName, endpointUrl, threadId, token, userId, agentName, endChatHandler, onErrorHandler } = props;
+  const { displayName, endpointUrl, threadId, token, userId, agentName, endChatHandler, onError } = props;
   const styles = useChatScreenStyles();
 
   // Disables pull down to refresh. Prevents accidental page refresh when scrolling through chat messages
@@ -46,11 +46,11 @@ export const ChatScreen = (props: ChatScreenProps): JSX.Element => {
     async (adapter: ChatAdapter): Promise<ChatAdapter> => {
       adapter.on('error', (e) => {
         console.error(e);
-        onErrorHandler?.(e.message);
+        onError?.(e.message);
       });
       return adapter;
     },
-    [onErrorHandler]
+    [onError]
   );
 
   const adapterArgs = useMemo(

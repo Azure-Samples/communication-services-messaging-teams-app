@@ -69,7 +69,7 @@ export const ChatFloatingWindow = (props: ChatFloatingWindowProps): JSX.Element 
               endChatHandler={() => {
                 setPage(Page.EndConfirmation);
               }}
-              onErrorHandler={(error: string) => {
+              onError={(error: string) => {
                 setErrorMessage(error);
                 setPage(Page.Error);
               }}
