@@ -55,7 +55,6 @@ export const ChatFloatingWindow = (props: ChatFloatingWindowProps): JSX.Element 
           />
         );
       }
-      // TODO: This section will be completed in a subsequent PR
       case Page.Chat: {
         if (token && userId && displayName && threadId && endpointUrl) {
           return (
