@@ -139,7 +139,7 @@ export const ConfigurationScreen = (props: ConfigurationScreenProps): JSX.Elemen
             labelText={strings.configurationDisplayNameLabelText}
             placeholder={strings.configurationDisplayNamePlaceholder}
             isEmpty={emptyNameWarning}
-            emptyErrorMessage={strings.configurationDisplayNameEmptyErrorMessage}
+            emptyErrorMessage={strings.requiredTextFiledErrorMessage}
             onTextChangedHandler={(newValue) => {
               setName(newValue);
               setEmptyNameWarning(!newValue);
@@ -150,7 +150,7 @@ export const ConfigurationScreen = (props: ConfigurationScreenProps): JSX.Elemen
             labelText={strings.configurationQuestionSummaryLabelText}
             placeholder={strings.configurationQuestionSummaryPlaceholder}
             isEmpty={emptyQuestionSummeryWarning}
-            emptyErrorMessage={strings.configurationQuestionSummaryEmptyErrorMessage}
+            emptyErrorMessage={strings.requiredTextFiledErrorMessage}
             onTextChangedHandler={(newValue) => {
               setQuestionSummery(newValue);
               setEmptyQuestionSummeryWarning(!newValue);
