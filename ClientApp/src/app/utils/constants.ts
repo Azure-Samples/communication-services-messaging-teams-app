@@ -19,7 +19,7 @@ export const strings = {
   configurationQuestionSummaryLabelText: 'How can we help you today?',
   configurationQuestionSummaryPlaceholder: 'Briefly summarize your issue',
   requiredTextFiledErrorMessage: 'Required',
-  initializeChatSpinnerLabel: 'Initializing chat client...',
+  initializeChatSpinnerLabel: 'Loading chat...',
   failToCreateChatClient: 'Failed to create chat client, please revisit home page to create a new thread',
   failToJoinChatThread: 'Failed to join the chat thread, please revisit home page to create a new thread',
   failToAssignAgent: 'Failed to assign an agent to the chat thread, please revisit home page to create a new thread'
