@@ -36,7 +36,7 @@ export const configurationScreenStyles = makeStyles({
   inputContainer: {
     width: '100%',
     padding: '0 0.75rem', // 0 12px
-    marginTop: '1.75rem', // 28px TODO: Check with UX whether we want to reduce this to 8px
+    marginTop: '1.75rem', // 28px
     marginBottom: '0.75rem', // 12px
     display: 'flex',
     flexDirection: 'column',
