@@ -3,17 +3,18 @@
 
 import { setLogLevel } from '@azure/logger';
 import { useState } from 'react';
-import { FluentProvider, webLightTheme } from '@fluentui/react-components';
 import { GetLiveHelpButton } from './GetLiveHelpButton';
 import { ChatFloatingWindow } from './ChatFloatingWindow';
+import { useAppStyles } from './styles/App.styles';
 
 setLogLevel('error');
 
 export const App = (): JSX.Element => {
+  const styles = useAppStyles();
   const [isChatFloatingWindowOpen, setIsChatFloatingWindowOpen] = useState(false);
 
   return (
-    <FluentProvider theme={webLightTheme}>
+    <div className={styles.root}>
       {isChatFloatingWindowOpen ? (
         <ChatFloatingWindow
           onCloseButtonClick={() => {
@@ -27,6 +28,6 @@ export const App = (): JSX.Element => {
           }}
         />
       )}
-    </FluentProvider>
+    </div>
   );
 };

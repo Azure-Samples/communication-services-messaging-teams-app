@@ -17,7 +17,8 @@ import { chatCompositeContainerStyle, chatScreenContainerStyle } from './styles/
 import { createAutoRefreshingCredential } from './utils/credential';
 import { fetchEmojiForUser } from './utils/emojiCache';
 import { getBackgroundColor } from './utils/utils';
-import { useSwitchableFluentTheme } from './theming/SwitchableFluentThemeProvider';
+import { strings } from './utils/constants';
+import { LoadingSpinner } from './LoadingSpinner';
 // These props are passed in when this component is referenced in JSX and not found in context
 interface ChatScreenProps {
   token: string;
@@ -39,8 +40,6 @@ export const ChatScreen = (props: ChatScreenProps): JSX.Element => {
       document.body.style.overflow = 'null';
     };
   }, []);
-
-  const { currentTheme } = useSwitchableFluentTheme();
 
   const adapterAfterCreate = useCallback(
     async (adapter: ChatAdapter): Promise<ChatAdapter> => {
@@ -94,7 +93,6 @@ export const ChatScreen = (props: ChatScreenProps): JSX.Element => {
         <Stack.Item className={chatCompositeContainerStyle} role="main">
           <ChatComposite
             adapter={adapter}
-            fluentTheme={currentTheme.theme}
             options={{
               autoFocus: 'sendBoxTextField'
             }}
@@ -105,5 +103,6 @@ export const ChatScreen = (props: ChatScreenProps): JSX.Element => {
       </Stack>
     );
   }
-  return <>Initializing...</>;
+
+  return <LoadingSpinner label={strings.initializeChatSpinnerLabel} />;
 };
