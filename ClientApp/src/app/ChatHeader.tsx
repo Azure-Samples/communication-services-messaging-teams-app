@@ -1,57 +1,34 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { DefaultButton, Icon, IconButton, mergeStyles, Stack } from '@fluentui/react';
-import {
-  buttonWithIconStyles,
-  chatHeaderContainerStyle,
-  greyIconButtonStyle,
-  largeLeaveButtonContainerStyle,
-  leaveButtonStyle,
-  leaveIcon,
-  leaveIconStyle,
-  paneButtonContainerStyle,
-  smallLeaveButtonContainerStyle
-} from './styles/ChatHeader.styles';
-import { useTheme } from '@azure/communication-react';
-
+import { Button, Persona } from '@fluentui/react-components';
+import { Dismiss20Regular } from '@fluentui/react-icons';
+import { useChatHeaderStyles } from './styles/ChatHeader.styles';
+import { strings } from './utils/constants';
 export interface ChatHeaderProps {
+  personaName: string;
   onEndChat(): void;
 }
 
 export const ChatHeader = (props: ChatHeaderProps): JSX.Element => {
-  const theme = useTheme();
-
-  const leaveString = 'Leave';
+  const { personaName, onEndChat } = props;
+  const styles = useChatHeaderStyles();
   return (
-    <Stack
-      horizontal={true}
-      verticalAlign={'center'}
-      horizontalAlign="end"
-      className={chatHeaderContainerStyle}
-      role="banner"
-    >
-      <div className={paneButtonContainerStyle}>{}</div>
-      <DefaultButton
-        className={mergeStyles(largeLeaveButtonContainerStyle, leaveButtonStyle, {
-          color: theme.palette.neutralPrimaryAlt
-        })}
-        styles={buttonWithIconStyles}
-        text={leaveString}
-        onClick={() => props.onEndChat()}
-        onRenderIcon={() => <Icon iconName={leaveIcon.iconName} className={leaveIconStyle} />}
-        aria-live={'polite'}
-        aria-label={leaveString}
+    <div className={styles.chatHeaderContainer} role="banner">
+      <Persona
+        name={personaName}
+        textAlignment="center"
+        size="small"
+        className={styles.personaContainer}
+        avatar={{ color: 'colorful' }}
       />
-      <IconButton
-        iconProps={leaveIcon}
-        className={mergeStyles(smallLeaveButtonContainerStyle, greyIconButtonStyle, {
-          color: theme.palette.neutralPrimaryAlt
-        })}
-        onClick={() => props.onEndChat()}
-        ariaLabel={leaveString}
+      <Button
+        icon={<Dismiss20Regular />}
+        className={styles.closeButton}
+        onClick={() => onEndChat()}
         aria-live={'polite'}
+        aria-label={strings.close}
       />
-    </Stack>
+    </div>
   );
 };

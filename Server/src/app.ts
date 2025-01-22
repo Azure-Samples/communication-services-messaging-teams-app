@@ -17,6 +17,7 @@ import addUser from './routes/addUser';
 import uploadToAzureBlobStorage from './routes/uploadToAzureBlobStorage';
 import agentACSUser from './routes/agentACSUser';
 import agentWorkItem from './routes/agentWorkItem';
+import assignAgentUser from './routes/assignAgentUser';
 
 const app = express();
 
@@ -39,6 +40,12 @@ app.get('/', (req, res) => {
  * purpose: Chat: create a new chat thread
  */
 app.use('/createThread', cors(), createThread);
+
+/**
+ * route: /assignAgentUser
+ * purpose: Chat: assign an agent user to the chat thread
+ */
+app.use('/assignAgentUser', cors(), assignAgentUser);
 
 /**
  * route: /addUser

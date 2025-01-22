@@ -27,7 +27,18 @@ interface AddUserParam {
 router.post('/:threadId', async function (req, res, next) {
   const addUserParam: AddUserParam = req.body;
   const threadId = req.params['threadId'];
+  try {
+    await addUserToThread(threadId, addUserParam.Id, addUserParam.DisplayName);
+    res.sendStatus(201);
+  } catch (err) {
+    // we will return a 404 if the thread to join is not accessible by the server user.
+    // The server user needs to be in the thread in order to add someone.
+    // So we are returning back that we can't find the thread to add the client user to.
+    res.sendStatus(404);
+  }
+});
 
+export const addUserToThread = async (threadId: string, userId: string, displayName: string): Promise<void> => {
   // create a user from the adminUserId and create a credential around that
   const credential = new AzureCommunicationTokenCredential({
     tokenRefresher: async () => (await getToken(getAdminUser(), ['chat'])).token,
@@ -37,22 +48,14 @@ router.post('/:threadId', async function (req, res, next) {
   const chatClient = new ChatClient(getEndpoint(), credential);
   const chatThreadClient = await chatClient.getChatThreadClient(threadId);
 
-  try {
-    await chatThreadClient.addParticipants({
-      participants: [
-        {
-          id: { communicationUserId: addUserParam.Id },
-          displayName: addUserParam.DisplayName
-        }
-      ]
-    });
-    res.sendStatus(201);
-  } catch (err) {
-    // we will return a 404 if the thread to join is not accessible by the server user.
-    // The server user needs to be in the thread in order to add someone.
-    // So we are returning back that we can't find the thread to add the client user to.
-    res.sendStatus(404);
-  }
-});
+  await chatThreadClient.addParticipants({
+    participants: [
+      {
+        id: { communicationUserId: userId },
+        displayName: displayName
+      }
+    ]
+  });
+};
 
 export default router;
