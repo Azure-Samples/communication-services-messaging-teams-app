@@ -23,7 +23,7 @@ export const configurationScreenStyles = makeStyles({
   },
   imageContainer: {
     width: '100%',
-    height: 'auto',
+    height: '73px',
     padding: '0.25rem 1rem 0' // 4px 16px 0
   },
   heroText: {
