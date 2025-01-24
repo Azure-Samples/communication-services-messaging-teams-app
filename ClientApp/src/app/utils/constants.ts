@@ -22,5 +22,10 @@ export const strings = {
   initializeChatSpinnerLabel: 'Loading chat...',
   failToCreateChatClient: 'Failed to create chat client, please revisit home page to create a new thread',
   failToJoinChatThread: 'Failed to join the chat thread, please revisit home page to create a new thread',
-  failToAssignAgent: 'Failed to assign an agent to the chat thread, please revisit home page to create a new thread'
+  failToAssignAgent: 'Failed to assign an agent to the chat thread, please revisit home page to create a new thread',
+  endChatConfirmationTitle: 'Leave chat?',
+  endChatConfirmationDescription: 'Your conversation is not saved',
+  endChatConfirmationConfirmButton: 'Leave and close',
+  endChatConfirmationCancelButton: 'Cancel',
+  homeButton: 'Go to homepage'
 };

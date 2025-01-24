@@ -1,8 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { makeStyles } from '@fluentui/react-components';
-import { tokens } from '@fluentui/react-theme';
+import { makeStyles, tokens } from '@fluentui/react-components';
 
 export const useGetLiveHelpButtonStyles = makeStyles({
   button: {
