@@ -9,7 +9,7 @@ export const useChatScreenStyles = makeStyles({
     flexDirection: 'column',
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
-    height: '100%',
+    height: '404px',
     width: '100%'
   },
   chatCompositeContainer: {
