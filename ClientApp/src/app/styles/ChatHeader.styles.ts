@@ -6,7 +6,7 @@ import { makeStyles, shorthands, tokens } from '@fluentui/react-components';
 export const useChatHeaderStyles = makeStyles({
   chatHeaderContainer: {
     width: '100%',
-    height: '2.75rem', // 44px
+    height: '44px',
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',

@@ -1,24 +1,19 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { AzureCommunicationTokenCredential } from '@azure/communication-common';
-import { ChatClient, CreateChatThreadOptions, CreateChatThreadRequest } from '@azure/communication-chat';
-import { getEndpoint } from '../envHelper';
-import { getAdminUser, getToken } from '../identityClient';
+import { CreateChatThreadOptions, CreateChatThreadRequest } from '@azure/communication-chat';
+import { getAdminUser } from '../identityClient';
 import { createAgentWorkItem } from '../../services/agentWorkItemService';
 import { AgentWorkItemStatus } from '../../models/agentWorkItem';
+import { createChatClient } from '../chatClient';
 
 // TODO: Remove this when topicName can be passed in
 let count = 0;
 
 export const createThread = async (topicName?: string): Promise<string> => {
+  // create a user from the adminUserId and create a credential around that
   const user = await getAdminUser();
-
-  const credential = new AzureCommunicationTokenCredential({
-    tokenRefresher: async () => (await getToken(user, ['chat'])).token,
-    refreshProactively: true
-  });
-  const chatClient = new ChatClient(getEndpoint(), credential);
+  const chatClient = await createChatClient(user);
 
   const request: CreateChatThreadRequest = {
     topic: topicName ?? `Your Chat sample thread ${count}`
