@@ -5,7 +5,7 @@ import { useChatFloatingWindowStyles } from './styles/ChatFloatingWindow.styles'
 import { useState } from 'react';
 import { ChatScreen } from './ChatScreen';
 import { ConfigurationScreen } from './ConfigurationScreen';
-import { EndScreen } from './EndScreen';
+import { EndConfirmationScreen } from './EndConfirmationScreen';
 import { ErrorScreen } from './ErrorScreen';
 import { strings } from './utils/constants';
 import { LoadingSpinner } from './LoadingSpinner';
@@ -77,18 +77,15 @@ export const ChatFloatingWindow = (props: ChatFloatingWindowProps): JSX.Element 
         }
         return <LoadingSpinner label={strings.initializeChatSpinnerLabel} />;
       }
-      // TODO: This section will be completed in a subsequent PR
       case Page.EndConfirmation: {
         return (
-          <EndScreen
-            rejoinHandler={() => {
-              setPage(Page.Chat); // use stored information to attempt to rejoin the chat thread
-            }}
-            homeHandler={() => {
+          <EndConfirmationScreen
+            onConfirmLeaving={() => {
               onCloseButtonClick();
             }}
-            userId={userId}
-            displayName={displayName}
+            onCancel={() => {
+              setPage(Page.Chat);
+            }}
           />
         );
       }
