@@ -76,6 +76,21 @@ const useThreads = (
         }
       });
 
+      client.on('participantsRemoved', async (event) => {
+        // Update thread status to 'resolved' when participant is removed
+        const threadId = event.threadId;
+        setThreads((prevThreads: ThreadItem[]) => {
+          const threadIndex = prevThreads.findIndex((thread) => thread.id === threadId);
+          if (threadIndex === -1) {
+            console.error(`Participant removed from unknown thread: ${threadId}`);
+            return prevThreads;
+          }
+          const [updatedThread] = prevThreads.splice(threadIndex, 1);
+          updatedThread.status = 'resolved';
+          return [updatedThread, ...prevThreads];
+        });
+      });
+
       client.on('chatMessageReceived', (event: ChatMessageReceivedEvent) => {
         // Bubble up the thread with new message to the top of the list
         const threadId = event.threadId;
