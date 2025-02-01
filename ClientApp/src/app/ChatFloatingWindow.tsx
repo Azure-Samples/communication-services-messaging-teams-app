@@ -9,6 +9,7 @@ import { EndConfirmationScreen } from './EndConfirmationScreen';
 import { ErrorScreen } from './ErrorScreen';
 import { strings } from './utils/constants';
 import { LoadingSpinner } from './LoadingSpinner';
+import { ChatAdapter } from '@azure/communication-react';
 
 enum Page {
   Configuration = 'configuration',
@@ -32,6 +33,7 @@ export const ChatFloatingWindow = (props: ChatFloatingWindowProps): JSX.Element 
   const [endpointUrl, setEndpointUrl] = useState('');
   const [agentName, setAgentName] = useState('');
   const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
+  const [adapter, setAdapter] = useState<ChatAdapter | undefined>(undefined);
 
   const renderPage = (): JSX.Element => {
     switch (page) {
@@ -65,7 +67,8 @@ export const ChatFloatingWindow = (props: ChatFloatingWindowProps): JSX.Element 
               endpointUrl={endpointUrl}
               threadId={threadId}
               agentName={agentName}
-              endChatHandler={() => {
+              onEndChat={(adapter: ChatAdapter) => {
+                setAdapter(adapter);
                 setPage(Page.EndConfirmation);
               }}
               onError={(error: string) => {
@@ -80,6 +83,9 @@ export const ChatFloatingWindow = (props: ChatFloatingWindowProps): JSX.Element 
       case Page.EndConfirmation: {
         return (
           <EndConfirmationScreen
+            userId={userId}
+            threadId={threadId}
+            adapter={adapter}
             onConfirmLeaving={() => {
               onCloseButtonClick();
             }}

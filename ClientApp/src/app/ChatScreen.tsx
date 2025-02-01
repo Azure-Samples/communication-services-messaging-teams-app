@@ -25,12 +25,12 @@ interface ChatScreenProps {
   endpointUrl: string;
   threadId: string;
   agentName: string;
-  endChatHandler(): void;
+  onEndChat(adapter: ChatAdapter): void;
   onError?(error: string): void;
 }
 
 export const ChatScreen = (props: ChatScreenProps): JSX.Element => {
-  const { displayName, endpointUrl, threadId, token, userId, agentName, endChatHandler, onError } = props;
+  const { displayName, endpointUrl, threadId, token, userId, agentName, onEndChat, onError } = props;
   const styles = useChatScreenStyles();
 
   // Disables pull down to refresh. Prevents accidental page refresh when scrolling through chat messages
@@ -86,7 +86,12 @@ export const ChatScreen = (props: ChatScreenProps): JSX.Element => {
 
     return (
       <div className={styles.chatScreenContainer}>
-        <ChatHeader personaName={agentName} onEndChat={endChatHandler} />
+        <ChatHeader
+          personaName={agentName}
+          onEndChat={() => {
+            onEndChat(adapter);
+          }}
+        />
         <div className={styles.chatCompositeContainer}>
           <ChatComposite
             adapter={adapter}

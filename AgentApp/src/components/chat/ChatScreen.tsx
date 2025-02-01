@@ -17,7 +17,7 @@ import { chatCompositeContainerStyle, chatScreenContainerStyle } from '../../sty
 import { createAutoRefreshingCredential } from '../../utils/fetchRequestUtils/credential';
 import { fetchEmojiForUser } from '../../utils/fetchRequestUtils/emojiCache';
 import { getBackgroundColor } from '../../utils/utils';
-import { AgentWorkItemStatus } from '../../utils/fetchRequestUtils/agentWorkItem';
+import { AgentWorkItemStatus, updateAgentWorkItem } from '../../utils/fetchRequestUtils/agentWorkItem';
 // These props are passed in when this component is referenced in JSX and not found in context
 interface ChatScreenProps {
   token: string;
@@ -78,14 +78,14 @@ export const ChatScreen = (props: ChatScreenProps): JSX.Element => {
   }, [adapter]);
 
   const handleOnResolveChat = useCallback(() => {
-    const updateAgentWorkItem = async (threadId: string, status: AgentWorkItemStatus): Promise<void> => {
+    const handleUpdateAgentWorkItem = async (threadId: string, status: AgentWorkItemStatus): Promise<void> => {
       try {
         await updateAgentWorkItem(threadId, status);
       } catch (error) {
         console.error(error);
       }
     };
-    updateAgentWorkItem(threadId, 'resolved');
+    handleUpdateAgentWorkItem(threadId, 'resolved');
     resolveChatHandler(threadId);
   }, [resolveChatHandler, threadId]);
 
