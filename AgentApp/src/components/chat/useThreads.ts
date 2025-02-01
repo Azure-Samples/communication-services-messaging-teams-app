@@ -1,13 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import { useState, useEffect, useMemo } from 'react';
-import {
-  ChatClient,
-  ChatMessageReceivedEvent,
-  ChatThreadCreatedEvent,
-  ChatThreadItem
-} from '@azure/communication-chat';
-import { AzureCommunicationTokenCredential } from '@azure/communication-common';
+import { ChatClient, ChatMessageReceivedEvent, ChatThreadItem } from '@azure/communication-chat';
+import { AzureCommunicationTokenCredential, CommunicationUserKind } from '@azure/communication-common';
 import { createAgentWorkItem, getAgentWorkItems, AgentWorkItem } from '../../utils/fetchRequestUtils/agentWorkItem';
 
 export interface ThreadItem {
@@ -53,23 +48,32 @@ const useThreads = (
       }
       await client.startRealtimeNotifications();
 
-      client.on('chatThreadCreated', async (event: ChatThreadCreatedEvent) => {
-        const threadItem: ThreadItem = {
-          id: event.threadId,
-          topic: event.properties.topic,
-          lastMessageReceivedOn: new Date(),
-          // Default status for new threads
-          status: 'active'
-        };
-
-        setThreads((prevThreads: ThreadItem[]) => {
-          const existingThreadIndex = prevThreads.findIndex((thread) => thread.id === threadItem.id);
-          if (existingThreadIndex === -1) {
-            // Thread does not exist, add it to the beginning of the list
-            return [threadItem, ...prevThreads];
-          }
-          return prevThreads;
+      client.on('participantsAdded', async (event) => {
+        const participantsAdded = event.participantsAdded;
+        const isCurrentUserAdded = participantsAdded.some((participant) => {
+          const participantId = participant.id as CommunicationUserKind;
+          return participantId.communicationUserId === userId;
         });
+
+        if (isCurrentUserAdded) {
+          const topic = (await client.getChatThreadClient(event.threadId).getProperties()).topic;
+          const threadItem: ThreadItem = {
+            id: event.threadId,
+            topic: topic,
+            lastMessageReceivedOn: new Date(),
+            // Default status for new threads
+            status: 'active'
+          };
+
+          setThreads((prevThreads: ThreadItem[]) => {
+            const existingThreadIndex = prevThreads.findIndex((thread) => thread.id === threadItem.id);
+            if (existingThreadIndex === -1) {
+              // Thread does not exist, add it to the beginning of the list
+              return [threadItem, ...prevThreads];
+            }
+            return prevThreads;
+          });
+        }
       });
 
       client.on('chatMessageReceived', (event: ChatMessageReceivedEvent) => {

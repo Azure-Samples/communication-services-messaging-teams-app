@@ -1,11 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { ChatClient } from '@azure/communication-chat';
-import { AzureCommunicationTokenCredential } from '@azure/communication-common';
 import * as express from 'express';
-import { getEndpoint } from '../lib/envHelper';
-import { getAdminUser, getToken } from '../lib/identityClient';
+import { createChatThreadClient } from '../lib/chatClient';
+import { getAdminUser } from '../lib/identityClient';
 
 const router = express.Router();
 interface AddUserParam {
@@ -39,14 +37,9 @@ router.post('/:threadId', async function (req, res, next) {
 });
 
 export const addUserToThread = async (threadId: string, userId: string, displayName: string): Promise<void> => {
-  // create a user from the adminUserId and create a credential around that
-  const credential = new AzureCommunicationTokenCredential({
-    tokenRefresher: async () => (await getToken(getAdminUser(), ['chat'])).token,
-    refreshProactively: true
-  });
-
-  const chatClient = new ChatClient(getEndpoint(), credential);
-  const chatThreadClient = await chatClient.getChatThreadClient(threadId);
+  // use the server admin user to add the user to the chat thread
+  const user = await getAdminUser();
+  const chatThreadClient = await createChatThreadClient(user, threadId);
 
   await chatThreadClient.addParticipants({
     participants: [

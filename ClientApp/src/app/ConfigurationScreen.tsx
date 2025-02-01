@@ -14,6 +14,7 @@ import { strings } from './utils/constants';
 import { Dismiss20Regular } from '@fluentui/react-icons';
 import { LoadingSpinner } from './LoadingSpinner';
 import { assignAgentUser } from './utils/assignAgentUser';
+import { sendMessage } from './utils/sendMessage';
 
 export interface ConfigurationScreenProps {
   joinChatHandler(): void;
@@ -89,11 +90,25 @@ export const ConfigurationScreen = (props: ConfigurationScreenProps): JSX.Elemen
       }
       setAgentName(agentDisplayName);
 
+      // Send the initial message with the question summary
+      sendMessage(token.identity, name, threadId, questionSummery);
+
       setDisableJoinChatButton(false);
       joinChatHandler();
     };
     createAndJoinChatThread();
-  }, [setThreadId, setToken, setUserId, setDisplayName, name, setEndpointUrl, setAgentName, joinChatHandler, onError]);
+  }, [
+    setThreadId,
+    setToken,
+    setUserId,
+    setDisplayName,
+    name,
+    setEndpointUrl,
+    setAgentName,
+    questionSummery,
+    joinChatHandler,
+    onError
+  ]);
 
   const validateRequiredFields = (): boolean => {
     if (!name) {

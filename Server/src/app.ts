@@ -18,6 +18,7 @@ import uploadToAzureBlobStorage from './routes/uploadToAzureBlobStorage';
 import agentACSUser from './routes/agentACSUser';
 import agentWorkItem from './routes/agentWorkItem';
 import assignAgentUser from './routes/assignAgentUser';
+import sendMessage from './routes/sendMessage';
 
 const app = express();
 
@@ -29,7 +30,7 @@ app.use(express.static(path.resolve(__dirname, 'build')));
 
 /**
  * route: /
- * purpose: default route when the app is started
+ * purpose: Default route when the app is started
  */
 app.get('/', (req, res) => {
   res.send('Welcome to the Home Page');
@@ -37,43 +38,43 @@ app.get('/', (req, res) => {
 
 /**
  * route: /createThread
- * purpose: Chat: create a new chat thread
+ * purpose: Create a new chat thread
  */
 app.use('/createThread', cors(), createThread);
 
 /**
  * route: /assignAgentUser
- * purpose: Chat: assign an agent user to the chat thread
+ * purpose: Assign an agent user to the chat thread
  */
 app.use('/assignAgentUser', cors(), assignAgentUser);
 
 /**
  * route: /addUser
- * purpose: Chat: add the user to the chat thread
+ * purpose: Add the user to the chat thread
  */
 app.use('/addUser', cors(), addUser);
 
 /**
  * route: /refreshToken
- * purpose: Chat,Calling: get a new token
+ * purpose: Get a new token
  */
 app.use('/refreshToken', cors(), refreshToken);
 
 /**
  * route: /getEndpointUrl
- * purpose: Chat,Calling: get the endpoint url of ACS resource
+ * purpose: Get the endpoint url of ACS resource
  */
 app.use('/getEndpointUrl', cors(), getEndpointUrl);
 
 /**
  * route: /token
- * purpose: Chat,Calling: get ACS token with the given scope
+ * purpose: Get ACS token with the given scope
  */
 app.use('/token', cors(), issueToken);
 
 /**
  * route: /userConfig
- * purpose: Chat: to add user details to userconfig for chat thread
+ * purpose: Add user details to userconfig for chat thread
  */
 app.use('/userConfig', cors(), userConfig);
 
@@ -89,7 +90,17 @@ app.use('/uploadToAzureBlobStorage', cors(), uploadToAzureBlobStorage);
  */
 app.use('/agentACSUser', cors(), agentACSUser);
 
+/**
+ * route: /agentWorkItem
+ * purpose: Handles agent work items
+ */
 app.use('/agentWorkItem', cors(), agentWorkItem);
+
+/**
+ * route: /sendMessage
+ * purpose: Send an ACS message
+ */
+app.use('/sendMessage', cors(), sendMessage);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
