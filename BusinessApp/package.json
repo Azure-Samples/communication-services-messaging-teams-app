@@ -1,5 +1,5 @@
 {
-  "name": "agentapp",
+  "name": "business-app",
   "version": "0.1.0",
   "engines": {
     "node": "18"
@@ -20,7 +20,7 @@
     "lint:quiet": "eslint '**/*.{ts,tsx}' --quiet"
   },
   "dependencies": {
-    "@fluentui/react-components": "^9.55.1",
+    "@fluentui/react-components": "^9.57.0",
     "@microsoft/teams-js": "^2.30.0",
     "@microsoft/teamsfx": "^3.0.0",
     "@microsoft/teamsfx-react": "^4.0.0",

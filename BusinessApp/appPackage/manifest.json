@@ -14,12 +14,12 @@
         "outline": "outline.png"
     },
     "name": {
-        "short": "AgentApp${{APP_NAME_SUFFIX}}",
-        "full": "Full name for AgentApp"
+        "short": "Support agent app (sample) ${{APP_NAME_SUFFIX}}",
+        "full": "Support agent app (sample)"
     },
     "description": {
-        "short": "Short description of AgentApp",
-        "full": "Full description of AgentApp"
+        "short": "Short description of Support agent app (sample)",
+        "full": "Full description of Support agent app (sample)"
     },
     "accentColor": "#FFFFFF",
     "bots": [],
