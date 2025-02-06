@@ -1,9 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
+import { useCallback, useState } from 'react';
 import { threadStrings } from '../../utils/constants';
 import { formatTimestampForThread } from '../../utils/datetime';
-import './AgentScreen.css';
+import { ThreadListHeader } from './ThreadListHeader';
 import { ThreadItem } from './useThreads';
+import { Label, List, ListItem, Persona } from '@fluentui/react-components';
+import { useThreadListStyles } from '../../styles/ThreadList.styles';
 
 export interface ThreadListProps {
   threads: Array<ThreadItem>;
@@ -12,23 +15,27 @@ export interface ThreadListProps {
 
 export const ThreadList = (props: ThreadListProps): JSX.Element => {
   const { threads, setSelectedThreadId } = props;
+  const styles = useThreadListStyles();
+  const tabs = ['Active', 'Resolved'];
+  const [selectedTab, setSelectedTab] = useState<string>(tabs[0]);
 
-  const onThreadSelected = (threadId: string): void => {
-    setSelectedThreadId(threadId);
-  };
+  const handleOnTabSelect = useCallback((tabValue: string): void => {
+    setSelectedTab(tabValue);
+  }, []);
 
-  // TODO: UI will be handled in the future
+  const onThreadSelected = useCallback(
+    (threadId: string): void => {
+      setSelectedThreadId(threadId);
+    },
+    [setSelectedThreadId]
+  );
+
   const threadItem = (thread: ThreadItem): JSX.Element => {
     return (
-      <div
-        key={thread.id}
-        style={{ display: 'flex', flexDirection: 'row', padding: '10px', borderBottom: '1px solid #ccc' }}
-      >
-        <button onClick={() => onThreadSelected(thread.id)}>{thread.topic}</button>
-        {/* TODO: UI will be handled in the future */}
-        {thread.status === 'active' && <div style={{ padding: '5px' }}>Active</div>}
+      <div key={thread.id} className={styles.threadItemContainer}>
+        <Persona name={thread.topic} textAlignment="center" size="small" avatar={{ color: 'colorful' }} />
         {
-          <div style={{ padding: '5px', width: '100px' }}>
+          <div className={styles.timestamp}>
             {formatTimestampForThread(thread.lastMessageReceivedOn, new Date(), threadStrings)}
           </div>
         }
@@ -37,9 +44,26 @@ export const ThreadList = (props: ThreadListProps): JSX.Element => {
   };
 
   return (
-    <div style={{ width: '400px' }}>
-      <h1 style={{ marginLeft: '15px' }}>Thread List</h1>
-      {threads.map((thread) => threadItem(thread))}
+    <div className={styles.container}>
+      <ThreadListHeader tabs={tabs} onTabSelect={handleOnTabSelect} />
+      <Label className={styles.label}>Assigned to me</Label>
+      <List className={styles.threadList} navigationMode="items">
+        {threads.map((thread) => {
+          if (thread.status === selectedTab.toLowerCase()) {
+            return (
+              <ListItem
+                key={thread.id}
+                onAction={() => {
+                  onThreadSelected(thread.id);
+                }}
+                className={styles.threadItem}
+              >
+                {threadItem(thread)}
+              </ListItem>
+            );
+          }
+        })}
+      </List>
     </div>
   );
 };
