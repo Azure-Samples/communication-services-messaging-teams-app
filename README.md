@@ -4,18 +4,18 @@
 
 This is a sample application to show how we can build a custom [Teams App](https://docs.microsoft.com/microsoftteams/platform/overview#build-apps-with-microsoft-teams-platform) that can interface with an Azure Communication Services instance, enabling the two systems to work together while keeping their backend environments and identity configurations separate.
 
-This sample includes three standalone applications: ClientApp, AgentApp, and Server. Together, they provide a comprehensive customer support experience. The overall view of the system is shown below:
+This sample includes three standalone applications: CustomerApp, BusinessApp, and Server. Together, they provide a comprehensive customer support experience. The overall view of the system is shown below:
 <br>
 <img src="./Assets/architecture-diagram.png" alt="Flow Chat" width="1024">
 
 1. An Azure Communications Services (ACS) instance that enables the chat experience.
-2. **AgentApp**: A web application hosted within a custom Teams application and deployed to Teams through an iframe inside the Teams client. Agents utilize this app within their Teams client.
-3. **ClientApp**: A web application used by customers to interact with agents.
-4. **Server** app: a web API provides the necessary server-side functionality for the AgentApp and the ClientApp.
+2. **BusinessApp**: A web application hosted within a custom Teams application and deployed to Teams through an iframe inside the Teams client. Agents utilize this app within their Teams client.
+3. **CustomerApp**: A web application used by customers to interact with agents.
+4. **Server** app: a web API provides the necessary server-side functionality for the BusinessApp and the CustomerApp.
 5. **Database**: An Azure Cosmos database to store metadata related to chat threads, such as their status.
 6. **Identity mapping**: The Azure Communications Services instance is not directly connected to the Teams environment. The Communications Services environment is surfaced through the custom Teams application.
-   The custom Teams application (AgentApp) leverages Teams’ Single Sign-On (SSO) to retrieve the Teams user ID, which is then used to map to a communication service user ID.
-   The AgentApp will use this communication service user ID to access the Azure Communication Services environment.
+   The custom Teams application (BusinessApp) leverages Teams’ Single Sign-On (SSO) to retrieve the Teams user ID, which is then used to map to a communication service user ID.
+   The BusinessApp will use this communication service user ID to access the Azure Communication Services environment.
 
 ## Prerequisites
 
@@ -33,22 +33,22 @@ This sample includes three standalone applications: ClientApp, AgentApp, and Ser
 
 ## Code structure
 
-- [AgentApp](./AgentApp) - A custom Teams app for agents to provide customer support
+- [BusinessApp](./BusinessApp) - A custom Teams app for agents to provide customer support
 
-  - [/index.tsx](./AgentApp/src/index.tsx) - Entry point of this app
-  - [/src](./AgentApp/src) - The source code for the frontend of the Teams custom application
-  - [/.vscode](./AgentApp/.vscode) - VSCode files for debugging
-  - [/appPackage](./AgentApp/appPackage) - Teams application manifest
-  - [/env](./AgentApp/env) - Environment files
-  - [/infra](./AgentApp/env) - files for provisioning Azure resources
+  - [/index.tsx](./BusinessApp/src/index.tsx) - Entry point of this app
+  - [/src](./BusinessApp/src) - The source code for the frontend of the Teams custom application
+  - [/.vscode](./BusinessApp/.vscode) - VSCode files for debugging
+  - [/appPackage](./BusinessApp/appPackage) - Teams application manifest
+  - [/env](./BusinessApp/env) - Environment files
+  - [/infra](./BusinessApp/env) - files for provisioning Azure resources
     The following are Teams Toolkit specific project files. You can [visit a complete guide on Github](https://github.com/OfficeDev/TeamsFx/wiki/Teams-Toolkit-Visual-Studio-Code-v5-Guide#overview) to understand how Teams Toolkit works
-  - [/teamsapp.yml](./AgentApp/teamsapp.yml) - This is the main Teams Toolkit project file. The project file defines two primary things: Properties and configuration Stage
-  - [/teamsapp.local.yml](./AgentApp/teamsapp.local.yml) - This overrides `teamsapp.yml` with actions that enable local execution and debugging
-  - [/aad.manifest.json](./AgentApp/aad.manifest.json) - This file defines the configuration of Microsoft Entra app. This template will only provision [single tenant](https://learn.microsoft.com/azure/active-directory/develop/single-and-multi-tenant-apps#who-can-sign-in-to-your-app) Microsoft Entra app
+  - [/teamsapp.yml](./BusinessApp/teamsapp.yml) - This is the main Teams Toolkit project file. The project file defines two primary things: Properties and configuration Stage
+  - [/teamsapp.local.yml](./BusinessApp/teamsapp.local.yml) - This overrides `teamsapp.yml` with actions that enable local execution and debugging
+  - [/aad.manifest.json](./BusinessApp/aad.manifest.json) - This file defines the configuration of Microsoft Entra app. This template will only provision [single tenant](https://learn.microsoft.com/azure/active-directory/develop/single-and-multi-tenant-apps#who-can-sign-in-to-your-app) Microsoft Entra app
 
-- [ClientApp](./ClientApp) - A web app where customers can start an ACS chat without a Microsoft Teams account
-  - [/index.tsx](./ClientApp/src/index.tsx) - Entry point of this app
-- [Server](./Server) - A server app that supports the AgentApp and the ClientApp
+- [CustomerApp](./CustomerApp) - A web app where customers can start an ACS chat without a Microsoft Teams account
+  - [/index.tsx](./CustomerApp/src/index.tsx) - Entry point of this app
+- [Server](./Server) - A server app that supports the BusinessApp and the CustomerApp
   - [/app.ts](./Server/src/app.ts) - Entry point of this app
   - [/appsettings.json.sample](./Server/appsettings.json.sample) - The sample file for all the environment variables needed to run the Server app
 
@@ -67,9 +67,9 @@ This sample includes three standalone applications: ClientApp, AgentApp, and Ser
    1. **AdminUserId**: Create a new ACS user as a server user to add new users to the chat thread. You can get this value by clicking on `Identities & User Access Tokens` in Azure portal. Generate a user with `Chat` scope. Then use the `Identity` value for this variable. For more information on identity strings, see [Create and manage access tokens](https://docs.microsoft.com/azure/communication-services/quickstarts/identity/access-tokens).
    1. **CosmosDBEndpoint**: Use the `URI` value from the Azure portal's Cosmos DB account. For more information on Azure Cosmos DB account, see [Create an Azure Cosmos DB account](https://docs.microsoft.com/azure/cosmos-db/nosql/tutorial-nodejs-web-app#create-account).
    1. **CosmosDBKey**: Use the `PRIMARY KEY` value from the Azure portal's Cosmos DB account. For more information on Azure Cosmos DB account, see [Create an Azure Cosmos DB account](https://docs.microsoft.com/azure/cosmos-db/nosql/tutorial-nodejs-web-app#create-account).
-   1. **AgentUsers**: An array of agent users that can use the agentApp. Each agent user object should contain the following values:
+   1. **AgentUsers**: An array of agent users that can use the BusinessApp. Each agent user object should contain the following values:
       1. **teamsUserId**: Use the `Object ID` from the Azure portal. For more information on user's object Id, see [Find the user object ID](https://docs.microsoft.com/partner-center/account-settings/find-ids-and-domain-names#find-the-user-object-id).
-      1. **acsUserId**: Each agent should be linked to an ACS user. The AgentApp will use this credential to retrieve chat threads data and to communicate with customers in the ACS environment.
+      1. **acsUserId**: Each agent should be linked to an ACS user. The BusinessApp will use this credential to retrieve chat threads data and to communicate with customers in the ACS environment.
          You can get this value by clicking on `Identities & User Access Tokens` in Azure portal. Generate a user with `Chat` scope. Then use the `Identity` value for this variable. For more information on identity strings, see [Create and manage access tokens](https://docs.microsoft.com/azure/communication-services/quickstarts/identity/access-tokens).
       1. **displayName**: Assign a display name for this agent.
    1. **AzureBlobStorageConnectionString** (Optional): This value is needed to enable the file uploading functionality.
@@ -77,10 +77,10 @@ This sample includes three standalone applications: ClientApp, AgentApp, and Ser
 
 ## Local run
 
-1. Start the ClientApp
+1. Start the CustomerApp
 
    ```bash
-   cd ClientApp && npm install && npm start
+   cd CustomerApp && npm install && npm start
    ```
 
    This will open a client server on port 3000 that serves the website files.
@@ -95,14 +95,15 @@ This sample includes three standalone applications: ClientApp, AgentApp, and Ser
    This will start an api server on port 8080 that performs functionality like minting tokens for chat participants and storing the chat thread.
    <br>
 
-1. Start the AgentApp
+1. Start the BusinessApp
 
-   1. First, select the Teams Toolkit icon on the left in the VS Code toolbar.
-   2. In the Account section, sign in with your [Microsoft 365 account](https://docs.microsoft.com/microsoftteams/platform/toolkit/accounts) if you haven't already.
-   3. Press F5 to start debugging which launches your app in Teams using a web browser. Select `Debug in Teams (Edge)` or `Debug in Teams (Chrome)`.
-   4. When Teams launches in the browser, select the `Add` button in the dialog to install the AgentApp to Teams.
+   1. Open the **BusinessApp** as the top level folder in VS Code.
+   1. Select the Teams Toolkit icon on the left in the VS Code toolbar.
+   1. In the Account section, sign in with your [Microsoft 365 account](https://docs.microsoft.com/microsoftteams/platform/toolkit/accounts) if you haven't already.
+   1. Press F5 to start debugging which launches your app in Teams using a web browser. Select `Debug in Teams (Edge)` or `Debug in Teams (Chrome)`.
+   1. When Teams launches in the browser, select the `Add` button in the dialog to install the BusinessApp to Teams.
 
-   This will open a browser window with the AgentApp running inside Teams web client.
+   This will open a browser window with the BusinessApp running inside Teams web client.
 
 ## Deploy
 
