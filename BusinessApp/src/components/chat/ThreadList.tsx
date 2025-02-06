@@ -29,18 +29,16 @@ export const ThreadList = (props: ThreadListProps): JSX.Element => {
       setSelectedThreadId(threadId);
       onThreadSelected(threadId);
     },
-    [setSelectedThreadId]
+    [onThreadSelected]
   );
 
   const threadItem = (thread: ThreadItem): JSX.Element => {
     return (
       <div key={thread.id} className={styles.threadItemContainer}>
         <Persona name={thread.topic} textAlignment="center" size="small" avatar={{ color: 'colorful' }} />
-        {
-          <div className={styles.timestamp}>
-            {formatTimestampForThread(thread.lastMessageReceivedOn, new Date(), threadStrings)}
-          </div>
-        }
+        <div className={styles.timestamp}>
+          {formatTimestampForThread(thread.lastMessageReceivedOn, new Date(), threadStrings)}
+        </div>
       </div>
     );
   };

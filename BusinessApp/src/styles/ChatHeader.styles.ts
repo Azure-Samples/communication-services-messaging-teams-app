@@ -7,7 +7,6 @@ export const chatHeaderContainerStyle = mergeStyles({
   position: 'absolute',
   alignSelf: 'flex-end',
   minHeight: '2.5rem',
-  width: '100%',
   height: 'auto',
   paddingLeft: '0.5rem',
   paddingRight: '0.5rem'
