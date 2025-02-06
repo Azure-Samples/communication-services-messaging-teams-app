@@ -98,7 +98,7 @@ export const AgentScreen = (): JSX.Element => {
     <div className="welcome page">
       <div style={{ display: 'flex', flexDirection: 'row', height: '100%' }}>
         {endpointUrl && threads ? (
-          <ThreadList setSelectedThreadId={setSelectedThreadId} threads={threads} />
+          <ThreadList onThreadSelected={setSelectedThreadId} threads={threads} />
         ) : (
           <div>Loading...</div>
         )}

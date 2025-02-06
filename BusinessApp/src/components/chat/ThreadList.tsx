@@ -10,22 +10,24 @@ import { useThreadListStyles } from '../../styles/ThreadList.styles';
 
 export interface ThreadListProps {
   threads: Array<ThreadItem>;
-  setSelectedThreadId(threadId: string): void;
+  onThreadSelected(threadId: string): void;
 }
 
 export const ThreadList = (props: ThreadListProps): JSX.Element => {
-  const { threads, setSelectedThreadId } = props;
+  const { threads, onThreadSelected } = props;
   const styles = useThreadListStyles();
   const tabs = ['Active', 'Resolved'];
   const [selectedTab, setSelectedTab] = useState<string>(tabs[0]);
+  const [selectedThreadId, setSelectedThreadId] = useState<string | undefined>(undefined);
 
   const handleOnTabSelect = useCallback((tabValue: string): void => {
     setSelectedTab(tabValue);
   }, []);
 
-  const onThreadSelected = useCallback(
+  const handleOnThreadSelected = useCallback(
     (threadId: string): void => {
       setSelectedThreadId(threadId);
+      onThreadSelected(threadId);
     },
     [setSelectedThreadId]
   );
@@ -50,13 +52,15 @@ export const ThreadList = (props: ThreadListProps): JSX.Element => {
       <List className={styles.threadList} navigationMode="items">
         {threads.map((thread) => {
           if (thread.status === selectedTab.toLowerCase()) {
+            const isSelected = thread.id === selectedThreadId;
+            const threadItemClassName = isSelected ? styles.selectedThreadItem : styles.unselectedThreadItem;
             return (
               <ListItem
                 key={thread.id}
                 onAction={() => {
-                  onThreadSelected(thread.id);
+                  handleOnThreadSelected(thread.id);
                 }}
-                className={styles.threadItem}
+                className={threadItemClassName}
               >
                 {threadItem(thread)}
               </ListItem>

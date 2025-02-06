@@ -37,10 +37,15 @@ export const useThreadListStyles = makeStyles({
   timestamp: {
     padding: '0.25rem' // 4px
   },
-  threadItem: {
+  unselectedThreadItem: {
     ':hover': {
       border: `1px solid ${tokens.colorNeutralStroke1Hover}`,
       borderRadius: '4px'
     }
+  },
+  selectedThreadItem: {
+    backgroundColor: tokens.colorNeutralBackground1Selected,
+    border: `1px solid ${tokens.colorNeutralStroke1}`,
+    borderRadius: '4px'
   }
 });
