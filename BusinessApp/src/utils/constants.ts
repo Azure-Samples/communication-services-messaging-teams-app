@@ -26,6 +26,10 @@ export interface ThreadStrings {
   saturday: string;
   /** String for Yesterday */
   yesterday: string;
+  /** String for Close button text */
+  close: string;
+  /** String for Resolve button text */
+  resolve: string;
 }
 
 export const threadStrings: ThreadStrings = {
@@ -36,5 +40,7 @@ export const threadStrings: ThreadStrings = {
   thursday: 'Thursday',
   friday: 'Friday',
   saturday: 'Saturday',
-  yesterday: 'Yesterday'
+  yesterday: 'Yesterday',
+  close: 'Close',
+  resolve: 'Resolve'
 };

@@ -3,14 +3,17 @@
 
 import { StatusCode } from './constants';
 
-export type AgentWorkItemStatus = 'active' | 'resolved';
+export enum ThreadItemStatus {
+  ACTIVE = 'active',
+  RESOLVED = 'resolved'
+}
 
 export interface AgentWorkItem {
   id: string;
-  status: AgentWorkItemStatus;
+  status: ThreadItemStatus;
 }
 
-export const updateAgentWorkItem = async (threadId: string, status: AgentWorkItemStatus): Promise<AgentWorkItem> => {
+export const updateAgentWorkItem = async (threadId: string, status: ThreadItemStatus): Promise<AgentWorkItem> => {
   try {
     const options = {
       method: 'PUT',

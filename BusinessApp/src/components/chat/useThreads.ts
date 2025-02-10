@@ -12,7 +12,10 @@ export interface ThreadItem {
   status?: ThreadItemStatus;
 }
 
-export type ThreadItemStatus = 'active' | 'resolved';
+export enum ThreadItemStatus {
+  ACTIVE = 'active',
+  RESOLVED = 'resolved'
+}
 
 interface UseThreadsProps {
   userId: string;
@@ -64,7 +67,7 @@ const useThreads = (
             topic: topic,
             lastMessageReceivedOn: new Date(),
             // Default status for new threads
-            status: 'active'
+            status: ThreadItemStatus.ACTIVE
           };
 
           setThreads((prevThreads: ThreadItem[]) => {
@@ -88,7 +91,7 @@ const useThreads = (
             return prevThreads;
           }
           const [updatedThread] = prevThreads.splice(threadIndex, 1);
-          updatedThread.status = 'resolved';
+          updatedThread.status = ThreadItemStatus.RESOLVED;
           return [updatedThread, ...prevThreads];
         });
       });
@@ -135,7 +138,7 @@ const useThreads = (
         if (!agentWorkItem) {
           console.info(`Thread properties not found for thread: ${thread.id}`);
           try {
-            await createAgentWorkItem(thread.id, 'active');
+            await createAgentWorkItem(thread.id, ThreadItemStatus.ACTIVE);
           } catch (error) {
             console.error(error);
           }

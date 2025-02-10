@@ -8,10 +8,10 @@ export const useThreadListHeaderStyles = makeStyles({
     width: '320px',
     height: '60px',
     padding: '0 0.5rem', // 0 8px
-    borderBottom: `1px solid ${tokens.colorNeutralStroke3}`
+    borderBottom: `1px solid ${tokens.colorNeutralStroke1}`
   },
   tabList: {
-    width: '320px',
+    width: '100%',
     height: '60px'
   }
 });

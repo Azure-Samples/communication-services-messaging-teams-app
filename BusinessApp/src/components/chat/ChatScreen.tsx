@@ -10,14 +10,15 @@ import {
   toFlatCommunicationIdentifier,
   useAzureCommunicationChatAdapter
 } from '@azure/communication-react';
-import { Stack } from '@fluentui/react';
 import { useCallback, useEffect, useMemo } from 'react';
 import { ChatHeader } from './ChatHeader';
-import { chatCompositeContainerStyle, chatScreenContainerStyle } from '../../styles/ChatScreen.styles';
 import { createAutoRefreshingCredential } from '../../utils/fetchRequestUtils/credential';
 import { fetchEmojiForUser } from '../../utils/fetchRequestUtils/emojiCache';
 import { getBackgroundColor } from '../../utils/utils';
-import { AgentWorkItemStatus, updateAgentWorkItem } from '../../utils/fetchRequestUtils/agentWorkItem';
+import { updateAgentWorkItem } from '../../utils/fetchRequestUtils/agentWorkItem';
+import { useChatScreenStyles } from '../../styles/ChatScreen.styles';
+import { ThreadItemStatus } from './useThreads';
+import { LoadingSpinner } from './LoadingSpinner';
 // These props are passed in when this component is referenced in JSX and not found in context
 interface ChatScreenProps {
   token: string;
@@ -25,13 +26,25 @@ interface ChatScreenProps {
   displayName: string;
   endpointUrl: string;
   threadId: string;
+  receiverName: string;
+  threadStatus: ThreadItemStatus;
   endChatHandler(isParticipantRemoved: boolean): void;
   resolveChatHandler(threadId: string): void;
 }
 
 export const ChatScreen = (props: ChatScreenProps): JSX.Element => {
-  const { displayName, endpointUrl, threadId, token, userId, endChatHandler, resolveChatHandler } = props;
-
+  const {
+    displayName,
+    endpointUrl,
+    threadId,
+    token,
+    userId,
+    receiverName,
+    threadStatus,
+    endChatHandler,
+    resolveChatHandler
+  } = props;
+  const styles = useChatScreenStyles();
   // Disables pull down to refresh. Prevents accidental page refresh when scrolling through chat messages
   // Another alternative: set body style touch-action to 'none'. Achieves same result.
   useEffect(() => {
@@ -78,14 +91,14 @@ export const ChatScreen = (props: ChatScreenProps): JSX.Element => {
   }, [adapter]);
 
   const handleOnResolveChat = useCallback(() => {
-    const handleUpdateAgentWorkItem = async (threadId: string, status: AgentWorkItemStatus): Promise<void> => {
+    const handleUpdateAgentWorkItem = async (threadId: string, status: ThreadItemStatus): Promise<void> => {
       try {
         await updateAgentWorkItem(threadId, status);
       } catch (error) {
         console.error(error);
       }
     };
-    handleUpdateAgentWorkItem(threadId, 'resolved');
+    handleUpdateAgentWorkItem(threadId, ThreadItemStatus.RESOLVED);
     resolveChatHandler(threadId);
   }, [resolveChatHandler, threadId]);
 
@@ -101,19 +114,24 @@ export const ChatScreen = (props: ChatScreenProps): JSX.Element => {
           })
       );
     return (
-      <Stack className={chatScreenContainerStyle}>
-        <Stack.Item className={chatCompositeContainerStyle} role="main">
+      <div className={styles.chatScreenContainer}>
+        <ChatHeader
+          personaName={receiverName}
+          threadStatus={threadStatus}
+          onResolveChat={() => handleOnResolveChat()}
+        />
+        <div className={styles.chatCompositeContainer} role="main">
           <ChatComposite
             adapter={adapter}
             options={{
-              autoFocus: 'sendBoxTextField'
+              autoFocus: 'sendBoxTextField',
+              topic: false
             }}
             onFetchAvatarPersonaData={onFetchAvatarPersonaData}
           />
-        </Stack.Item>
-        <ChatHeader onResolveChat={() => handleOnResolveChat()} />
-      </Stack>
+        </div>
+      </div>
     );
   }
-  return <>Initializing...</>;
+  return <LoadingSpinner />;
 };
