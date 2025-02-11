@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { threadStrings } from '../../utils/constants';
 import { formatTimestampForThread } from '../../utils/datetime';
 import { ThreadListHeader } from './ThreadListHeader';
@@ -43,6 +43,15 @@ export const ThreadList = (props: ThreadListProps): JSX.Element => {
     );
   };
 
+  const getThreadItemContainerStyle = useCallback(
+    (threadId: string) => {
+      const isSelected = threadId === selectedThreadId;
+      const threadItemClassName = isSelected ? styles.selectedThreadItem : styles.unselectedThreadItem;
+      return threadItemClassName;
+    },
+    [selectedThreadId, styles.selectedThreadItem, styles.unselectedThreadItem]
+  );
+
   return (
     <div className={styles.container}>
       <ThreadListHeader tabs={tabs} onTabSelect={handleOnTabSelect} />
@@ -50,15 +59,13 @@ export const ThreadList = (props: ThreadListProps): JSX.Element => {
       <List className={styles.threadList} navigationMode="items">
         {threads.map((thread) => {
           if (thread.status === selectedTab.toLowerCase()) {
-            const isSelected = thread.id === selectedThreadId;
-            const threadItemClassName = isSelected ? styles.selectedThreadItem : styles.unselectedThreadItem;
             return (
               <ListItem
                 key={thread.id}
                 onAction={() => {
                   handleOnThreadSelected(thread.id);
                 }}
-                className={threadItemClassName}
+                className={getThreadItemContainerStyle(thread.id)}
               >
                 {threadItem(thread)}
               </ListItem>
