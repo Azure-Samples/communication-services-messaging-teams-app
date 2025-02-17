@@ -9,8 +9,10 @@ export interface ThreadItem {
   id: string;
   topic: string;
   lastMessageReceivedOn: Date;
-  status?: string;
+  status?: ThreadItemStatus;
 }
+
+export type ThreadItemStatus = 'active' | 'resolved';
 
 interface UseThreadsProps {
   userId: string;

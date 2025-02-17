@@ -37,7 +37,6 @@ export const formatDateForThread = (threadDate: Date): string => {
  * @private
  */
 export const formatTimestampForThread = (threadDate: Date, todayDate: Date, dateStrings: ThreadStrings): string => {
-  // TODO: Waiting for UX design input for how to handle this scenario.
   if (!threadDate) {
     return '';
   }

@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { makeStyles, shorthands, tokens } from '@fluentui/react-components';
+import { makeStyles, tokens } from '@fluentui/react-components';
 
 export const useChatHeaderStyles = makeStyles({
   chatHeaderContainer: {
@@ -12,7 +12,7 @@ export const useChatHeaderStyles = makeStyles({
     alignItems: 'center',
     backgroundColor: tokens.colorNeutralBackground1,
     borderRadius: '8px',
-    ...shorthands.borderBottom('1px', 'solid', tokens.colorNeutralStroke3)
+    borderBottom: `1px solid ${tokens.colorNeutralStroke3}`
   },
   personaContainer: {
     marginLeft: '0.75rem' // 12px
