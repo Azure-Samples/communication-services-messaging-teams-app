@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { Button, Text } from '@fluentui/react-components';
-import { useEndConfirmationScreenStyles } from './styles/ErrorScreen.styles';
+import { useErrorScreenStyles } from './styles/ErrorScreen.styles';
 import { strings } from './utils/constants';
 import { Dismiss20Regular, ErrorCircle48Regular } from '@fluentui/react-icons';
 import { useCallback, useState } from 'react';
@@ -35,7 +35,7 @@ export const ErrorScreen = (props: ErrorScreenProps): JSX.Element => {
     setEndpointUrl,
     setAgentName
   } = props;
-  const styles = useEndConfirmationScreenStyles();
+  const styles = useErrorScreenStyles();
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [disableRetryButton, setDisableRetryButton] = useState<boolean>(false);

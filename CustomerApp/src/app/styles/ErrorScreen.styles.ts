@@ -3,7 +3,7 @@
 
 import { makeStyles, tokens } from '@fluentui/react-components';
 
-export const useEndConfirmationScreenStyles = makeStyles({
+export const useErrorScreenStyles = makeStyles({
   errorScreenContainer: {
     display: 'flex',
     flexDirection: 'column',
