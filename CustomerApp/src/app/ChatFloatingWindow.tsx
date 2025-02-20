@@ -31,7 +31,7 @@ export const ChatFloatingWindow = (props: ChatFloatingWindowProps): JSX.Element 
   const [displayName, setDisplayName] = useState('');
   const [threadId, setThreadId] = useState('');
   const [endpointUrl, setEndpointUrl] = useState('');
-  const [questionSummary, setQuestionSummery] = useState('');
+  const [questionSummary, setQuestionSummary] = useState('');
   const [agentName, setAgentName] = useState('');
   const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
   const [adapter, setAdapter] = useState<ChatAdapter | undefined>(undefined);
@@ -52,7 +52,7 @@ export const ChatFloatingWindow = (props: ChatFloatingWindowProps): JSX.Element 
             setAgentName={setAgentName}
             onCloseButtonClicked={onCloseButtonClick}
             onError={(error: string, questionSummary: string) => {
-              setQuestionSummery(questionSummary); // store the questionSummary to be used for the retry function in the error screen
+              setQuestionSummary(questionSummary); // store the questionSummary to be used for the retry function in the error screen
               setErrorMessage(error);
               setPage(Page.Error);
             }}
@@ -99,11 +99,11 @@ export const ChatFloatingWindow = (props: ChatFloatingWindowProps): JSX.Element 
             message={errorMessage || strings.pageNotFoundErrorMessage}
             onClose={() => {
               setErrorMessage(undefined);
-              setQuestionSummery('');
+              setQuestionSummary('');
               onCloseButtonClick();
             }}
             onRetrySucceed={() => {
-              setQuestionSummery('');
+              setQuestionSummary('');
               setPage(Page.Chat);
             }}
             displayName={displayName}

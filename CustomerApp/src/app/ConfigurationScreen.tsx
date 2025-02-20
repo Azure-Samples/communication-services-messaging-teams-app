@@ -40,8 +40,8 @@ export const ConfigurationScreen = (props: ConfigurationScreenProps): JSX.Elemen
 
   const [name, setName] = useState('');
   const [emptyNameWarning, setEmptyNameWarning] = useState(false);
-  const [questionSummary, setQuestionSummery] = useState('');
-  const [emptyQuestionSummeryWarning, setEmptyQuestionSummeryWarning] = useState(false);
+  const [questionSummary, setQuestionSummary] = useState('');
+  const [emptyQuestionSummaryWarning, setEmptyQuestionSummaryWarning] = useState(false);
   const [disableJoinChatButton, setDisableJoinChatButton] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -50,7 +50,7 @@ export const ConfigurationScreen = (props: ConfigurationScreenProps): JSX.Elemen
       setEmptyNameWarning(true);
     }
     if (!questionSummary) {
-      setEmptyQuestionSummeryWarning(true);
+      setEmptyQuestionSummaryWarning(true);
     }
     return !!name && !!questionSummary;
   };
@@ -60,7 +60,7 @@ export const ConfigurationScreen = (props: ConfigurationScreenProps): JSX.Elemen
       return;
     }
     setEmptyNameWarning(false);
-    setEmptyQuestionSummeryWarning(false);
+    setEmptyQuestionSummaryWarning(false);
     setDisableJoinChatButton(true);
     setIsLoading(true);
     setDisplayName(name);
@@ -111,11 +111,11 @@ export const ConfigurationScreen = (props: ConfigurationScreenProps): JSX.Elemen
           <InputSection
             labelText={strings.configurationQuestionSummaryLabelText}
             placeholder={strings.configurationQuestionSummaryPlaceholder}
-            isEmpty={emptyQuestionSummeryWarning}
+            isEmpty={emptyQuestionSummaryWarning}
             emptyErrorMessage={strings.requiredTextFiledErrorMessage}
             onTextChangedHandler={(newValue) => {
-              setQuestionSummery(newValue);
-              setEmptyQuestionSummeryWarning(!newValue);
+              setQuestionSummary(newValue);
+              setEmptyQuestionSummaryWarning(!newValue);
             }}
             onKeyDownHandler={startChat}
             isMultiline={true}
