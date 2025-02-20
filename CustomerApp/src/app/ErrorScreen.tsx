@@ -89,7 +89,7 @@ export const ErrorScreen = (props: ErrorScreenProps): JSX.Element => {
         <ErrorCircle48Regular className={styles.errorIcon} />
         <Text
           aria-level={1}
-          aria-label={strings.endChatConfirmationTitle}
+          aria-label={strings.errorScreenTitle}
           aria-live="polite"
           className={styles.errorTitle}
         >
