@@ -36,44 +36,49 @@ export const createAndJoinChatThreadWithNewUser = (props: CreateAndJoinChatThrea
     onError
   } = props;
   const createAndJoinChatThread = async (): Promise<void> => {
-    // Create a new chat thread
-    const threadId = await createThread();
-    if (!threadId) {
-      console.error('Failed to create a thread, returned threadId is undefined or empty string');
+    try {
+      // Create a new chat thread
+      const threadId = await createThread();
+      if (!threadId) {
+        console.error('Failed to create a thread, returned threadId is undefined or empty string');
+        onError(strings.unableToStartChat, questionSummary);
+        return;
+      }
+      setThreadId(threadId);
+
+      // Create a new ACS user
+      const token = await getToken();
+      const endpointUrl = await getEndpointUrl();
+
+      setToken(token.token);
+      setUserId(token.identity);
+      setEndpointUrl(endpointUrl);
+
+      // Join the thread with the newly created user
+      const result = await joinThread(threadId, token.identity, displayName);
+      if (!result) {
+        console.error('Failed to join the thread ', threadId);
+        onError(strings.unableToStartChat, questionSummary);
+        return;
+      }
+
+      // Assign a random agent
+      const agentDisplayName = await assignAgentUser(threadId);
+      if (agentDisplayName === undefined) {
+        console.error('Failed to assign an agent to the chat thread');
+        onError(strings.unableToStartChat, questionSummary);
+        return;
+      }
+      setAgentName(agentDisplayName);
+
+      // Send the initial message with the question summary
+      sendMessage(token.identity, displayName, threadId, questionSummary);
+
+      onJoinChat();
+    } catch (error) {
+      console.error('An unexpected error occurred:', error);
       onError(strings.unableToStartChat, questionSummary);
-      return;
     }
-    setThreadId(threadId);
-
-    // Create a new ACS user
-    const token = await getToken();
-    const endpointUrl = await getEndpointUrl();
-
-    setToken(token.token);
-    setUserId(token.identity);
-    setEndpointUrl(endpointUrl);
-
-    // Join the thread with the newly created user
-    const result = await joinThread(threadId, token.identity, displayName);
-    if (!result) {
-      console.error('Failed to join the thread ', threadId);
-      onError(strings.unableToStartChat, questionSummary);
-      return;
-    }
-
-    // Assign a random agent
-    const agentDisplayName = await assignAgentUser(threadId);
-    if (agentDisplayName === undefined) {
-      console.error('Failed to assign an agent to the chat thread');
-      onError(strings.unableToStartChat, questionSummary);
-      return;
-    }
-    setAgentName(agentDisplayName);
-
-    // Send the initial message with the question summary
-    sendMessage(token.identity, displayName, threadId, questionSummary);
-
-    onJoinChat();
   };
   createAndJoinChatThread();
 };
