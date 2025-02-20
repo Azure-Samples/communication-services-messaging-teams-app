@@ -14,7 +14,7 @@ export interface ErrorScreenProps {
   onClose(): void;
   onRetrySucceed(): void;
   displayName: string;
-  questionSummery: string;
+  questionSummary: string;
   setToken(token: string): void;
   setUserId(userId: string): void;
   setThreadId(threadId: string): void;
@@ -28,7 +28,7 @@ export const ErrorScreen = (props: ErrorScreenProps): JSX.Element => {
     onClose,
     onRetrySucceed,
     displayName,
-    questionSummery,
+    questionSummary,
     setToken,
     setUserId,
     setThreadId,
@@ -51,7 +51,7 @@ export const ErrorScreen = (props: ErrorScreenProps): JSX.Element => {
     // Use the stored information to attempt to rejoin the chat thread
     createAndJoinChatThreadWithNewUser({
       displayName,
-      questionSummery,
+      questionSummary,
       onJoinChat: onRetrySucceed,
       setToken: setToken,
       setUserId: setUserId,
@@ -62,7 +62,7 @@ export const ErrorScreen = (props: ErrorScreenProps): JSX.Element => {
     });
   }, [
     displayName,
-    questionSummery,
+    questionSummary,
     onRetrySucceed,
     setToken,
     setUserId,

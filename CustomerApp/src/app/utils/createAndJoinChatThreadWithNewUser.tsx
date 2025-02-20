@@ -11,14 +11,14 @@ import { sendMessage } from './sendMessage';
 
 export interface CreateAndJoinChatThreadWithNewUserProps {
   displayName: string;
-  questionSummery: string;
+  questionSummary: string;
   onJoinChat(): void;
   setToken(token: string): void;
   setUserId(userId: string): void;
   setThreadId(threadId: string): void;
   setEndpointUrl(endpointUrl: string): void;
   setAgentName(agentName: string): void;
-  onError(error: string, questionSummery: string): void;
+  onError(error: string, questionSummary: string): void;
 }
 
 // This function creates a new chat thread and a new ACS user,
@@ -26,7 +26,7 @@ export interface CreateAndJoinChatThreadWithNewUserProps {
 export const createAndJoinChatThreadWithNewUser = (props: CreateAndJoinChatThreadWithNewUserProps): void => {
   const {
     displayName,
-    questionSummery,
+    questionSummary,
     onJoinChat,
     setToken,
     setUserId,
@@ -40,7 +40,7 @@ export const createAndJoinChatThreadWithNewUser = (props: CreateAndJoinChatThrea
     const threadId = await createThread();
     if (!threadId) {
       console.error('Failed to create a thread, returned threadId is undefined or empty string');
-      onError(strings.unableToStartChat, questionSummery);
+      onError(strings.unableToStartChat, questionSummary);
       return;
     }
     setThreadId(threadId);
@@ -57,7 +57,7 @@ export const createAndJoinChatThreadWithNewUser = (props: CreateAndJoinChatThrea
     const result = await joinThread(threadId, token.identity, displayName);
     if (!result) {
       console.error('Failed to join the thread ', threadId);
-      onError(strings.unableToStartChat, questionSummery);
+      onError(strings.unableToStartChat, questionSummary);
       return;
     }
 
@@ -65,13 +65,13 @@ export const createAndJoinChatThreadWithNewUser = (props: CreateAndJoinChatThrea
     const agentDisplayName = await assignAgentUser(threadId);
     if (agentDisplayName === undefined) {
       console.error('Failed to assign an agent to the chat thread');
-      onError(strings.unableToStartChat, questionSummery);
+      onError(strings.unableToStartChat, questionSummary);
       return;
     }
     setAgentName(agentDisplayName);
 
     // Send the initial message with the question summary
-    sendMessage(token.identity, displayName, threadId, questionSummery);
+    sendMessage(token.identity, displayName, threadId, questionSummary);
 
     onJoinChat();
   };

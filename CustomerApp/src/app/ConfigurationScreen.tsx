@@ -20,7 +20,7 @@ export interface ConfigurationScreenProps {
   setEndpointUrl(endpointUrl: string): void;
   setAgentName(agentName: string): void;
   onCloseButtonClicked(): void;
-  onError(error: string, questionSummery: string): void;
+  onError(error: string, questionSummary: string): void;
 }
 
 export const ConfigurationScreen = (props: ConfigurationScreenProps): JSX.Element => {
@@ -40,7 +40,7 @@ export const ConfigurationScreen = (props: ConfigurationScreenProps): JSX.Elemen
 
   const [name, setName] = useState('');
   const [emptyNameWarning, setEmptyNameWarning] = useState(false);
-  const [questionSummery, setQuestionSummery] = useState('');
+  const [questionSummary, setQuestionSummery] = useState('');
   const [emptyQuestionSummeryWarning, setEmptyQuestionSummeryWarning] = useState(false);
   const [disableJoinChatButton, setDisableJoinChatButton] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -49,10 +49,10 @@ export const ConfigurationScreen = (props: ConfigurationScreenProps): JSX.Elemen
     if (!name) {
       setEmptyNameWarning(true);
     }
-    if (!questionSummery) {
+    if (!questionSummary) {
       setEmptyQuestionSummeryWarning(true);
     }
-    return !!name && !!questionSummery;
+    return !!name && !!questionSummary;
   };
   const startChat = (): void => {
     const validRequiredFields = validateRequiredFields();
@@ -67,7 +67,7 @@ export const ConfigurationScreen = (props: ConfigurationScreenProps): JSX.Elemen
 
     createAndJoinChatThreadWithNewUser({
       displayName: name,
-      questionSummery,
+      questionSummary,
       onJoinChat,
       setToken,
       setUserId,
