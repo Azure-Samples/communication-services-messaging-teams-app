@@ -97,7 +97,7 @@ export const ErrorScreen = (props: ErrorScreenProps): JSX.Element => {
         </Text>
         <Text
           aria-level={1}
-          aria-label={strings.endChatConfirmationDescription}
+          aria-label={strings.errorScreenRetryButton}
           aria-live="polite"
           className={styles.errorMessage}
         >
