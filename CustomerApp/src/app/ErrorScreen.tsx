@@ -87,12 +87,7 @@ export const ErrorScreen = (props: ErrorScreenProps): JSX.Element => {
       </div>
       <div className={styles.textContainer}>
         <ErrorCircle48Regular className={styles.errorIcon} />
-        <Text
-          aria-level={1}
-          aria-label={strings.errorScreenTitle}
-          aria-live="polite"
-          className={styles.errorTitle}
-        >
+        <Text aria-level={1} aria-label={strings.errorScreenTitle} aria-live="polite" className={styles.errorTitle}>
           {strings.errorScreenTitle}
         </Text>
         <Text
