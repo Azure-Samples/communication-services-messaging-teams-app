@@ -3,7 +3,6 @@
 
 import { CommunicationUserIdentifier } from '@azure/communication-common';
 import {
-  AvatarPersonaData,
   ChatAdapter,
   ChatComposite,
   fromFlatCommunicationIdentifier,
@@ -13,8 +12,6 @@ import { useCallback, useEffect, useMemo } from 'react';
 import { ChatHeader } from './ChatHeader';
 import { useChatScreenStyles } from './styles/ChatScreen.styles';
 import { createAutoRefreshingCredential } from './utils/credential';
-import { fetchEmojiForUser } from './utils/emojiCache';
-import { getBackgroundColor } from './utils/utils';
 import { strings } from './utils/constants';
 import { LoadingSpinner } from './LoadingSpinner';
 // These props are passed in when this component is referenced in JSX and not found in context
@@ -68,17 +65,6 @@ export const ChatScreen = (props: ChatScreenProps): JSX.Element => {
   }, [adapter]);
 
   if (adapter) {
-    const onFetchAvatarPersonaData = (userId: string): Promise<AvatarPersonaData> =>
-      fetchEmojiForUser(userId).then(
-        (emoji) =>
-          new Promise((resolve) => {
-            return resolve({
-              imageInitials: emoji,
-              initialsColor: emoji ? getBackgroundColor(emoji)?.backgroundColor : undefined
-            });
-          })
-      );
-
     return (
       <div className={styles.chatScreenContainer}>
         <ChatHeader
@@ -94,7 +80,6 @@ export const ChatScreen = (props: ChatScreenProps): JSX.Element => {
               autoFocus: 'sendBoxTextField',
               topic: false
             }}
-            onFetchAvatarPersonaData={onFetchAvatarPersonaData}
           />
         </div>
       </div>

@@ -1,13 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+import { ThreadItemStatus } from '../../components/chat/useThreads';
 import { StatusCode } from '../constants';
-
-export type AgentWorkItemStatus = 'active' | 'resolved';
 
 export interface AgentWorkItem {
   id: string;
-  status: AgentWorkItemStatus;
+  status: ThreadItemStatus;
 }
 
 export const getAgentWorkItems = async (): Promise<AgentWorkItem[]> => {
@@ -27,7 +26,7 @@ export const getAgentWorkItems = async (): Promise<AgentWorkItem[]> => {
   }
 };
 
-export const createAgentWorkItem = async (threadId: string, status: AgentWorkItemStatus): Promise<AgentWorkItem> => {
+export const createAgentWorkItem = async (threadId: string, status: ThreadItemStatus): Promise<AgentWorkItem> => {
   try {
     const options = {
       method: 'POST',
@@ -48,7 +47,7 @@ export const createAgentWorkItem = async (threadId: string, status: AgentWorkIte
   }
 };
 
-export const updateAgentWorkItem = async (threadId: string, status: AgentWorkItemStatus): Promise<AgentWorkItem> => {
+export const updateAgentWorkItem = async (threadId: string, status: ThreadItemStatus): Promise<AgentWorkItem> => {
   try {
     const options = {
       method: 'PUT',

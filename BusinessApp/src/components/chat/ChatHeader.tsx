@@ -1,57 +1,42 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { DefaultButton, Icon, IconButton, mergeStyles, Stack } from '@fluentui/react';
-import {
-  buttonWithIconStyles,
-  chatHeaderContainerStyle,
-  greyIconButtonStyle,
-  largeLeaveButtonContainerStyle,
-  leaveButtonStyle,
-  leaveIcon,
-  leaveIconStyle,
-  paneButtonContainerStyle,
-  smallLeaveButtonContainerStyle
-} from '../../styles/ChatHeader.styles';
-import { useTheme } from '@azure/communication-react';
+import { Button } from '@fluentui/react-components';
+import { useChatHeaderStyles } from '../../styles/ChatHeader.styles';
+import { threadStrings } from '../../utils/constants';
+import { Checkmark16Regular } from '@fluentui/react-icons';
+import { Persona } from '@fluentui/react-components';
+import { ThreadItemStatus } from './useThreads';
 
 export interface ChatHeaderProps {
+  personaName: string;
+  threadStatus: ThreadItemStatus;
   onResolveChat(): void;
 }
 
 export const ChatHeader = (props: ChatHeaderProps): JSX.Element => {
-  const theme = useTheme();
-
-  const resolveString = 'Resolve';
+  const { personaName, threadStatus, onResolveChat } = props;
+  const styles = useChatHeaderStyles();
   return (
-    <Stack
-      horizontal={true}
-      verticalAlign={'center'}
-      horizontalAlign="end"
-      className={chatHeaderContainerStyle}
-      role="banner"
-    >
-      <div className={paneButtonContainerStyle}>{}</div>
-      <DefaultButton
-        className={mergeStyles(largeLeaveButtonContainerStyle, leaveButtonStyle, {
-          color: theme.palette.neutralPrimaryAlt
-        })}
-        styles={buttonWithIconStyles}
-        text={resolveString}
-        onClick={() => props.onResolveChat()}
-        onRenderIcon={() => <Icon iconName={leaveIcon.iconName} className={leaveIconStyle} />}
-        aria-live={'polite'}
-        aria-label={resolveString}
+    <div className={styles.chatHeaderContainer} role="banner">
+      <Persona
+        name={personaName}
+        textAlignment="center"
+        size="medium"
+        avatar={{ color: 'colorful' }}
+        primaryText={<span className={styles.primaryText}>{personaName}</span>}
       />
-      <IconButton
-        iconProps={leaveIcon}
-        className={mergeStyles(smallLeaveButtonContainerStyle, greyIconButtonStyle, {
-          color: theme.palette.neutralPrimaryAlt
-        })}
-        onClick={() => props.onResolveChat()}
-        ariaLabel={resolveString}
-        aria-live={'polite'}
-      />
-    </Stack>
+      {threadStatus === ThreadItemStatus.ACTIVE && (
+        <Button
+          icon={<Checkmark16Regular />}
+          className={styles.closeButton}
+          onClick={() => onResolveChat()}
+          aria-live={'polite'}
+          aria-label={threadStrings.close}
+        >
+          {threadStrings.resolve}
+        </Button>
+      )}
+    </div>
   );
 };
