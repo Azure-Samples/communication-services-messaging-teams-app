@@ -31,6 +31,7 @@ export const ChatFloatingWindow = (props: ChatFloatingWindowProps): JSX.Element 
   const [displayName, setDisplayName] = useState('');
   const [threadId, setThreadId] = useState('');
   const [endpointUrl, setEndpointUrl] = useState('');
+  const [questionSummary, setQuestionSummary] = useState('');
   const [agentName, setAgentName] = useState('');
   const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
   const [adapter, setAdapter] = useState<ChatAdapter | undefined>(undefined);
@@ -40,7 +41,7 @@ export const ChatFloatingWindow = (props: ChatFloatingWindowProps): JSX.Element 
       case Page.Configuration: {
         return (
           <ConfigurationScreen
-            joinChatHandler={() => {
+            onJoinChat={() => {
               setPage(Page.Chat);
             }}
             setToken={setToken}
@@ -50,7 +51,8 @@ export const ChatFloatingWindow = (props: ChatFloatingWindowProps): JSX.Element 
             setEndpointUrl={setEndpointUrl}
             setAgentName={setAgentName}
             onCloseButtonClicked={onCloseButtonClick}
-            onError={(error: string) => {
+            onError={(error: string, questionSummary: string) => {
+              setQuestionSummary(questionSummary); // store the questionSummary to be used for the retry function in the error screen
               setErrorMessage(error);
               setPage(Page.Error);
             }}
@@ -70,10 +72,6 @@ export const ChatFloatingWindow = (props: ChatFloatingWindowProps): JSX.Element 
               onEndChat={(adapter: ChatAdapter) => {
                 setAdapter(adapter);
                 setPage(Page.EndConfirmation);
-              }}
-              onError={(error: string) => {
-                setErrorMessage(error);
-                setPage(Page.Error);
               }}
             />
           );
@@ -95,15 +93,26 @@ export const ChatFloatingWindow = (props: ChatFloatingWindowProps): JSX.Element 
           />
         );
       }
-      // TODO: This section will be completed in a subsequent PR
       default:
         return (
           <ErrorScreen
-            title={errorMessage || 'Page not found'}
-            homeHandler={() => {
+            message={errorMessage || strings.pageNotFoundErrorMessage}
+            onClose={() => {
               setErrorMessage(undefined);
+              setQuestionSummary('');
               onCloseButtonClick();
             }}
+            onRetrySucceed={() => {
+              setQuestionSummary('');
+              setPage(Page.Chat);
+            }}
+            displayName={displayName}
+            questionSummary={questionSummary}
+            setToken={setToken}
+            setUserId={setUserId}
+            setThreadId={setThreadId}
+            setEndpointUrl={setEndpointUrl}
+            setAgentName={setAgentName}
           />
         );
     }
