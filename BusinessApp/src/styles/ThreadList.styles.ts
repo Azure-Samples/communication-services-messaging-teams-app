@@ -9,8 +9,7 @@ export const useThreadListStyles = makeStyles({
     height: '100vh',
     display: 'flex',
     flexDirection: 'column',
-    background: tokens.colorNeutralBackground4,
-    boxShadow: '0px 14px 250px 0px #00000024'
+    background: tokens.colorNeutralBackground4
   },
   label: {
     display: 'flex',

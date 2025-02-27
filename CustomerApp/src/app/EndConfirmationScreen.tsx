@@ -5,7 +5,7 @@ import { Button, Text } from '@fluentui/react-components';
 import { useEndConfirmationScreenStyles } from './styles/EndConfirmationScreen.styles';
 import { strings } from './utils/constants';
 import { useCallback } from 'react';
-import { updateAgentWorkItem } from './utils/agentWorkItem';
+import { ThreadItemStatus, updateAgentWorkItem } from './utils/agentWorkItem';
 import { ChatAdapter } from '@azure/communication-react';
 
 export interface EndCallProps {
@@ -22,7 +22,7 @@ export const EndConfirmationScreen = (props: EndCallProps): JSX.Element => {
 
   const handleOnConfirmLeaving = useCallback(() => {
     const resolveThread = async (): Promise<void> => {
-      await updateAgentWorkItem(threadId, 'resolved');
+      await updateAgentWorkItem(threadId, ThreadItemStatus.RESOLVED);
     };
     adapter?.removeParticipant(userId);
     resolveThread();

@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 import { useCallback, useContext, useEffect, useState } from 'react';
-import './AgentScreen.css';
 import { ChatScreen } from './ChatScreen';
 import { ThreadList } from './ThreadList';
 import { getToken } from '../../utils/fetchRequestUtils/getToken';
@@ -9,9 +8,11 @@ import { getEndpointUrl } from '../../utils/fetchRequestUtils/getEndpointUrl';
 import { TeamsFxContext } from '../Context';
 import { useData } from '@microsoft/teamsfx-react';
 import { AgentUser, getAgentACSUser } from '../../utils/fetchRequestUtils/agentACSUser';
-import useThreads from './useThreads';
+import useThreads, { ThreadItemStatus } from './useThreads';
+import { useAgentScreenStyles } from '../../styles/AgentScreen.styles';
 
 export const AgentScreen = (): JSX.Element => {
+  const styles = useAgentScreenStyles();
   const [token, setToken] = useState('');
   const [userId, setUserId] = useState('');
   const [displayName, setDisplayName] = useState('');
@@ -65,11 +66,11 @@ export const AgentScreen = (): JSX.Element => {
     );
   };
 
-  // TODO: UI will be handled in the future
   const chatScreen = useCallback(() => {
     if (!selectedThreadId || !token || !endpointUrl || !userId || !displayName) {
       return emptyChatScreen();
     }
+    const thread = threads?.find((thread) => thread.id === selectedThreadId);
     return (
       <ChatScreen
         token={token}
@@ -77,6 +78,8 @@ export const AgentScreen = (): JSX.Element => {
         displayName={displayName}
         endpointUrl={endpointUrl}
         threadId={selectedThreadId}
+        receiverName={thread?.topic || ''}
+        threadStatus={thread?.status || ThreadItemStatus.ACTIVE}
         endChatHandler={function (isParticipantRemoved: boolean): void {
           console.log('End chat handler called', isParticipantRemoved);
         }}
@@ -84,7 +87,7 @@ export const AgentScreen = (): JSX.Element => {
           setThreads((prevThreads) =>
             prevThreads.map((thread) => {
               if (thread.id === threadId) {
-                return { ...thread, status: 'resolved' };
+                return { ...thread, status: ThreadItemStatus.RESOLVED };
               }
               return thread;
             })
@@ -92,18 +95,12 @@ export const AgentScreen = (): JSX.Element => {
         }}
       />
     );
-  }, [selectedThreadId, token, endpointUrl, userId, displayName, setThreads]);
+  }, [selectedThreadId, token, endpointUrl, userId, displayName, threads, setThreads]);
 
   return (
-    <div className="welcome page">
-      <div style={{ display: 'flex', flexDirection: 'row', height: '100%' }}>
-        {endpointUrl && threads ? (
-          <ThreadList onThreadSelected={setSelectedThreadId} threads={threads} />
-        ) : (
-          <div>Loading...</div>
-        )}
-        <div className="narrow">{chatScreen()}</div>
-      </div>
+    <div className={styles.container}>
+      <ThreadList onThreadSelected={setSelectedThreadId} threads={threads} isLoading={!endpointUrl || !threads} />
+      <div className={styles.chatScreenContainer}>{chatScreen()}</div>
     </div>
   );
 };
