@@ -19,7 +19,6 @@ export const assignAgentUser = async (threadId: string): Promise<string> => {
       throw new Error('Failed at assign an agent user to the chat thread ' + response.status);
     }
   } catch (error) {
-    console.error('Failed at assign an agent user to the chat thread: ', error);
     throw new Error('Failed at assign an agent user to the chat thread');
   }
 };

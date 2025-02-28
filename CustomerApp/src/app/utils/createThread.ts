@@ -15,7 +15,6 @@ export const createThread = async (): Promise<string> => {
       throw new Error('Failed at creating thread ' + response.status);
     }
   } catch (error) {
-    console.error('Failed creating thread, Error: ', error);
     throw new Error('Failed at creating thread');
   }
 };

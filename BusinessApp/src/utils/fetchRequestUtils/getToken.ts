@@ -11,14 +11,18 @@ export type UserToken = {
  * This gets the token for a given user
  */
 export const getToken: (userId: string) => Promise<UserToken> = async (userId?: string) => {
-  const getTokenRequestOptions = {
-    method: 'POST'
-  };
-  const getTokenResponse = await fetch(`/token/user/${userId}?scope=chat`, getTokenRequestOptions);
-  const responseJson = await getTokenResponse.json();
-  return {
-    expiresOn: responseJson.expiresOn,
-    identity: responseJson.user.communicationUserId,
-    token: responseJson.token
-  };
+  try {
+    const getTokenRequestOptions = {
+      method: 'POST'
+    };
+    const getTokenResponse = await fetch(`/token/user/${userId}?scope=chat`, getTokenRequestOptions);
+    const responseJson = await getTokenResponse.json();
+    return {
+      expiresOn: responseJson.expiresOn,
+      identity: responseJson.user.communicationUserId,
+      token: responseJson.token
+    };
+  } catch (error) {
+    throw new Error('could not get token for user: ' + userId + ' due to error: ' + error);
+  }
 };

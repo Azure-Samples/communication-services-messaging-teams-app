@@ -22,7 +22,11 @@ export const EndConfirmationScreen = (props: EndCallProps): JSX.Element => {
 
   const handleOnConfirmLeaving = useCallback(() => {
     const resolveThread = async (): Promise<void> => {
-      await updateAgentWorkItem(threadId, ThreadItemStatus.RESOLVED);
+      try {
+        await updateAgentWorkItem(threadId, ThreadItemStatus.RESOLVED);
+      } catch (error) {
+        console.error(`Failed at resolving thread ${threadId}, Error: ${error}`);
+      }
     };
     adapter?.removeParticipant(userId);
     resolveThread();
