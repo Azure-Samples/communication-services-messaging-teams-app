@@ -36,6 +36,10 @@ export interface ThreadStrings {
   failToLinkToACSUser: string;
   /** String for the error message of failed to get the Teams user information */
   failToGetTeamsUserInfo: string;
+  /** String for no threads */
+  noThreads: string;
+  /** String for assigned to me label on the thread list */
+  assignedToMe: string;
 }
 
 export const threadStrings: ThreadStrings = {
@@ -51,5 +55,7 @@ export const threadStrings: ThreadStrings = {
   resolve: 'Resolve',
   errorScreenTitle: 'Configuration error',
   failToLinkToACSUser: 'ACS user not linked.',
-  failToGetTeamsUserInfo: 'Failed to get Teams user information'
+  failToGetTeamsUserInfo: 'Failed to get Teams user information',
+  noThreads: 'No chats',
+  assignedToMe: 'Assigned to me'
 };

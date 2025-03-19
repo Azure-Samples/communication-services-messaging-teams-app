@@ -21,7 +21,7 @@ export const AgentScreen = (): JSX.Element => {
   const [endpointUrl, setEndpointUrl] = useState('');
   const [selectedThreadId, setSelectedThreadId] = useState<string | undefined>(undefined);
   const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
-  const { threads, setThreads } = useThreads({ userId, token, endpointUrl });
+  const { threads, setThreads, isLoading } = useThreads({ userId, token, endpointUrl });
   const { teamsUserCredential } = useContext(TeamsFxContext);
 
   const { loading, data, error } = useData(async () => {
@@ -66,19 +66,9 @@ export const AgentScreen = (): JSX.Element => {
     setScreenState();
   }, [getACSUser]);
 
-  // TODO: UI will be handled in the future
-  const emptyChatScreen = (): JSX.Element => {
-    return (
-      <div className="empty-screen">
-        <h1>Welcome to the chat app</h1>
-        <p>Select a thread to start chatting</p>
-      </div>
-    );
-  };
-
   const chatScreen = useCallback(() => {
     if (!selectedThreadId || !token || !endpointUrl || !userId || !displayName) {
-      return emptyChatScreen();
+      return <></>;
     }
     const thread = threads?.find((thread) => thread.id === selectedThreadId);
     return (
@@ -113,8 +103,8 @@ export const AgentScreen = (): JSX.Element => {
         <ErrorScreen errorMessage={errorMessage} />
       ) : (
         <div className={styles.container}>
-          <ThreadList onThreadSelected={setSelectedThreadId} threads={threads} isLoading={!endpointUrl || !threads} />
-          <div className={styles.chatScreenContainer}>{chatScreen()}</div>
+          <ThreadList onThreadSelected={setSelectedThreadId} threads={threads} isLoading={!endpointUrl || isLoading} />
+          <div className={styles.chatContainer}>{chatScreen()}</div>
         </div>
       )}
     </div>
