@@ -1,21 +1,16 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { CommunicationUserIdentifier } from '@azure/communication-common';
-import {
-  ChatAdapter,
-  ChatComposite,
-  fromFlatCommunicationIdentifier,
-  toFlatCommunicationIdentifier,
-  useAzureCommunicationChatAdapter
-} from '@azure/communication-react';
-import { useCallback, useEffect, useMemo } from 'react';
+import { AzureCommunicationTokenCredential } from '@azure/communication-common';
+import { ChatClientProvider, ChatThreadClientProvider, createStatefulChatClient } from '@azure/communication-react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ChatHeader } from './ChatHeader';
-import { createAutoRefreshingCredential } from '../../utils/fetchRequestUtils/credential';
 import { updateAgentWorkItem } from '../../utils/fetchRequestUtils/agentWorkItem';
 import { useChatScreenStyles } from '../../styles/ChatScreen.styles';
 import { ThreadItemStatus } from './useThreads';
 import { LoadingSpinner } from './LoadingSpinner';
+import { ChatThreadClient } from '@azure/communication-chat';
+import ChatComponents from './ChatComponents';
 // These props are passed in when this component is referenced in JSX and not found in context
 interface ChatScreenProps {
   token: string;
@@ -42,6 +37,8 @@ export const ChatScreen = (props: ChatScreenProps): JSX.Element => {
     resolveChatHandler
   } = props;
   const styles = useChatScreenStyles();
+  const [isLoading, setIsLoading] = useState(true);
+
   // Disables pull down to refresh. Prevents accidental page refresh when scrolling through chat messages
   // Another alternative: set body style touch-action to 'none'. Achieves same result.
   useEffect(() => {
@@ -50,42 +47,6 @@ export const ChatScreen = (props: ChatScreenProps): JSX.Element => {
       document.body.style.overflow = 'null';
     };
   }, []);
-
-  const adapterAfterCreate = useCallback(
-    async (adapter: ChatAdapter): Promise<ChatAdapter> => {
-      adapter.on('participantsRemoved', (listener) => {
-        const removedParticipantIds = listener.participantsRemoved.map((p) => toFlatCommunicationIdentifier(p.id));
-        if (removedParticipantIds.includes(userId)) {
-          const removedBy = toFlatCommunicationIdentifier(listener.removedBy.id);
-          endChatHandler(removedBy !== userId);
-        }
-      });
-      adapter.on('error', (e) => {
-        console.error(e);
-      });
-      return adapter;
-    },
-    [endChatHandler, userId]
-  );
-
-  const adapterArgs = useMemo(
-    () => ({
-      endpoint: endpointUrl,
-      userId: fromFlatCommunicationIdentifier(userId) as CommunicationUserIdentifier,
-      displayName,
-      credential: createAutoRefreshingCredential(userId, token),
-      threadId
-    }),
-    [endpointUrl, userId, displayName, token, threadId]
-  );
-  const adapter = useAzureCommunicationChatAdapter(adapterArgs, adapterAfterCreate);
-
-  // Dispose of the adapter in the window's before unload event
-  useEffect(() => {
-    const disposeAdapter = (): void => adapter?.dispose();
-    window.addEventListener('beforeunload', disposeAdapter);
-    return () => window.removeEventListener('beforeunload', disposeAdapter);
-  }, [adapter]);
 
   const handleOnResolveChat = useCallback(() => {
     const handleUpdateAgentWorkItem = async (threadId: string, status: ThreadItemStatus): Promise<void> => {
@@ -99,25 +60,51 @@ export const ChatScreen = (props: ChatScreenProps): JSX.Element => {
     resolveChatHandler(threadId);
   }, [resolveChatHandler, threadId]);
 
-  if (adapter) {
-    return (
-      <div className={styles.chatScreenContainer}>
-        <ChatHeader
-          personaName={receiverName}
-          threadStatus={threadStatus}
-          onResolveChat={() => handleOnResolveChat()}
-        />
-        <div className={styles.chatCompositeContainer} role="main">
-          <ChatComposite
-            adapter={adapter}
-            options={{
-              autoFocus: 'sendBoxTextField',
-              topic: false
-            }}
+  // Instantiate the statefulChatClient
+  const statefulChatClient = useMemo(() => {
+    const tokenCredential = new AzureCommunicationTokenCredential(token);
+    const chatClient = createStatefulChatClient({
+      userId: { communicationUserId: userId },
+      displayName: displayName,
+      endpoint: endpointUrl,
+      credential: tokenCredential
+    });
+    chatClient.startRealtimeNotifications();
+
+    return chatClient;
+  }, [displayName, endpointUrl, token, userId]);
+
+  const chatThreadClient = useMemo(() => {
+    setIsLoading(true);
+    console.log('loading ......');
+
+    const threadClient = statefulChatClient.getChatThreadClient(threadId);
+    const initializeThreadState = async (chatThreadClient: ChatThreadClient): Promise<void> => {
+      await chatThreadClient.getProperties();
+    };
+    initializeThreadState(threadClient);
+    setIsLoading(false);
+    return threadClient;
+  }, [statefulChatClient, threadId]);
+
+  return (
+    <div className={styles.chatScreenContainer}>
+      {isLoading ? (
+        <LoadingSpinner />
+      ) : (
+        <>
+          <ChatHeader
+            personaName={receiverName}
+            threadStatus={threadStatus}
+            onResolveChat={() => handleOnResolveChat()}
           />
-        </div>
-      </div>
-    );
-  }
-  return <LoadingSpinner />;
+          <ChatClientProvider chatClient={statefulChatClient}>
+            <ChatThreadClientProvider chatThreadClient={chatThreadClient}>
+              <ChatComponents />
+            </ChatThreadClientProvider>
+          </ChatClientProvider>
+        </>
+      )}
+    </div>
+  );
 };
