@@ -3,7 +3,7 @@
 import { usePropsFor, MessageThread, RichTextSendBox } from '@azure/communication-react';
 import { messageThreadStyles, useChatComponentsStyles } from '../../styles/ChatComponents.styles';
 
-function ChatComponents(): JSX.Element {
+export const ChatComponents = (): JSX.Element => {
   const styles = useChatComponentsStyles();
   const messageThreadProps = usePropsFor(MessageThread);
   const richTextSendBoxProps = usePropsFor(RichTextSendBox);
@@ -21,6 +21,4 @@ function ChatComponents(): JSX.Element {
       </div>
     </div>
   );
-}
-
-export default ChatComponents;
+};
