@@ -24,7 +24,6 @@ export const sendMessage = async (
       throw new Error('Failed to send messages to the chat thread ' + response.status);
     }
   } catch (error) {
-    console.error('Failed to send messages to the chat thread ', error);
     throw new Error('Failed to send messages to the chat thread');
   }
 };

@@ -13,7 +13,10 @@ export const useChatScreenStyles = makeStyles({
     width: '100%'
   },
   chatCompositeContainer: {
-    width: '100%',
-    height: '372px'
+    display: 'flex',
+    flexDirection: 'row',
+    flexGrow: 1, // Take the remaining height
+    justifyContent: 'center',
+    alignItems: 'stretch'
   }
 });

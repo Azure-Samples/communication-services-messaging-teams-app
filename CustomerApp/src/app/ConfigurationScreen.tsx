@@ -2,22 +2,17 @@
 // Licensed under the MIT License.
 
 import { Button, Image, Text } from '@fluentui/react-components';
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import { configurationScreenStyles } from './styles/ConfigurationScreen.styles';
 import { InputSection } from './InputSection';
-import { getToken } from './utils/getToken';
-import { joinThread } from './utils/joinThread';
-import { getEndpointUrl } from './utils/getEndpointUrl';
-import { createThread } from './utils/createThread';
 import configurationScreenHeroSVG from '../assets/configurationScreenHero.svg';
 import { strings } from './utils/constants';
 import { Dismiss20Regular } from '@fluentui/react-icons';
 import { LoadingSpinner } from './LoadingSpinner';
-import { assignAgentUser } from './utils/assignAgentUser';
-import { sendMessage } from './utils/sendMessage';
+import { createAndJoinChatThreadWithNewUser } from './utils/createAndJoinChatThreadWithNewUser';
 
 export interface ConfigurationScreenProps {
-  joinChatHandler(): void;
+  onJoinChat(): void;
   setToken(token: string): void;
   setUserId(userId: string): void;
   setDisplayName(displayName: string): void;
@@ -25,12 +20,12 @@ export interface ConfigurationScreenProps {
   setEndpointUrl(endpointUrl: string): void;
   setAgentName(agentName: string): void;
   onCloseButtonClicked(): void;
-  onError(error: string): void;
+  onError(error: string, questionSummary: string): void;
 }
 
 export const ConfigurationScreen = (props: ConfigurationScreenProps): JSX.Element => {
   const {
-    joinChatHandler,
+    onJoinChat,
     setToken,
     setUserId,
     setDisplayName,
@@ -45,79 +40,19 @@ export const ConfigurationScreen = (props: ConfigurationScreenProps): JSX.Elemen
 
   const [name, setName] = useState('');
   const [emptyNameWarning, setEmptyNameWarning] = useState(false);
-  const [questionSummery, setQuestionSummery] = useState('');
-  const [emptyQuestionSummeryWarning, setEmptyQuestionSummeryWarning] = useState(false);
+  const [questionSummary, setQuestionSummary] = useState('');
+  const [emptyQuestionSummaryWarning, setEmptyQuestionSummaryWarning] = useState(false);
   const [disableJoinChatButton, setDisableJoinChatButton] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  // This function creates a new chat thread and a new ACS user,
-  // then joins the thread with the newly created user.
-  const createAndJoinChatThreadWithNewUser = useCallback(() => {
-    const createAndJoinChatThread = async (): Promise<void> => {
-      // Create a new chat thread
-      const threadId = await createThread();
-      if (!threadId) {
-        console.error('Failed to create a thread, returned threadId is undefined or empty string');
-        onError(strings.failToCreateChatClient);
-        return;
-      }
-      setThreadId(threadId);
-
-      // Create a new ACS user
-      const token = await getToken();
-      const endpointUrl = await getEndpointUrl();
-
-      setToken(token.token);
-      setUserId(token.identity);
-      setDisplayName(name);
-      setEndpointUrl(endpointUrl);
-
-      // Join the thread with the newly created user
-      const result = await joinThread(threadId, token.identity, name);
-      if (!result) {
-        console.error('Failed to join the thread');
-        onError(strings.failToJoinChatThread);
-        setDisableJoinChatButton(false);
-        return;
-      }
-
-      // Assign a random agent
-      const agentDisplayName = await assignAgentUser(threadId);
-      if (agentDisplayName === undefined) {
-        console.error('Failed to assign an agent to the chat thread');
-        onError?.(strings.failToAssignAgent);
-        return;
-      }
-      setAgentName(agentDisplayName);
-
-      // Send the initial message with the question summary
-      sendMessage(token.identity, name, threadId, questionSummery);
-
-      setDisableJoinChatButton(false);
-      joinChatHandler();
-    };
-    createAndJoinChatThread();
-  }, [
-    setThreadId,
-    setToken,
-    setUserId,
-    setDisplayName,
-    name,
-    setEndpointUrl,
-    setAgentName,
-    questionSummery,
-    joinChatHandler,
-    onError
-  ]);
 
   const validateRequiredFields = (): boolean => {
     if (!name) {
       setEmptyNameWarning(true);
     }
-    if (!questionSummery) {
-      setEmptyQuestionSummeryWarning(true);
+    if (!questionSummary) {
+      setEmptyQuestionSummaryWarning(true);
     }
-    return !!name && !!questionSummery;
+    return !!name && !!questionSummary;
   };
   const startChat = (): void => {
     const validRequiredFields = validateRequiredFields();
@@ -125,10 +60,22 @@ export const ConfigurationScreen = (props: ConfigurationScreenProps): JSX.Elemen
       return;
     }
     setEmptyNameWarning(false);
-    setEmptyQuestionSummeryWarning(false);
+    setEmptyQuestionSummaryWarning(false);
     setDisableJoinChatButton(true);
     setIsLoading(true);
-    createAndJoinChatThreadWithNewUser();
+    setDisplayName(name);
+
+    createAndJoinChatThreadWithNewUser({
+      displayName: name,
+      questionSummary,
+      onJoinChat,
+      setToken,
+      setUserId,
+      setThreadId,
+      setEndpointUrl,
+      setAgentName,
+      onError
+    });
   };
 
   const renderConfigurationView = (): JSX.Element => {
@@ -164,11 +111,11 @@ export const ConfigurationScreen = (props: ConfigurationScreenProps): JSX.Elemen
           <InputSection
             labelText={strings.configurationQuestionSummaryLabelText}
             placeholder={strings.configurationQuestionSummaryPlaceholder}
-            isEmpty={emptyQuestionSummeryWarning}
+            isEmpty={emptyQuestionSummaryWarning}
             emptyErrorMessage={strings.requiredTextFiledErrorMessage}
             onTextChangedHandler={(newValue) => {
-              setQuestionSummery(newValue);
-              setEmptyQuestionSummeryWarning(!newValue);
+              setQuestionSummary(newValue);
+              setEmptyQuestionSummaryWarning(!newValue);
             }}
             onKeyDownHandler={startChat}
             isMultiline={true}

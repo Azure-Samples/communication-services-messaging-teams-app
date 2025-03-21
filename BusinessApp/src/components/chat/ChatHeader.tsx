@@ -29,10 +29,10 @@ export const ChatHeader = (props: ChatHeaderProps): JSX.Element => {
       {threadStatus === ThreadItemStatus.ACTIVE && (
         <Button
           icon={<Checkmark16Regular />}
-          className={styles.closeButton}
+          className={styles.resolveButton}
           onClick={() => onResolveChat()}
           aria-live={'polite'}
-          aria-label={threadStrings.close}
+          aria-label={threadStrings.resolve}
         >
           {threadStrings.resolve}
         </Button>

@@ -5,7 +5,6 @@ import {
   teamsLightTheme,
   teamsDarkTheme,
   teamsHighContrastTheme,
-  Spinner,
   tokens
 } from '@fluentui/react-components';
 import { HashRouter as Router, Navigate, Route, Routes } from 'react-router-dom';
@@ -15,6 +14,7 @@ import TermsOfUse from './TermsOfUse';
 import { Tab } from './Tab';
 import { TeamsFxContext } from './Context';
 import config from '../lib/config';
+import { LoadingSpinner } from './chat/LoadingSpinner';
 
 /**
  * The main app which handles the initialization and routing
@@ -33,16 +33,13 @@ export const App = (): JSX.Element => {
             ? teamsDarkTheme
             : themeString === 'contrast'
             ? teamsHighContrastTheme
-            : {
-                ...teamsLightTheme,
-                colorNeutralBackground3: '#eeeeee'
-              }
+            : teamsLightTheme
         }
         style={{ background: tokens.colorNeutralBackground3 }}
       >
         <Router>
           {loading ? (
-            <Spinner style={{ margin: 100 }} />
+            <LoadingSpinner />
           ) : (
             <Routes>
               <Route path="/privacy" element={<Privacy />} />

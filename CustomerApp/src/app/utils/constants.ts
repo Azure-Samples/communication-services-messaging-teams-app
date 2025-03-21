@@ -20,12 +20,12 @@ export const strings = {
   configurationQuestionSummaryPlaceholder: 'Briefly summarize your issue',
   requiredTextFiledErrorMessage: 'Required',
   initializeChatSpinnerLabel: 'Loading chat...',
-  failToCreateChatClient: 'Failed to create chat client, please revisit home page to create a new thread',
-  failToJoinChatThread: 'Failed to join the chat thread, please revisit home page to create a new thread',
-  failToAssignAgent: 'Failed to assign an agent to the chat thread, please revisit home page to create a new thread',
+  unableToStartChat: 'Unable to start chat.',
   endChatConfirmationTitle: 'Leave chat?',
   endChatConfirmationDescription: 'Your conversation is not saved',
   endChatConfirmationConfirmButton: 'Leave and close',
   endChatConfirmationCancelButton: 'Cancel',
-  homeButton: 'Go to homepage'
+  errorScreenTitle: 'We ran into a problem',
+  errorScreenRetryButton: 'Retry',
+  pageNotFoundErrorMessage: 'Page not found'
 };

@@ -10,6 +10,8 @@ import { useData } from '@microsoft/teamsfx-react';
 import { AgentUser, getAgentACSUser } from '../../utils/fetchRequestUtils/agentACSUser';
 import useThreads, { ThreadItemStatus } from './useThreads';
 import { useAgentScreenStyles } from '../../styles/AgentScreen.styles';
+import { threadStrings } from '../../utils/constants';
+import { ErrorScreen } from './ErrorScreen';
 
 export const AgentScreen = (): JSX.Element => {
   const styles = useAgentScreenStyles();
@@ -18,13 +20,18 @@ export const AgentScreen = (): JSX.Element => {
   const [displayName, setDisplayName] = useState('');
   const [endpointUrl, setEndpointUrl] = useState('');
   const [selectedThreadId, setSelectedThreadId] = useState<string | undefined>(undefined);
-  const { threads, setThreads } = useThreads({ userId, token, endpointUrl });
+  const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
+  const { threads, setThreads, isLoading } = useThreads({ userId, token, endpointUrl });
   const { teamsUserCredential } = useContext(TeamsFxContext);
 
   const { loading, data, error } = useData(async () => {
     if (teamsUserCredential) {
-      const userInfo = await teamsUserCredential.getUserInfo();
-      return userInfo;
+      try {
+        const userInfo = await teamsUserCredential.getUserInfo();
+        return userInfo;
+      } catch (error) {
+        setErrorMessage(threadStrings.failToGetTeamsUserInfo);
+      }
     }
   });
 
@@ -39,36 +46,29 @@ export const AgentScreen = (): JSX.Element => {
 
   useEffect(() => {
     const setScreenState = async (): Promise<void> => {
-      const agentACSUser = await getACSUser();
-      if (!agentACSUser) {
-        // TODO: Display error screen if user ID is not found
-        return;
-      }
-      const endpointUrl = await getEndpointUrl();
-      const token = await getToken(agentACSUser.acsUserId);
-      const displayName = agentACSUser.displayName;
+      try {
+        const agentACSUser = await getACSUser();
+        if (!agentACSUser) {
+          return;
+        }
+        const endpointUrl = await getEndpointUrl();
+        const token = await getToken(agentACSUser.acsUserId);
+        const displayName = agentACSUser.displayName;
 
-      setUserId(agentACSUser.acsUserId);
-      setEndpointUrl(endpointUrl);
-      setToken(token.token);
-      setDisplayName(displayName);
+        setUserId(agentACSUser.acsUserId);
+        setEndpointUrl(endpointUrl);
+        setToken(token.token);
+        setDisplayName(displayName);
+      } catch (error) {
+        setErrorMessage(threadStrings.failToLinkToACSUser);
+      }
     };
     setScreenState();
   }, [getACSUser]);
 
-  // TODO: UI will be handled in the future
-  const emptyChatScreen = (): JSX.Element => {
-    return (
-      <div className="empty-screen">
-        <h1>Welcome to the chat app</h1>
-        <p>Select a thread to start chatting</p>
-      </div>
-    );
-  };
-
   const chatScreen = useCallback(() => {
     if (!selectedThreadId || !token || !endpointUrl || !userId || !displayName) {
-      return emptyChatScreen();
+      return <></>;
     }
     const thread = threads?.find((thread) => thread.id === selectedThreadId);
     return (
@@ -80,9 +80,6 @@ export const AgentScreen = (): JSX.Element => {
         threadId={selectedThreadId}
         receiverName={thread?.topic || ''}
         threadStatus={thread?.status || ThreadItemStatus.ACTIVE}
-        endChatHandler={function (isParticipantRemoved: boolean): void {
-          console.log('End chat handler called', isParticipantRemoved);
-        }}
         resolveChatHandler={(threadId) => {
           setThreads((prevThreads) =>
             prevThreads.map((thread) => {
@@ -98,9 +95,15 @@ export const AgentScreen = (): JSX.Element => {
   }, [selectedThreadId, token, endpointUrl, userId, displayName, threads, setThreads]);
 
   return (
-    <div className={styles.container}>
-      <ThreadList onThreadSelected={setSelectedThreadId} threads={threads} isLoading={!endpointUrl || !threads} />
-      <div className={styles.chatScreenContainer}>{chatScreen()}</div>
+    <div>
+      {errorMessage ? (
+        <ErrorScreen errorMessage={errorMessage} />
+      ) : (
+        <div className={styles.container}>
+          <ThreadList onThreadSelected={setSelectedThreadId} threads={threads} isLoading={!endpointUrl || isLoading} />
+          <div className={styles.chatContainer}>{chatScreen()}</div>
+        </div>
+      )}
     </div>
   );
 };

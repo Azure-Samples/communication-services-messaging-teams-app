@@ -10,8 +10,8 @@ export const useChatHeaderStyles = makeStyles({
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: tokens.colorNeutralBackground1,
-    borderBottom: `1px solid ${tokens.colorNeutralStroke3}`,
+    backgroundColor: tokens.colorNeutralBackground3,
+    borderBottom: `1px solid ${tokens.colorNeutralStroke1}`,
     padding: '0 1.25rem' // 0 8px
   },
   primaryText: {
@@ -19,7 +19,7 @@ export const useChatHeaderStyles = makeStyles({
     fontWeight: 700,
     lineHeight: '1.5rem' // 24px
   },
-  closeButton: {
+  resolveButton: {
     width: '6.25rem', // 100px
     height: '2rem', // 32px
     marginRight: '0.125rem' // 2px

@@ -1,22 +1,26 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { CommunicationUserIdentifier } from '@azure/communication-common';
+import { AzureCommunicationTokenCredential } from '@azure/communication-common';
 import {
-  AvatarPersonaData,
-  ChatAdapter,
-  ChatComposite,
-  fromFlatCommunicationIdentifier,
-  useAzureCommunicationChatAdapter
+  ChatClientProvider,
+  ChatThreadClientProvider,
+  createStatefulChatClient,
+  DEFAULT_COMPONENT_ICONS
 } from '@azure/communication-react';
-import { useCallback, useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { ChatHeader } from './ChatHeader';
 import { useChatScreenStyles } from './styles/ChatScreen.styles';
-import { createAutoRefreshingCredential } from './utils/credential';
-import { fetchEmojiForUser } from './utils/emojiCache';
-import { getBackgroundColor } from './utils/utils';
 import { strings } from './utils/constants';
 import { LoadingSpinner } from './LoadingSpinner';
+import ChatComponents from './ChatComponents';
+import { ChatThreadClient } from '@azure/communication-chat';
+import { initializeIcons, registerIcons } from '@fluentui/react';
+
+// Register Fluent UI V8 icons so component icons, such as send button, can be displayed
+initializeIcons();
+registerIcons({ icons: DEFAULT_COMPONENT_ICONS });
+
 // These props are passed in when this component is referenced in JSX and not found in context
 interface ChatScreenProps {
   token: string;
@@ -25,13 +29,14 @@ interface ChatScreenProps {
   endpointUrl: string;
   threadId: string;
   agentName: string;
-  onEndChat(adapter: ChatAdapter): void;
-  onError?(error: string): void;
+  onEndChat(chatThreadClient: ChatThreadClient): void;
 }
 
 export const ChatScreen = (props: ChatScreenProps): JSX.Element => {
-  const { displayName, endpointUrl, threadId, token, userId, agentName, onEndChat, onError } = props;
+  const { displayName, endpointUrl, threadId, token, userId, agentName, onEndChat } = props;
   const styles = useChatScreenStyles();
+  const [chatThreadClient, setChatThreadClient] = useState<ChatThreadClient | undefined>(undefined);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Disables pull down to refresh. Prevents accidental page refresh when scrolling through chat messages
   // Another alternative: set body style touch-action to 'none'. Achieves same result.
@@ -42,69 +47,52 @@ export const ChatScreen = (props: ChatScreenProps): JSX.Element => {
     };
   }, []);
 
-  const adapterAfterCreate = useCallback(
-    async (adapter: ChatAdapter): Promise<ChatAdapter> => {
-      adapter.on('error', (e) => {
-        console.error(e);
-        onError?.(e.message);
-      });
-      return adapter;
-    },
-    [onError]
-  );
-
-  const adapterArgs = useMemo(
-    () => ({
+  // Instantiate the statefulChatClient
+  const statefulChatClient = useMemo(() => {
+    const tokenCredential = new AzureCommunicationTokenCredential(token);
+    const chatClient = createStatefulChatClient({
+      userId: { communicationUserId: userId },
+      displayName: displayName,
       endpoint: endpointUrl,
-      userId: fromFlatCommunicationIdentifier(userId) as CommunicationUserIdentifier,
-      displayName,
-      credential: createAutoRefreshingCredential(userId, token),
-      threadId
-    }),
-    [endpointUrl, userId, displayName, token, threadId]
-  );
-  const adapter = useAzureCommunicationChatAdapter(adapterArgs, adapterAfterCreate);
+      credential: tokenCredential
+    });
+    chatClient.startRealtimeNotifications();
 
-  // Dispose of the adapter in the window's before unload event
+    return chatClient;
+  }, [displayName, endpointUrl, token, userId]);
+
   useEffect(() => {
-    const disposeAdapter = (): void => adapter?.dispose();
-    window.addEventListener('beforeunload', disposeAdapter);
-    return () => window.removeEventListener('beforeunload', disposeAdapter);
-  }, [adapter]);
+    const initializeChatThreadClient = async (): Promise<void> => {
+      setIsLoading(true);
+      const threadClient = statefulChatClient.getChatThreadClient(threadId);
+      try {
+        await threadClient.getProperties();
+        setChatThreadClient(threadClient);
+      } catch (error) {
+        console.error('Failed to initialize chat thread client:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-  if (adapter) {
-    const onFetchAvatarPersonaData = (userId: string): Promise<AvatarPersonaData> =>
-      fetchEmojiForUser(userId).then(
-        (emoji) =>
-          new Promise((resolve) => {
-            return resolve({
-              imageInitials: emoji,
-              initialsColor: emoji ? getBackgroundColor(emoji)?.backgroundColor : undefined
-            });
-          })
-      );
+    initializeChatThreadClient();
+  }, [statefulChatClient, threadId]);
 
-    return (
-      <div className={styles.chatScreenContainer}>
-        <ChatHeader
-          personaName={agentName}
-          onEndChat={() => {
-            onEndChat(adapter);
-          }}
-        />
-        <div className={styles.chatCompositeContainer}>
-          <ChatComposite
-            adapter={adapter}
-            options={{
-              autoFocus: 'sendBoxTextField',
-              topic: false
-            }}
-            onFetchAvatarPersonaData={onFetchAvatarPersonaData}
-          />
-        </div>
-      </div>
-    );
-  }
-
-  return <LoadingSpinner label={strings.initializeChatSpinnerLabel} />;
+  return isLoading || !chatThreadClient ? (
+    <LoadingSpinner label={strings.initializeChatSpinnerLabel} />
+  ) : (
+    <div className={styles.chatScreenContainer}>
+      <ChatHeader
+        personaName={agentName}
+        onEndChat={() => {
+          onEndChat(chatThreadClient);
+        }}
+      />
+      <ChatClientProvider chatClient={statefulChatClient}>
+        <ChatThreadClientProvider chatThreadClient={chatThreadClient}>
+          <ChatComponents />
+        </ChatThreadClientProvider>
+      </ChatClientProvider>
+    </div>
+  );
 };

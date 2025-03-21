@@ -22,10 +22,14 @@ export const createAutoRefreshingCredential = (userId: string, token: string): A
 
 const refreshTokenAsync = (userIdentity: string): ((abortSignal?: AbortSignalLike) => Promise<string>) => {
   return async (): Promise<string> => {
-    const response = await fetch(`/refreshToken/${userIdentity}`, postRefreshTokenParameters);
-    if (response.ok) {
-      return (await response.json()).token;
-    } else {
+    try {
+      const response = await fetch(`/refreshToken/${userIdentity}`, postRefreshTokenParameters);
+      if (response.ok) {
+        return (await response.json()).token;
+      } else {
+        throw new Error('could not refresh token');
+      }
+    } catch (error) {
       throw new Error('could not refresh token');
     }
   };

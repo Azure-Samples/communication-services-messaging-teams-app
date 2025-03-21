@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 import { TabList, Tab, SelectTabEvent, SelectTabData } from '@fluentui/react-components';
 import { useThreadListHeaderStyles } from '../../styles/ThreadListHeader.styles';
+import { useCallback } from 'react';
 
 export interface ThreadListHeaderProps {
   tabs: string[];
@@ -12,14 +13,17 @@ export const ThreadListHeader = (props: ThreadListHeaderProps): JSX.Element => {
   const { tabs, onTabSelect } = props;
   const styles = useThreadListHeaderStyles();
 
-  const handleOnTabSelect = (_: SelectTabEvent, data: SelectTabData): void => {
-    const tabValue = data.value as string;
-    if (!tabs.includes(tabValue)) {
-      console.error('Invalid tab selected:', data.value);
-      return;
-    }
-    onTabSelect(tabValue);
-  };
+  const handleOnTabSelect = useCallback(
+    (_: SelectTabEvent, data: SelectTabData): void => {
+      const tabValue = data.value as string;
+      if (!tabs.includes(tabValue)) {
+        console.error('Invalid tab selected:', data.value);
+        return;
+      }
+      onTabSelect(tabValue);
+    },
+    [onTabSelect, tabs]
+  );
 
   return (
     <div className={styles.container}>

@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { makeStyles } from '@fluentui/react-components';
+import { makeStyles, tokens } from '@fluentui/react-components';
 
 export const useAgentScreenStyles = makeStyles({
   container: {
@@ -9,7 +9,9 @@ export const useAgentScreenStyles = makeStyles({
     flexDirection: 'row',
     height: '100%'
   },
-  chatScreenContainer: {
-    width: '100%'
+  chatContainer: {
+    width: '100%',
+    background: tokens.colorNeutralBackground1Hover,
+    boxShadow: `0px 0px 8px 0px ${tokens.colorNeutralShadowAmbient}`
   }
 });
