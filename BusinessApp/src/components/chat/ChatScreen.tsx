@@ -2,7 +2,12 @@
 // Licensed under the MIT License.
 
 import { AzureCommunicationTokenCredential } from '@azure/communication-common';
-import { ChatClientProvider, ChatThreadClientProvider, createStatefulChatClient } from '@azure/communication-react';
+import {
+  ChatClientProvider,
+  ChatThreadClientProvider,
+  createStatefulChatClient,
+  DEFAULT_COMPONENT_ICONS
+} from '@azure/communication-react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ChatHeader } from './ChatHeader';
 import { updateAgentWorkItem } from '../../utils/fetchRequestUtils/agentWorkItem';
@@ -10,7 +15,13 @@ import { useChatScreenStyles } from '../../styles/ChatScreen.styles';
 import { ThreadItemStatus } from './useThreads';
 import { LoadingSpinner } from './LoadingSpinner';
 import { ChatThreadClient } from '@azure/communication-chat';
-import ChatComponents from './ChatComponents';
+import { ChatComponents } from './ChatComponents';
+import { initializeIcons, registerIcons } from '@fluentui/react';
+
+// Register Fluent UI V8 icons so component icons, such as send button, can be displayed
+initializeIcons();
+registerIcons({ icons: DEFAULT_COMPONENT_ICONS });
+
 // These props are passed in when this component is referenced in JSX and not found in context
 interface ChatScreenProps {
   token: string;
@@ -20,22 +31,11 @@ interface ChatScreenProps {
   threadId: string;
   receiverName: string;
   threadStatus: ThreadItemStatus;
-  endChatHandler(isParticipantRemoved: boolean): void;
   resolveChatHandler(threadId: string): void;
 }
 
 export const ChatScreen = (props: ChatScreenProps): JSX.Element => {
-  const {
-    displayName,
-    endpointUrl,
-    threadId,
-    token,
-    userId,
-    receiverName,
-    threadStatus,
-    endChatHandler,
-    resolveChatHandler
-  } = props;
+  const { displayName, endpointUrl, threadId, token, userId, receiverName, threadStatus, resolveChatHandler } = props;
   const styles = useChatScreenStyles();
   const [isLoading, setIsLoading] = useState(true);
 
@@ -76,8 +76,6 @@ export const ChatScreen = (props: ChatScreenProps): JSX.Element => {
 
   const chatThreadClient = useMemo(() => {
     setIsLoading(true);
-    console.log('loading ......');
-
     const threadClient = statefulChatClient.getChatThreadClient(threadId);
     const initializeThreadState = async (chatThreadClient: ChatThreadClient): Promise<void> => {
       await chatThreadClient.getProperties();

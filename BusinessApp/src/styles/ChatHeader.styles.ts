@@ -10,7 +10,7 @@ export const useChatHeaderStyles = makeStyles({
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: tokens.colorNeutralBackground1Hover,
+    backgroundColor: tokens.colorNeutralBackground3,
     borderBottom: `1px solid ${tokens.colorNeutralStroke1}`,
     padding: '0 1.25rem' // 0 8px
   },
