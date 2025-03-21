@@ -74,20 +74,28 @@ export const ChatScreen = (props: ChatScreenProps): JSX.Element => {
     return chatClient;
   }, [displayName, endpointUrl, token, userId]);
 
-  const chatThreadClient = useMemo(() => {
-    setIsLoading(true);
-    const threadClient = statefulChatClient.getChatThreadClient(threadId);
-    const initializeThreadState = async (chatThreadClient: ChatThreadClient): Promise<void> => {
-      await chatThreadClient.getProperties();
+  const [chatThreadClient, setChatThreadClient] = useState<ChatThreadClient | undefined>(undefined);
+
+  useEffect(() => {
+    const initializeChatThreadClient = async (): Promise<void> => {
+      setIsLoading(true);
+      const threadClient = statefulChatClient.getChatThreadClient(threadId);
+      try {
+        await threadClient.getProperties();
+        setChatThreadClient(threadClient);
+      } catch (error) {
+        console.error('Failed to initialize chat thread client:', error);
+      } finally {
+        setIsLoading(false);
+      }
     };
-    initializeThreadState(threadClient);
-    setIsLoading(false);
-    return threadClient;
+
+    initializeChatThreadClient();
   }, [statefulChatClient, threadId]);
 
   return (
     <div className={styles.chatScreenContainer}>
-      {isLoading ? (
+      {isLoading || !chatThreadClient ? (
         <LoadingSpinner />
       ) : (
         <>
