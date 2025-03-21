@@ -80,9 +80,6 @@ export const AgentScreen = (): JSX.Element => {
         threadId={selectedThreadId}
         receiverName={thread?.topic || ''}
         threadStatus={thread?.status || ThreadItemStatus.ACTIVE}
-        endChatHandler={function (isParticipantRemoved: boolean): void {
-          console.log('End chat handler called', isParticipantRemoved);
-        }}
         resolveChatHandler={(threadId) => {
           setThreads((prevThreads) =>
             prevThreads.map((thread) => {

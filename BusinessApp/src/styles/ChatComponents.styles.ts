@@ -5,24 +5,25 @@ import { makeStyles, tokens } from '@fluentui/react-components';
 
 export const useChatComponentsStyles = makeStyles({
   container: {
-    flexGrow: 1,
     width: '100%',
+    height: 'calc(100vh - 60px)',
     display: 'flex',
-    flexDirection: 'column',
-    background: tokens.colorNeutralBackground1Hover
+    flexDirection: 'column'
   },
   messageThreadContainer: {
-    overflow: 'auto',
-    flexGrow: 1
+    flexGrow: 1,
+    maxHeight: 'calc(100vh - 60px)',
+    overflowY: 'auto'
   },
   sendBoxContainer: {
-    margin: '0.5rem 5rem 1.5rem'
+    padding: '0.75rem 5rem 1.5rem'
   }
 });
 
 export const messageThreadStyles = {
   chatContainer: {
-    backgroundColor: tokens.colorNeutralBackground1Hover,
-    padding: '0.75rem 3.125rem 0'
+    backgroundColor: tokens.colorNeutralBackground3,
+    padding: '0.75rem 3.125rem 0',
+    overflow: 'scroll'
   }
 };
