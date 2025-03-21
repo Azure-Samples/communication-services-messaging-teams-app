@@ -70,10 +70,11 @@ export const ChatScreen = (props: ChatScreenProps): JSX.Element => {
       endpoint: endpointUrl,
       credential: tokenCredential
     });
+    chatClient.startRealtimeNotifications();
+
+    return chatClient;
   }, [displayName, endpointUrl, token, userId]);
-  useEffect(() => {
-    statefulChatClient.startRealtimeNotifications();
-  }, [statefulChatClient]);
+
   useEffect(() => {
     const initializeChatThreadClient = async (): Promise<void> => {
       setIsLoading(true);
