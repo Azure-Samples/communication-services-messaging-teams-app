@@ -1,7 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { usePropsFor, MessageThread, RichTextSendBox } from '@azure/communication-react';
+import { usePropsFor, MessageThread, RichTextSendBox, CustomAvatarOptions } from '@azure/communication-react';
 import { messageThreadStyles, useChatComponentsStyles } from '../../styles/ChatComponents.styles';
+import { Avatar } from '@fluentui/react-components';
 
 export const ChatComponents = (): JSX.Element => {
   const styles = useChatComponentsStyles();
@@ -13,7 +14,14 @@ export const ChatComponents = (): JSX.Element => {
       <div className={styles.messageThreadContainer}>
         {/*Props are updated asynchronously, so only render the component once props are populated.*/}
         {messageThreadProps && (
-          <MessageThread {...messageThreadProps} richTextEditorOptions={{}} styles={messageThreadStyles} />
+          <MessageThread
+            {...messageThreadProps}
+            richTextEditorOptions={{}}
+            styles={messageThreadStyles}
+            onRenderAvatar={(_?: string, options?: CustomAvatarOptions) => {
+              return <Avatar name={options?.text} color={'colorful'} size={36} />;
+            }}
+          />
         )}
       </div>
       <div className={styles.sendBoxContainer}>

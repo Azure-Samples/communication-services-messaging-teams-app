@@ -23,7 +23,9 @@ export const useChatComponentsStyles = makeStyles({
 export const messageThreadStyles = {
   chatContainer: {
     backgroundColor: tokens.colorNeutralBackground3,
-    padding: '0.75rem 3.125rem 0',
-    overflow: 'scroll'
+    padding: '0.75rem 3.125rem'
+  },
+  chatMessageContainer: {
+    background: tokens.colorNeutralBackground1
   }
 };
