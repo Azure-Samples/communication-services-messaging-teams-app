@@ -37,6 +37,7 @@ interface ChatScreenProps {
 export const ChatScreen = (props: ChatScreenProps): JSX.Element => {
   const { displayName, endpointUrl, threadId, token, userId, receiverName, threadStatus, resolveChatHandler } = props;
   const styles = useChatScreenStyles();
+  const [chatThreadClient, setChatThreadClient] = useState<ChatThreadClient | undefined>(undefined);
   const [isLoading, setIsLoading] = useState(true);
 
   // Disables pull down to refresh. Prevents accidental page refresh when scrolling through chat messages
@@ -73,8 +74,6 @@ export const ChatScreen = (props: ChatScreenProps): JSX.Element => {
 
     return chatClient;
   }, [displayName, endpointUrl, token, userId]);
-
-  const [chatThreadClient, setChatThreadClient] = useState<ChatThreadClient | undefined>(undefined);
 
   useEffect(() => {
     const initializeChatThreadClient = async (): Promise<void> => {
