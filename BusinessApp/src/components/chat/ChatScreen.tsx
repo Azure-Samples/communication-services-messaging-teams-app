@@ -50,16 +50,18 @@ export const ChatScreen = (props: ChatScreenProps): JSX.Element => {
   }, []);
 
   const handleOnResolveChat = useCallback(() => {
-    const handleUpdateAgentWorkItem = async (threadId: string, status: ThreadItemStatus): Promise<void> => {
+    const resolveChat = async (threadId: string, status: ThreadItemStatus): Promise<void> => {
       try {
+        // Update the chat thread metadata to notify the CustomerApp that the chat has been resolved
+        await chatThreadClient?.updateProperties({ metadata: { isResolvedByAgent: 'true' } });
         await updateAgentWorkItem(threadId, status);
       } catch (error) {
         console.error(error);
       }
     };
-    handleUpdateAgentWorkItem(threadId, ThreadItemStatus.RESOLVED);
+    resolveChat(threadId, ThreadItemStatus.RESOLVED);
     resolveChatHandler(threadId);
-  }, [resolveChatHandler, threadId]);
+  }, [chatThreadClient, resolveChatHandler, threadId]);
 
   // Instantiate the statefulChatClient
   const statefulChatClient = useMemo(() => {

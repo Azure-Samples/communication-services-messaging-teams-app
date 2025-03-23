@@ -14,7 +14,7 @@ import { useChatScreenStyles } from './styles/ChatScreen.styles';
 import { strings } from './utils/constants';
 import { LoadingSpinner } from './LoadingSpinner';
 import ChatComponents from './ChatComponents';
-import { ChatThreadClient } from '@azure/communication-chat';
+import { ChatThreadClient, ChatThreadPropertiesUpdatedEvent } from '@azure/communication-chat';
 import { initializeIcons, registerIcons } from '@fluentui/react';
 
 // Register Fluent UI V8 icons so component icons, such as send button, can be displayed
@@ -37,6 +37,7 @@ export const ChatScreen = (props: ChatScreenProps): JSX.Element => {
   const styles = useChatScreenStyles();
   const [chatThreadClient, setChatThreadClient] = useState<ChatThreadClient | undefined>(undefined);
   const [isLoading, setIsLoading] = useState(true);
+  const [isResolvedByAgent, setIsResolvedByAgent] = useState(false);
 
   // Disables pull down to refresh. Prevents accidental page refresh when scrolling through chat messages
   // Another alternative: set body style touch-action to 'none'. Achieves same result.
@@ -56,8 +57,6 @@ export const ChatScreen = (props: ChatScreenProps): JSX.Element => {
       endpoint: endpointUrl,
       credential: tokenCredential
     });
-    chatClient.startRealtimeNotifications();
-
     return chatClient;
   }, [displayName, endpointUrl, token, userId]);
 
@@ -77,6 +76,30 @@ export const ChatScreen = (props: ChatScreenProps): JSX.Element => {
 
     initializeChatThreadClient();
   }, [statefulChatClient, threadId]);
+
+  useEffect(() => {
+    const addChatClientListeners = async (): Promise<void> => {
+      if (!statefulChatClient) {
+        console.error('Failed to add listeners because client is not initialized');
+        return;
+      }
+      await statefulChatClient.startRealtimeNotifications();
+
+      statefulChatClient.on('chatMessageReceived', (event) => {
+        console.log('Leah: Chat message received', event);
+      });
+
+      statefulChatClient.on('chatThreadPropertiesUpdated', (event: ChatThreadPropertiesUpdatedEvent) => {
+        console.log('Leah: Chat thread properties updated', event);
+        const { threadId: resolvedThreadId, properties } = event;
+        if (!isResolvedByAgent && resolvedThreadId === threadId && properties.metadata?.isResolvedByAgent === 'true') {
+          console.log('Chat has been resolved by the agent');
+          setIsResolvedByAgent(true);
+        }
+      });
+    };
+    addChatClientListeners();
+  }, [statefulChatClient, isResolvedByAgent, threadId, userId]);
 
   return isLoading || !chatThreadClient ? (
     <LoadingSpinner label={strings.initializeChatSpinnerLabel} />
