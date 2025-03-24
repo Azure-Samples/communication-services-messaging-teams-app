@@ -8,7 +8,7 @@ import {
   createStatefulChatClient,
   DEFAULT_COMPONENT_ICONS
 } from '@azure/communication-react';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ChatHeader } from './ChatHeader';
 import { useChatScreenStyles } from './styles/ChatScreen.styles';
 import { strings } from './utils/constants';
@@ -16,6 +16,7 @@ import { LoadingSpinner } from './LoadingSpinner';
 import ChatComponents from './ChatComponents';
 import { ChatThreadClient, ChatThreadPropertiesUpdatedEvent } from '@azure/communication-chat';
 import { initializeIcons, registerIcons } from '@fluentui/react';
+import { ThreadItemStatus, updateAgentWorkItem } from './utils/agentWorkItem';
 
 // Register Fluent UI V8 icons so component icons, such as send button, can be displayed
 initializeIcons();
@@ -85,12 +86,7 @@ export const ChatScreen = (props: ChatScreenProps): JSX.Element => {
       }
       await statefulChatClient.startRealtimeNotifications();
 
-      statefulChatClient.on('chatMessageReceived', (event) => {
-        console.log('Leah: Chat message received', event);
-      });
-
       statefulChatClient.on('chatThreadPropertiesUpdated', (event: ChatThreadPropertiesUpdatedEvent) => {
-        console.log('Leah: Chat thread properties updated', event);
         const { threadId: resolvedThreadId, properties } = event;
         if (!isResolvedByAgent && resolvedThreadId === threadId && properties.metadata?.isResolvedByAgent === 'true') {
           console.log('Chat has been resolved by the agent');
@@ -100,6 +96,11 @@ export const ChatScreen = (props: ChatScreenProps): JSX.Element => {
     };
     addChatClientListeners();
   }, [statefulChatClient, isResolvedByAgent, threadId, userId]);
+
+  const handleOnResumeConversation = useCallback(() => {
+    setIsResolvedByAgent(false);
+    updateAgentWorkItem(threadId, ThreadItemStatus.ACTIVE);
+  }, [threadId]);
 
   return isLoading || !chatThreadClient ? (
     <LoadingSpinner label={strings.initializeChatSpinnerLabel} />
@@ -113,7 +114,7 @@ export const ChatScreen = (props: ChatScreenProps): JSX.Element => {
       />
       <ChatClientProvider chatClient={statefulChatClient}>
         <ChatThreadClientProvider chatThreadClient={chatThreadClient}>
-          <ChatComponents />
+          <ChatComponents isResolvedByAgent={isResolvedByAgent} onResumeConversation={handleOnResumeConversation} />
         </ChatThreadClientProvider>
       </ChatClientProvider>
     </div>

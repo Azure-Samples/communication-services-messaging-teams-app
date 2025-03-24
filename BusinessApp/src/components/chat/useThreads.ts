@@ -108,6 +108,12 @@ const useThreads = (
             }
             const [updatedThread] = prevThreads.splice(threadIndex, 1);
             updatedThread.lastMessageReceivedOn = new Date();
+            if (
+              updatedThread.status === ThreadItemStatus.RESOLVED &&
+              (event.sender as CommunicationUserKind).communicationUserId !== userId
+            ) {
+              updatedThread.status = ThreadItemStatus.ACTIVE;
+            }
             return [updatedThread, ...prevThreads];
           });
         });
