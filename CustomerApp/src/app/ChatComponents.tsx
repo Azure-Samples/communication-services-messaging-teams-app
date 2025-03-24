@@ -71,6 +71,18 @@ function ChatComponents(props: ChatComponentsProps): JSX.Element {
     [isResolvedByAgent, onResumeConversation, richTextSendBoxProps]
   );
 
+  const handleOnUpdateMessage = useCallback(
+    async (messageId: string, content: string) => {
+      const message = messages.find((msg) => msg.messageId === messageId);
+      if (message) {
+        (message as ChatMessage).content = content;
+        setMessages([...messages]);
+      }
+      await messageThreadProps.onUpdateMessage(messageId, content, { type: 'html' });
+    },
+    [messageThreadProps, messages]
+  );
+
   return (
     <div className={styles.container}>
       <div className={styles.messageThreadContainer}>
@@ -94,6 +106,7 @@ function ChatComponents(props: ChatComponentsProps): JSX.Element {
               }
               return messageRenderer?.(messageProps) || <></>;
             }}
+            onUpdateMessage={handleOnUpdateMessage}
           />
         )}
       </div>
