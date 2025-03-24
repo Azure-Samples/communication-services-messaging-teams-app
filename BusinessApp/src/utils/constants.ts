@@ -30,6 +30,12 @@ export interface ThreadStrings {
   close: string;
   /** String for Resolve button text */
   resolve: string;
+  /** String for the error screen title */
+  errorScreenTitle: string;
+  /** String for the error message of ACS user not linked */
+  failToLinkToACSUser: string;
+  /** String for the error message of failed to get the Teams user information */
+  failToGetTeamsUserInfo: string;
 }
 
 export const threadStrings: ThreadStrings = {
@@ -42,5 +48,8 @@ export const threadStrings: ThreadStrings = {
   saturday: 'Saturday',
   yesterday: 'Yesterday',
   close: 'Close',
-  resolve: 'Resolve'
+  resolve: 'Resolve',
+  errorScreenTitle: 'Configuration error',
+  failToLinkToACSUser: 'ACS user not linked.',
+  failToGetTeamsUserInfo: 'Failed to get Teams user information'
 };

@@ -90,12 +90,7 @@ export const ErrorScreen = (props: ErrorScreenProps): JSX.Element => {
         <Text aria-level={1} aria-label={strings.errorScreenTitle} aria-live="polite" className={styles.errorTitle}>
           {strings.errorScreenTitle}
         </Text>
-        <Text
-          aria-level={1}
-          aria-label={strings.errorScreenRetryButton}
-          aria-live="polite"
-          className={styles.errorMessage}
-        >
+        <Text aria-level={1} aria-label={message} aria-live="polite" className={styles.errorMessage}>
           {message}
         </Text>
       </div>
