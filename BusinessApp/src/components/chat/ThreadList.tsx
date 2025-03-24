@@ -46,6 +46,7 @@ export const ThreadList = (props: ThreadListProps): JSX.Element => {
     return (
       <div key={thread.id} className={styles.threadItemContainer}>
         <Persona
+          name={thread.topic}
           primaryText={<span className={styles.personaName}>{thread.topic}</span>} // Apply truncation style
           textAlignment="center"
           size="medium"
