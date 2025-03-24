@@ -7,20 +7,14 @@ import { createAgentWorkItem } from '../../services/agentWorkItemService';
 import { AgentWorkItemStatus } from '../../models/agentWorkItem';
 import { createChatClient } from '../chatClient';
 
-// TODO: Remove this when topicName can be passed in
-let count = 0;
-
-export const createThread = async (topicName?: string): Promise<string> => {
+export const createThread = async (topic?: string): Promise<string> => {
   // create a user from the adminUserId and create a credential around that
   const user = await getAdminUser();
   const chatClient = await createChatClient(user);
 
   const request: CreateChatThreadRequest = {
-    topic: topicName ?? `Your Chat sample thread ${count}`
+    topic: topic ?? `Your Chat sample thread`
   };
-
-  // TODO: Remove this when topicName can be passed in
-  count++;
 
   const options: CreateChatThreadOptions = {
     participants: [

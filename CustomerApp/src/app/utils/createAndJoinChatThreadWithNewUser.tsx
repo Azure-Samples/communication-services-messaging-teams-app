@@ -38,7 +38,7 @@ export const createAndJoinChatThreadWithNewUser = (props: CreateAndJoinChatThrea
   const createAndJoinChatThread = async (): Promise<void> => {
     try {
       // Create a new chat thread
-      const threadId = await createThread();
+      const threadId = await createThread(displayName);
       if (!threadId) {
         console.error('Failed to create a thread, returned threadId is undefined or empty string');
         onError(strings.unableToStartChat, questionSummary);

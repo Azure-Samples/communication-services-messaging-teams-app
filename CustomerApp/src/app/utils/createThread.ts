@@ -3,10 +3,14 @@
 
 import { StatusCode } from './constants';
 
-export const createThread = async (): Promise<string> => {
+export const createThread = async (topic: string): Promise<string> => {
   try {
     const requestOptions = {
-      method: 'POST'
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ topic })
     };
     const response = await fetch('/createThread', requestOptions);
     if (response.status === StatusCode.OK) {
