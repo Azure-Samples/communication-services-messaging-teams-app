@@ -20,7 +20,6 @@ export const ChatHeader = (props: ChatHeaderProps): JSX.Element => {
   return (
     <div className={styles.chatHeaderContainer} role="banner">
       <Persona
-        name={personaName}
         textAlignment="center"
         size="medium"
         avatar={{ color: 'colorful' }}
