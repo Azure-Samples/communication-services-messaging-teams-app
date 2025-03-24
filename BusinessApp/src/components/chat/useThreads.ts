@@ -25,9 +25,10 @@ interface UseThreadsProps {
 
 const useThreads = (
   props: UseThreadsProps
-): { threads: ThreadItem[]; setThreads: React.Dispatch<React.SetStateAction<ThreadItem[]>> } => {
+): { threads: ThreadItem[]; setThreads: React.Dispatch<React.SetStateAction<ThreadItem[]>>; isLoading: boolean } => {
   const { userId, token, endpointUrl } = props;
   const [threads, setThreads] = useState<ThreadItem[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const chatClient = useMemo(() => {
     if (!endpointUrl) {
@@ -119,6 +120,7 @@ const useThreads = (
 
   useEffect(() => {
     const fetchThreads = async (): Promise<void> => {
+      setIsLoading(true);
       try {
         const client = await chatClient;
         if (!client) {
@@ -159,11 +161,12 @@ const useThreads = (
       } catch (error) {
         console.error('Failed to fetch threads');
       }
+      setIsLoading(false);
     };
     fetchThreads();
   }, [chatClient, userId]);
 
-  return { threads, setThreads };
+  return { threads, setThreads, isLoading };
 };
 
 export default useThreads;

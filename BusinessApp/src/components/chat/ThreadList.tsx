@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { threadStrings } from '../../utils/constants';
 import { formatTimestampForThread } from '../../utils/datetime';
 import { ThreadListHeader } from './ThreadListHeader';
@@ -35,6 +35,13 @@ export const ThreadList = (props: ThreadListProps): JSX.Element => {
     [onThreadSelected]
   );
 
+  // Select the first thread when the component is mounted
+  useEffect(() => {
+    if (!selectedThreadId && threads?.[0]?.id) {
+      handleOnThreadSelected(threads?.[0]?.id);
+    }
+  }, [handleOnThreadSelected, selectedThreadId, threads]);
+
   const threadItem = (thread: ThreadItem): JSX.Element => {
     return (
       <div key={thread.id} className={styles.threadItemContainer}>
@@ -55,11 +62,16 @@ export const ThreadList = (props: ThreadListProps): JSX.Element => {
     [selectedThreadId, styles.selectedThreadItem, styles.unselectedThreadItem]
   );
 
-  return (
-    <div className={styles.container}>
-      <ThreadListHeader tabs={tabs} onTabSelect={handleOnTabSelect} />
-      <Label className={styles.label}>Assigned to me</Label>
-      {!isLoading && threads ? (
+  const threadList = (threads: ThreadItem[] | undefined): JSX.Element => {
+    if (isLoading) {
+      return <LoadingSpinner />;
+    }
+    if (!threads || threads.length <= 0) {
+      return <Label className={styles.noThreadsLabel}>{threadStrings.noThreads}</Label>;
+    }
+    return (
+      <>
+        <Label className={styles.assignedToMeLabel}>{threadStrings.assignedToMe}</Label>
         <List className={styles.threadList} navigationMode="items">
           {threads.map((thread) => {
             if (thread.status === selectedTab.toLowerCase()) {
@@ -77,9 +89,14 @@ export const ThreadList = (props: ThreadListProps): JSX.Element => {
             }
           })}
         </List>
-      ) : (
-        <LoadingSpinner />
-      )}
+      </>
+    );
+  };
+
+  return (
+    <div className={styles.container}>
+      <ThreadListHeader tabs={tabs} onTabSelect={handleOnTabSelect} />
+      {threadList(threads)}
     </div>
   );
 };
