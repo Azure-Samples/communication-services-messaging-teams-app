@@ -27,5 +27,7 @@ export const strings = {
   endChatConfirmationCancelButton: 'Cancel',
   errorScreenTitle: 'We ran into a problem',
   errorScreenRetryButton: 'Retry',
-  pageNotFoundErrorMessage: 'Page not found'
+  pageNotFoundErrorMessage: 'Page not found',
+  conversationResolvedByAgent: 'Your conversation has ended.',
+  resumeConversation: 'Resume a conversation by sending a message.'
 };

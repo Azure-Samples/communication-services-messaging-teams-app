@@ -14,6 +14,7 @@ import {
 import { messageThreadStyles, useChatComponentsStyles } from './styles/ChatComponents.styles';
 import { Avatar, Label } from '@fluentui/react-components';
 import { useCallback, useEffect, useState } from 'react';
+import { strings } from './utils/constants';
 
 interface ChatComponentsProps {
   isResolvedByAgent: boolean;
@@ -56,8 +57,8 @@ function ChatComponents(props: ChatComponentsProps): JSX.Element {
       return;
     }
     // Insert to the message list
-    const resolveSystemMessage = createSystemMessage('Your conversation has ended.');
-    const resumeSystemMessage = createSystemMessage('Resume a conversation by sending a message. ');
+    const resolveSystemMessage = createSystemMessage(strings.conversationResolvedByAgent);
+    const resumeSystemMessage = createSystemMessage(strings.resumeConversation);
     setMessages((prevMessages) => [...prevMessages, resolveSystemMessage, resumeSystemMessage]);
   }, [isResolvedByAgent]);
 
@@ -69,6 +70,20 @@ function ChatComponents(props: ChatComponentsProps): JSX.Element {
       await richTextSendBoxProps.onSendMessage(content, { type: 'html' });
     },
     [isResolvedByAgent, onResumeConversation, richTextSendBoxProps]
+  );
+
+  const onRenderMessage = useCallback(
+    (messageProps: MessageProps, messageRenderer?: MessageRenderer) => {
+      if (messageProps.message.messageType === 'custom') {
+        return (
+          <div className={styles.resolveSystemMessageContainer}>
+            <Label className={styles.resolveSystemMessage}>{messageProps.message.content}</Label>
+          </div>
+        );
+      }
+      return messageRenderer?.(messageProps) || <></>;
+    },
+    [styles.resolveSystemMessage, styles.resolveSystemMessageContainer]
   );
 
   const handleOnUpdateMessage = useCallback(
@@ -96,16 +111,7 @@ function ChatComponents(props: ChatComponentsProps): JSX.Element {
             onRenderAvatar={(_?: string, options?: CustomAvatarOptions) => {
               return <Avatar name={options?.text} color={'colorful'} size={28} />;
             }}
-            onRenderMessage={(messageProps: MessageProps, messageRenderer?: MessageRenderer) => {
-              if (messageProps.message.messageType === 'custom') {
-                return (
-                  <div className={styles.resolveSystemMessageContainer}>
-                    <Label className={styles.resolveSystemMessage}>{messageProps.message.content}</Label>
-                  </div>
-                );
-              }
-              return messageRenderer?.(messageProps) || <></>;
-            }}
+            onRenderMessage={onRenderMessage}
             onUpdateMessage={handleOnUpdateMessage}
           />
         )}
