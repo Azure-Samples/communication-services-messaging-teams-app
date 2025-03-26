@@ -28,8 +28,6 @@ This sample includes three standalone applications: CustomerApp, BusinessApp, an
 - [Set up your dev environment for extending Teams apps across Microsoft 365](https://aka.ms/teamsfx-m365-apps-prerequisites).
   Please note that after you enrolled your developer tenant in Office 365 Target Release, it may take couple days for the enrollment to take effect.
 - [Teams Toolkit Visual Studio Code Extension](https://aka.ms/teams-toolkit) version 5.0.0 and higher or [Teams Toolkit CLI](https://aka.ms/teamsfx-toolkit-cli).
-- (Optional) To enable the file uploading functionality, an [Azure Blob Storage](https://learn.microsoft.com/azure/storage/blobs/storage-quickstart-blobs-nodejs?tabs=managed-identity%2Croles-azure-portal%2Csign-in-azure-cli&pivots=blob-storage-quickstart-scratch) is needed.
-  - For using azure storage in production environments, please follow the azure storage [application architecture guide](https://learn.microsoft.com/azure/architecture/guide/multitenant/service/storage).
 
 ## Code structure
 
@@ -72,8 +70,6 @@ This sample includes three standalone applications: CustomerApp, BusinessApp, an
       1. **acsUserId**: Each agent should be linked to an ACS user. The BusinessApp will use this credential to retrieve chat threads data and to communicate with customers in the ACS environment.
          You can get this value by clicking on `Identities & User Access Tokens` in Azure portal. Generate a user with `Chat` scope. Then use the `Identity` value for this variable. For more information on identity strings, see [Create and manage access tokens](https://docs.microsoft.com/azure/communication-services/quickstarts/identity/access-tokens).
       1. **displayName**: Assign a display name for this agent.
-   1. **AzureBlobStorageConnectionString** (Optional): This value is needed to enable the file uploading functionality.
-      Use the `Connection string` value from the Azure portal's Storage accounts page. For more information on storage accounts connection strings, see [Manage storage account access keys](https://docs.microsoft.com/azure/storage/common/storage-account-keys-manage?tabs=azure-portal).
 
 ## Local run
 
@@ -97,7 +93,7 @@ This sample includes three standalone applications: CustomerApp, BusinessApp, an
 
 1. Start the BusinessApp
 
-   1. Open the **BusinessApp** as the top level folder in VS Code.
+   1. Open the `BusinessApp` as the **top level folder** in VS Code.
    1. Select the Teams Toolkit icon on the left in the VS Code toolbar.
    1. In the Account section, sign in with your [Microsoft 365 account](https://docs.microsoft.com/microsoftteams/platform/toolkit/accounts) if you haven't already.
    1. Press F5 to start debugging which launches your app in Teams using a web browser. Select `Debug in Teams (Edge)` or `Debug in Teams (Chrome)`.
@@ -107,7 +103,20 @@ This sample includes three standalone applications: CustomerApp, BusinessApp, an
 
 ## Deploy
 
-\<TBD\>
+1. Preparation for deployment:
+   1. Prepare the `App manifest` and `App icons`. For details, see [Teams app package](https://docs.microsoft.com/microsoftteams/platform/concepts/build-and-test/apps-package).
+   1. Edit app `Basic information`, `App features`, `Permissions` etc. through Developer Portal. For details, see [To update Manifest file and app package](https://docs.microsoft.com/microsoftteams/platform/toolkit/publish-your-teams-apps-using-developer-portal#to-update-manifest-file-and-app-package).
+1. Deploy the BusinessApp:
+   `BusinessApp` is a Teams App. You can publish it either [using Teams Toolkit](https://docs.microsoft.com/microsoftteams/platform/toolkit/publish) or [using Developer Portal](https://docs.microsoft.com/microsoftteams/platform/toolkit/publish-your-teams-apps-using-developer-portal).
+1. Deploy the CustomerApp:
+   `CustomerApp` is a React app. You can host it with a hosting provider such as [Azure Static Web Apps](https://docs.microsoft.com/azure/static-web-apps/overview). For details, see [Deploy your web app to Azure Static Web Apps
+   ](https://docs.microsoft.com/azure/static-web-apps/deploy-web-framework?tabs=bash&pivots=react).
+1. Deploy the Server app:
+   `Server` app is a Node.js app. You can host it with a hosting provider such as Azure App Service. For details, see [Deploy a Node.js web app in Azure](https://docs.microsoft.com/azure/app-service/quickstart-nodejs?tabs=linux&pivots=development-environment-vscode).
+
+## Add additional features:
+
+- File sharing: To enable the file sharing feature, please follow this [quickstart](https://docs.microsoft.com/samples/azure-samples/communication-services-javascript-quickstarts/ui-library-sample---file-sharing-using-ui-components/) as an example.
 
 ## Additional Reading
 
@@ -121,6 +130,5 @@ This sample includes three standalone applications: CustomerApp, BusinessApp, an
 - Host your app in Azure by [provision cloud resources](https://learn.microsoft.com/microsoftteams/platform/toolkit/provision) and [deploy the code to cloud](https://learn.microsoft.com/microsoftteams/platform/toolkit/deploy)
 - [Collaborate on app development](https://learn.microsoft.com/microsoftteams/platform/toolkit/teamsfx-collaboration)
 - [Set up the CI/CD pipeline](https://learn.microsoft.com/microsoftteams/platform/toolkit/use-cicd-template)
-- [Publish the app to your organization or the Microsoft Teams app store](https://learn.microsoft.com/microsoftteams/platform/toolkit/publish)
 - [Enable the app for multi-tenant](https://github.com/OfficeDev/TeamsFx/wiki/Multi-tenancy-Support-for-Azure-AD-app)
 - [Preview the app on mobile clients](https://aka.ms/teamsfx-mobile)
