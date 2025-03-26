@@ -11,7 +11,7 @@ export const useErrorScreenStyles = makeStyles({
     justifyContent: 'space-between',
     height: '100%',
     width: '100%',
-    backgroundColor: tokens.colorNeutralBackground1
+    backgroundColor: tokens.colorNeutralBackground3
   },
   textContainer: {
     display: 'flex',

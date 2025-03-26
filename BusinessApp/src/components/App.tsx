@@ -33,12 +33,9 @@ export const App = (): JSX.Element => {
             ? teamsDarkTheme
             : themeString === 'contrast'
             ? teamsHighContrastTheme
-            : {
-                ...teamsLightTheme,
-                colorNeutralBackground3: tokens.colorNeutralBackground1
-              }
+            : teamsLightTheme
         }
-        style={{ background: tokens.colorNeutralBackground1 }}
+        style={{ background: tokens.colorNeutralBackground3 }}
       >
         <Router>
           {loading ? (
