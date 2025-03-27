@@ -85,7 +85,7 @@ This sample includes three standalone applications: CustomerApp, BusinessApp, an
 1. Start the Server app
 
    ```bash
-   cd Server && npm install && npm start
+   cd Server && npm install && npm start:dev
    ```
 
    This will start an api server on port 8080 that performs functionality like minting tokens for chat participants and storing the chat thread.
