@@ -6,6 +6,7 @@ import { getAdminUser } from '../identityClient';
 import { createAgentWorkItem } from '../../services/agentWorkItemService';
 import { AgentWorkItemStatus } from '../../models/agentWorkItem';
 import { createChatClient } from '../chatClient';
+import { strings } from '../constants';
 
 export const createThread = async (topic?: string): Promise<string> => {
   // create a user from the adminUserId and create a credential around that
@@ -13,7 +14,7 @@ export const createThread = async (topic?: string): Promise<string> => {
   const chatClient = await createChatClient(user);
 
   const request: CreateChatThreadRequest = {
-    topic: topic ?? `Your Chat sample thread`
+    topic: topic ?? strings.defaultThreadTopic
   };
 
   const options: CreateChatThreadOptions = {
