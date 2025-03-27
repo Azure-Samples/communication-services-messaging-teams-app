@@ -35,9 +35,16 @@ function ChatComponents(props: ChatComponentsProps): JSX.Element {
         const serverMessages = messageThreadProps.messages;
         const mergedMessages = [...prevMessages, ...serverMessages];
         // Remove duplicate messages based on messageId
-        const uniqueMessages = Array.from(new Set(mergedMessages.map((msg) => msg.messageId)))
-          .map((id) => mergedMessages.find((msg) => msg.messageId === id))
-          .filter((msg): msg is ChatMessage => msg !== undefined && msg.messageId !== '');
+        const uniqueMessages: Message[] = Array.from(
+          mergedMessages
+            .reduce((map, msg) => {
+              if (msg.messageId && msg.messageId !== '' && !map.has(msg.messageId)) {
+                map.set(msg.messageId, msg);
+              }
+              return map;
+            }, new Map())
+            .values()
+        );
         return uniqueMessages.sort((a, b) => a.createdOn.getTime() - b.createdOn.getTime());
       });
     }
@@ -45,7 +52,7 @@ function ChatComponents(props: ChatComponentsProps): JSX.Element {
 
   const createSystemMessage = (content: string): CustomMessage => {
     return {
-      messageId: Math.random().toString(),
+      messageId: Date.now().toString(),
       messageType: 'custom',
       content,
       createdOn: new Date()

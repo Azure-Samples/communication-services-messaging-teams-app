@@ -89,7 +89,6 @@ export const ChatScreen = (props: ChatScreenProps): JSX.Element => {
       statefulChatClient.on('chatThreadPropertiesUpdated', (event: ChatThreadPropertiesUpdatedEvent) => {
         const { threadId: resolvedThreadId, properties } = event;
         if (!isResolvedByAgent && resolvedThreadId === threadId && properties.metadata?.isResolvedByAgent === 'true') {
-          console.log('Chat has been resolved by the agent');
           setIsResolvedByAgent(true);
         }
       });
