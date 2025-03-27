@@ -4,6 +4,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { ChatClient, ChatMessageReceivedEvent, ChatThreadItem } from '@azure/communication-chat';
 import { AzureCommunicationTokenCredential, CommunicationUserKind } from '@azure/communication-common';
 import { createAgentWorkItem, getAgentWorkItems, AgentWorkItem } from '../../utils/fetchRequestUtils/agentWorkItem';
+import { getNextActiveThreadId } from '../../utils/threadsUtils';
 
 export interface ThreadItem {
   id: string;
@@ -23,11 +24,21 @@ interface UseThreadsProps {
   endpointUrl: string;
 }
 
-const useThreads = (
-  props: UseThreadsProps
-): { threads: ThreadItem[]; setThreads: React.Dispatch<React.SetStateAction<ThreadItem[]>>; isLoading: boolean } => {
+interface UseThreadsReturn {
+  threads: ThreadItem[];
+  setThreads: React.Dispatch<React.SetStateAction<ThreadItem[]>>;
+  selectedThreadId?: string;
+  setSelectedThreadId: React.Dispatch<React.SetStateAction<string | undefined>>;
+  resolvedThreadId?: string;
+  setResolvedThreadId: React.Dispatch<React.SetStateAction<string | undefined>>;
+  isLoading: boolean;
+}
+
+export const useThreads = (props: UseThreadsProps): UseThreadsReturn => {
   const { userId, token, endpointUrl } = props;
   const [threads, setThreads] = useState<ThreadItem[]>([]);
+  const [selectedThreadId, setSelectedThreadId] = useState<string | undefined>(undefined);
+  const [resolvedThreadId, setResolvedThreadId] = useState<string | undefined>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const chatClient = useMemo(() => {
@@ -93,8 +104,18 @@ const useThreads = (
             }
             const [updatedThread] = prevThreads.splice(threadIndex, 1);
             updatedThread.status = ThreadItemStatus.RESOLVED;
-            return [updatedThread, ...prevThreads];
+            const newThreads = [updatedThread, ...prevThreads];
+            newThreads.sort(
+              (a: ThreadItem, b: ThreadItem) => b.lastMessageReceivedOn.getTime() - a.lastMessageReceivedOn.getTime()
+            );
+            return newThreads;
           });
+
+          if (selectedThreadId === threadId) {
+            const nextActiveThreadId = getNextActiveThreadId(threads, threadId);
+            setSelectedThreadId(nextActiveThreadId);
+          }
+          setResolvedThreadId(threadId);
         });
 
         client.on('chatMessageReceived', (event: ChatMessageReceivedEvent) => {
@@ -122,7 +143,7 @@ const useThreads = (
       }
     };
     addChatClientListeners();
-  }, [chatClient, userId]);
+  }, [chatClient, selectedThreadId, threads, userId]);
 
   useEffect(() => {
     const fetchThreads = async (): Promise<void> => {
@@ -148,22 +169,21 @@ const useThreads = (
         for (const thread of threadItems) {
           const agentWorkItem = agentWorkItems.find((properties: AgentWorkItem) => properties.id === thread.id);
           if (!agentWorkItem) {
-            console.info(`Thread properties not found for thread: ${thread.id}`);
             try {
               await createAgentWorkItem(thread.id, ThreadItemStatus.ACTIVE);
             } catch (error) {
-              console.error(error);
+              console.error(`Fail to create thread status work item for thread ${thread.id} due to ${error}`);
             }
           } else {
             thread.status = agentWorkItem?.status;
           }
         }
 
-        setThreads((prevThreads) => {
-          const existingThreadIds = new Set(prevThreads.map((thread) => thread.id));
-          const newThreads = threadItems.filter((thread: ThreadItem) => !existingThreadIds.has(thread.id));
-          return [...prevThreads, ...newThreads];
-        });
+        threadItems.sort(
+          (a: ThreadItem, b: ThreadItem) => b.lastMessageReceivedOn.getTime() - a.lastMessageReceivedOn.getTime()
+        );
+
+        setThreads(threadItems);
       } catch (error) {
         console.error('Failed to fetch threads');
       }
@@ -172,7 +192,13 @@ const useThreads = (
     fetchThreads();
   }, [chatClient, userId]);
 
-  return { threads, setThreads, isLoading };
+  return {
+    threads,
+    setThreads,
+    selectedThreadId,
+    setSelectedThreadId,
+    resolvedThreadId,
+    setResolvedThreadId,
+    isLoading
+  };
 };
-
-export default useThreads;

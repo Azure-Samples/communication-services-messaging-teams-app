@@ -6,11 +6,12 @@ import { useCallback } from 'react';
 
 export interface ThreadListHeaderProps {
   tabs: string[];
+  selectedTab: string;
   onTabSelect(tabValue: string): void;
 }
 
 export const ThreadListHeader = (props: ThreadListHeaderProps): JSX.Element => {
-  const { tabs, onTabSelect } = props;
+  const { tabs, selectedTab, onTabSelect } = props;
   const styles = useThreadListHeaderStyles();
 
   const handleOnTabSelect = useCallback(
@@ -30,8 +31,8 @@ export const ThreadListHeader = (props: ThreadListHeaderProps): JSX.Element => {
       <TabList
         aria-label="Thread List"
         className={styles.tabList}
-        defaultSelectedValue={tabs[0]}
         onTabSelect={handleOnTabSelect}
+        selectedValue={selectedTab}
       >
         {tabs.map((tabValue) => {
           return (
