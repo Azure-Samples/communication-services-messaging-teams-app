@@ -45,7 +45,13 @@ export const ThreadList = (props: ThreadListProps): JSX.Element => {
   const threadItem = (thread: ThreadItem): JSX.Element => {
     return (
       <div key={thread.id} className={styles.threadItemContainer}>
-        <Persona name={thread.topic} textAlignment="center" size="medium" />
+        <Persona
+          name={thread.topic}
+          primaryText={<span className={styles.personaName}>{thread.topic}</span>} // Apply truncation style
+          textAlignment="center"
+          size="medium"
+          avatar={{ color: 'colorful' }}
+        />
         <div className={styles.timestamp}>
           {formatTimestampForThread(thread.lastMessageReceivedOn, new Date(), threadStrings)}
         </div>

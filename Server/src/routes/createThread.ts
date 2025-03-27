@@ -16,7 +16,8 @@ const router = express.Router();
  */
 
 router.post('/', async function (req, res, next) {
-  res.send(await createThread());
+  const { topic } = req.body;
+  res.send(await createThread(topic));
 });
 
 export default router;

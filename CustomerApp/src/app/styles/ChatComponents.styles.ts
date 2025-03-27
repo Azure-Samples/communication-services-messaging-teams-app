@@ -16,6 +16,15 @@ export const useChatComponentsStyles = makeStyles({
   },
   sendBoxContainer: {
     padding: '0.75rem'
+  },
+  resolveSystemMessageContainer: {
+    display: 'flex',
+    justifyContent: 'center'
+  },
+  resolveSystemMessage: {
+    fontWeight: 400,
+    fontSize: '0.75rem', // 12px
+    letterSpacing: '0'
   }
 });
 

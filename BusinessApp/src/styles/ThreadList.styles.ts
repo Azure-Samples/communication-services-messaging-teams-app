@@ -37,23 +37,35 @@ export const useThreadListStyles = makeStyles({
     overflowY: 'auto',
     padding: '0 0.5rem' // 0 20px
   },
+  personaName: {
+    display: 'inline-block', // Ensure the text is treated as a block for truncation
+    overflow: 'hidden',
+    whiteSpace: 'nowrap',
+    textOverflow: 'ellipsis',
+    maxWidth: '150px'
+  },
   threadItemContainer: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
     height: '48px',
+    width: '100%',
     padding: '0.625rem' // 10px
   },
   timestamp: {
     padding: '0.25rem' // 4px
   },
   unselectedThreadItem: {
+    boxSizing: 'border-box',
+    border: `1px solid transparent`,
     ':hover': {
+      boxSizing: 'border-box',
       border: `1px solid ${tokens.colorNeutralStroke1Hover}`,
       borderRadius: '4px'
     }
   },
   selectedThreadItem: {
+    boxSizing: 'border-box',
     backgroundColor: tokens.colorNeutralBackground1Selected,
     border: `1px solid ${tokens.colorNeutralStroke1}`,
     borderRadius: '4px'

@@ -17,7 +17,12 @@ export const useChatHeaderStyles = makeStyles({
   primaryText: {
     fontSize: '1.125rem', // 18px
     fontWeight: 700,
-    lineHeight: '1.5rem' // 24px
+    lineHeight: '1.5rem', // 24px
+    display: 'inline-block', // Ensure the text is treated as a block for truncation
+    overflow: 'hidden',
+    whiteSpace: 'nowrap',
+    textOverflow: 'ellipsis',
+    maxWidth: '30vw'
   },
   resolveButton: {
     width: '6.25rem', // 100px
