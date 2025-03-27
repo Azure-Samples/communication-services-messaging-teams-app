@@ -9,7 +9,7 @@ import { EndConfirmationScreen } from './EndConfirmationScreen';
 import { ErrorScreen } from './ErrorScreen';
 import { strings } from './utils/constants';
 import { LoadingSpinner } from './LoadingSpinner';
-import { ChatAdapter } from '@azure/communication-react';
+import { ChatThreadClient } from '@azure/communication-chat';
 
 enum Page {
   Configuration = 'configuration',
@@ -34,7 +34,7 @@ export const ChatFloatingWindow = (props: ChatFloatingWindowProps): JSX.Element 
   const [questionSummary, setQuestionSummary] = useState('');
   const [agentName, setAgentName] = useState('');
   const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
-  const [adapter, setAdapter] = useState<ChatAdapter | undefined>(undefined);
+  const [chatThreadClient, setChatThreadClient] = useState<ChatThreadClient | undefined>(undefined);
 
   const renderPage = (): JSX.Element => {
     switch (page) {
@@ -69,8 +69,8 @@ export const ChatFloatingWindow = (props: ChatFloatingWindowProps): JSX.Element 
               endpointUrl={endpointUrl}
               threadId={threadId}
               agentName={agentName}
-              onEndChat={(adapter: ChatAdapter) => {
-                setAdapter(adapter);
+              onEndChat={(chatThreadClient: ChatThreadClient) => {
+                setChatThreadClient(chatThreadClient);
                 setPage(Page.EndConfirmation);
               }}
             />
@@ -83,7 +83,7 @@ export const ChatFloatingWindow = (props: ChatFloatingWindowProps): JSX.Element 
           <EndConfirmationScreen
             userId={userId}
             threadId={threadId}
-            adapter={adapter}
+            chatThreadClient={chatThreadClient}
             onConfirmLeaving={() => {
               onCloseButtonClick();
             }}

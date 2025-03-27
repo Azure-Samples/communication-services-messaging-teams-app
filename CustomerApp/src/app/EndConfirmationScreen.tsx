@@ -6,18 +6,18 @@ import { useEndConfirmationScreenStyles } from './styles/EndConfirmationScreen.s
 import { strings } from './utils/constants';
 import { useCallback } from 'react';
 import { ThreadItemStatus, updateAgentWorkItem } from './utils/agentWorkItem';
-import { ChatAdapter } from '@azure/communication-react';
+import { ChatThreadClient } from '@azure/communication-chat';
 
 export interface EndCallProps {
   userId: string;
   threadId: string;
   onConfirmLeaving(): void;
   onCancel(): void;
-  adapter?: ChatAdapter;
+  chatThreadClient?: ChatThreadClient;
 }
 
 export const EndConfirmationScreen = (props: EndCallProps): JSX.Element => {
-  const { userId, threadId, adapter, onConfirmLeaving, onCancel } = props;
+  const { userId, threadId, chatThreadClient, onConfirmLeaving, onCancel } = props;
   const styles = useEndConfirmationScreenStyles();
 
   const handleOnConfirmLeaving = useCallback(() => {
@@ -28,10 +28,10 @@ export const EndConfirmationScreen = (props: EndCallProps): JSX.Element => {
         console.error(`Failed at resolving thread ${threadId}, Error: ${error}`);
       }
     };
-    adapter?.removeParticipant(userId);
+    chatThreadClient?.removeParticipant({ communicationUserId: userId });
     resolveThread();
     onConfirmLeaving();
-  }, [adapter, onConfirmLeaving, threadId, userId]);
+  }, [chatThreadClient, onConfirmLeaving, threadId, userId]);
 
   return (
     <div className={styles.endChatContainer}>
