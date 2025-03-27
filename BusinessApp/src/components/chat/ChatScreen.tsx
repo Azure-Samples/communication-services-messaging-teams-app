@@ -31,11 +31,11 @@ interface ChatScreenProps {
   threadId: string;
   receiverName: string;
   threadStatus: ThreadItemStatus;
-  resolveChatHandler(threadId: string): void;
+  onResolveChat(threadId: string): void;
 }
 
 export const ChatScreen = (props: ChatScreenProps): JSX.Element => {
-  const { displayName, endpointUrl, threadId, token, userId, receiverName, threadStatus, resolveChatHandler } = props;
+  const { displayName, endpointUrl, threadId, token, userId, receiverName, threadStatus, onResolveChat } = props;
   const styles = useChatScreenStyles();
   const [chatThreadClient, setChatThreadClient] = useState<ChatThreadClient | undefined>(undefined);
   const [isLoading, setIsLoading] = useState(true);
@@ -60,8 +60,8 @@ export const ChatScreen = (props: ChatScreenProps): JSX.Element => {
       }
     };
     resolveChat(threadId, ThreadItemStatus.RESOLVED);
-    resolveChatHandler(threadId);
-  }, [chatThreadClient, resolveChatHandler, threadId]);
+    onResolveChat(threadId);
+  }, [chatThreadClient, onResolveChat, threadId]);
 
   // Instantiate the statefulChatClient
   const statefulChatClient = useMemo(() => {

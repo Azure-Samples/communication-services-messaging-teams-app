@@ -14,7 +14,7 @@
         "outline": "outline.png"
     },
     "name": {
-        "short": "Support agent app (sample) ${{APP_NAME_SUFFIX}}",
+        "short": "Support agent app (sample)",
         "full": "Support agent app (sample)"
     },
     "description": {

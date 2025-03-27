@@ -40,6 +40,10 @@ export interface ThreadStrings {
   noThreads: string;
   /** String for assigned to me label on the thread list */
   assignedToMe: string;
+  /** String for the title of the toast notification when a thread is resolved */
+  resolvedToasterTitle: string;
+  /** String for the view button text in the resolved thread toaster */
+  resolvedToasterViewButton: string;
 }
 
 export const threadStrings: ThreadStrings = {
@@ -57,5 +61,7 @@ export const threadStrings: ThreadStrings = {
   failToLinkToACSUser: 'ACS user not linked.',
   failToGetTeamsUserInfo: 'Failed to get Teams user information',
   noThreads: 'No chats',
-  assignedToMe: 'Assigned to me'
+  assignedToMe: 'Assigned to me',
+  resolvedToasterTitle: 'Thread resolved',
+  resolvedToasterViewButton: 'View'
 };

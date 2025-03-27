@@ -1,6 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect } from 'react';
 import { threadStrings } from '../../utils/constants';
 import { formatTimestampForThread } from '../../utils/datetime';
 import { ThreadListHeader } from './ThreadListHeader';
@@ -8,28 +8,23 @@ import { ThreadItem, ThreadItemStatus } from './useThreads';
 import { Label, List, ListItem, Persona } from '@fluentui/react-components';
 import { useThreadListStyles } from '../../styles/ThreadList.styles';
 import { LoadingSpinner } from './LoadingSpinner';
-import { capitalizeString } from '../../utils/utils';
 
 export interface ThreadListProps {
   threads?: Array<ThreadItem>;
   isLoading: boolean;
+  selectedThreadId?: string;
   onThreadSelected(threadId: string): void;
+  tabs: string[];
+  selectedTab: string;
+  onStatusTabSelected(tabValue: string): void;
 }
 
 export const ThreadList = (props: ThreadListProps): JSX.Element => {
-  const { threads, isLoading, onThreadSelected } = props;
+  const { threads, isLoading, selectedThreadId, onThreadSelected, tabs, selectedTab, onStatusTabSelected } = props;
   const styles = useThreadListStyles();
-  const tabs = [capitalizeString(ThreadItemStatus.ACTIVE), capitalizeString(ThreadItemStatus.RESOLVED)];
-  const [selectedTab, setSelectedTab] = useState<string>(tabs[0]);
-  const [selectedThreadId, setSelectedThreadId] = useState<string | undefined>(undefined);
-
-  const handleOnTabSelect = useCallback((tabValue: string): void => {
-    setSelectedTab(tabValue);
-  }, []);
 
   const handleOnThreadSelected = useCallback(
     (threadId: string): void => {
-      setSelectedThreadId(threadId);
       onThreadSelected(threadId);
     },
     [onThreadSelected]
@@ -37,10 +32,11 @@ export const ThreadList = (props: ThreadListProps): JSX.Element => {
 
   // Select the first thread when the component is mounted
   useEffect(() => {
-    if (!selectedThreadId && threads?.[0]?.id) {
-      handleOnThreadSelected(threads?.[0]?.id);
+    if (!selectedThreadId && threads && threads?.length > 0) {
+      const firstThread = threads.find((thread) => thread.status === selectedTab.toLowerCase());
+      firstThread && handleOnThreadSelected(firstThread?.id);
     }
-  }, [handleOnThreadSelected, selectedThreadId, threads]);
+  }, [handleOnThreadSelected, selectedTab, selectedThreadId, threads]);
 
   const threadItem = (thread: ThreadItem): JSX.Element => {
     return (
@@ -72,27 +68,26 @@ export const ThreadList = (props: ThreadListProps): JSX.Element => {
     if (isLoading) {
       return <LoadingSpinner />;
     }
-    if (!threads || threads.length <= 0) {
+    const currentStatusThreads = threads?.filter((thread) => thread.status === selectedTab.toLowerCase());
+    if (!threads || !currentStatusThreads || currentStatusThreads.length <= 0) {
       return <Label className={styles.noThreadsLabel}>{threadStrings.noThreads}</Label>;
     }
     return (
       <>
         <Label className={styles.assignedToMeLabel}>{threadStrings.assignedToMe}</Label>
         <List className={styles.threadList} navigationMode="items">
-          {threads.map((thread) => {
-            if (thread.status === selectedTab.toLowerCase()) {
-              return (
-                <ListItem
-                  key={thread.id}
-                  onAction={() => {
-                    handleOnThreadSelected(thread.id);
-                  }}
-                  className={getThreadItemContainerStyle(thread.id)}
-                >
-                  {threadItem(thread)}
-                </ListItem>
-              );
-            }
+          {currentStatusThreads.map((thread) => {
+            return (
+              <ListItem
+                key={thread.id}
+                onAction={() => {
+                  handleOnThreadSelected(thread.id);
+                }}
+                className={getThreadItemContainerStyle(thread.id)}
+              >
+                {threadItem(thread)}
+              </ListItem>
+            );
           })}
         </List>
       </>
@@ -101,7 +96,7 @@ export const ThreadList = (props: ThreadListProps): JSX.Element => {
 
   return (
     <div className={styles.container}>
-      <ThreadListHeader tabs={tabs} onTabSelect={handleOnTabSelect} />
+      <ThreadListHeader tabs={tabs} selectedTab={selectedTab} onTabSelect={onStatusTabSelected} />
       {threadList(threads)}
     </div>
   );
