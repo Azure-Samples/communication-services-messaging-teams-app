@@ -18,21 +18,21 @@ export const useErrorScreenStyles = makeStyles({
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: '0.25rem', // 4px
+    gap: '0.25rem',
     width: '100%',
     height: '100%'
   },
   errorIcon: {
     color: tokens.colorNeutralStroke1Pressed,
-    marginBottom: '0.375rem' // 6px
+    marginBottom: '0.375rem'
   },
   errorTitle: {
-    fontSize: '1.125rem', // 18px
+    fontSize: '1.125rem',
     fontWeight: 600,
-    lineHeight: '1.375rem' // 22px
+    lineHeight: '1.375rem'
   },
   errorMessage: {
-    fontSize: '0.875rem', // 14px
+    fontSize: '0.875rem',
     fontWeight: 400,
     lineHeight: '18.62px'
   }

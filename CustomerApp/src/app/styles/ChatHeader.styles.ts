@@ -15,7 +15,7 @@ export const useChatHeaderStyles = makeStyles({
     borderBottom: `1px solid ${tokens.colorNeutralStroke3}`
   },
   personaContainer: {
-    marginLeft: '0.75rem' // 12px
+    marginLeft: '0.75rem'
   },
   headerTitle: {
     fontSize: '1.25rem',
@@ -23,9 +23,9 @@ export const useChatHeaderStyles = makeStyles({
   },
   closeButton: {
     color: tokens.colorNeutralForeground1,
-    width: '2rem', // 32px
-    height: '2rem', // 32px
-    marginRight: '0.125rem', // 2px
+    width: '2rem',
+    height: '2rem',
+    marginRight: '0.125rem',
     border: 'none'
   }
 });

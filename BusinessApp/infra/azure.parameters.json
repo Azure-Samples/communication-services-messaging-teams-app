@@ -22,33 +22,6 @@
     },
     "staticWebAppSku": {
       "value": "Free"
-    },
-    "teamsMobileOrDesktopAppClientId": {
-      "value": "${{TEAMS_MOBILE_OR_DESKTOP_APP_CLIENT_ID}}"
-    },
-    "teamsWebAppClientId": {
-      "value": "${{TEAMS_WEB_APP_CLIENT_ID}}"
-    },
-    "officeWebAppClientId1": {
-      "value": "${{OFFICE_WEB_APP_CLIENT_ID_1}}"
-    },
-    "officeWebAppClientId2": {
-      "value": "${{OFFICE_WEB_APP_CLIENT_ID_2}}"
-    },
-    "outlookDesktopAppClientId": {
-      "value": "${{OUTLOOK_DESKTOP_APP_CLIENT_ID}}"
-    },
-    "outlookWebAppClientId": {
-      "value": "${{OUTLOOK_WEB_APP_CLIENT_ID}}"
-    },
-    "officeUwpPwaClientId": {
-      "value": "${{OFFICE_UWP_PWA_CLIENT_ID}}"
-    },
-    "outlookOnlineAddInAppClientId": {
-      "value": "${{OUTLOOK_ONLINE_ADD_IN_APP_CLIENT_ID}}"
-    },
-    "outlookMobileAppClientId": {
-      "value": "${{OUTLOOK_MOBILE_APP_CLIENT_ID}}"
     }
   }
 }

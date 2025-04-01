@@ -15,27 +15,27 @@ export const useThreadListStyles = makeStyles({
     display: 'flex',
     alignItems: 'center',
     height: '28px',
-    marginTop: '0.5rem', // 8px
-    padding: '0 1.25rem', // 0 20px
-    fontSize: '0.75rem', // 12px
+    marginTop: '0.5rem',
+    padding: '0 1.25rem',
+    fontSize: '0.75rem',
     fontWeight: 400,
-    lineHeight: '1rem' // 16px
+    lineHeight: '1rem'
   },
   noThreadsLabel: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: '1.375rem', // 22px
+    marginTop: '1.375rem',
     color: tokens.colorNeutralStrokeAccessible,
-    fontSize: '0.875rem', // 14px
+    fontSize: '0.875rem',
     fontWeight: 400,
-    lineHeight: '1.25rem', // 20px
+    lineHeight: '1.25rem',
     letterSpacing: '0px'
   },
   threadList: {
     flex: 1,
     overflowY: 'auto',
-    padding: '0 0.5rem' // 0 20px
+    padding: '0 0.5rem'
   },
   personaName: {
     display: 'inline-block', // Ensure the text is treated as a block for truncation
@@ -50,10 +50,10 @@ export const useThreadListStyles = makeStyles({
     justifyContent: 'space-between',
     height: '48px',
     width: '100%',
-    padding: '0.625rem' // 10px
+    padding: '0.625rem'
   },
   timestamp: {
-    padding: '0.25rem' // 4px
+    padding: '0.25rem'
   },
   unselectedThreadItem: {
     boxSizing: 'border-box',

@@ -8,10 +8,10 @@ export const useChatFloatingWindowStyles = makeStyles({
     height: 'auto',
     background: tokens.colorNeutralBackground1,
     boxShadow: '0px 2px 8px 0px #004E8C1A',
-    borderTopLeftRadius: '0.5rem', // 8px
-    borderTopRightRadius: '0.5rem', // 8px
+    borderTopLeftRadius: '0.5rem',
+    borderTopRightRadius: '0.5rem',
     position: 'fixed',
-    right: '0.75rem', // 12px
+    right: '0.75rem',
     bottom: '0'
   }
 });
