@@ -23,7 +23,7 @@ export const useChatComponentsStyles = makeStyles({
   },
   resolveSystemMessage: {
     fontWeight: 400,
-    fontSize: '0.75rem', // 12px
+    fontSize: '0.75rem',
     letterSpacing: '0'
   }
 });

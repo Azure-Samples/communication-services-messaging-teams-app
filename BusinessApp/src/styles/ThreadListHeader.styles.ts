@@ -7,7 +7,7 @@ export const useThreadListHeaderStyles = makeStyles({
   container: {
     width: '320px',
     height: '60px',
-    padding: '0 0.5rem', // 0 8px
+    padding: '0 0.5rem',
     borderBottom: `1px solid ${tokens.colorNeutralStroke1}`
   },
   tabList: {

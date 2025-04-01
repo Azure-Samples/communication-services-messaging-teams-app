@@ -12,12 +12,12 @@ export const useChatHeaderStyles = makeStyles({
     alignItems: 'center',
     backgroundColor: tokens.colorNeutralBackground3,
     borderBottom: `1px solid ${tokens.colorNeutralStroke1}`,
-    padding: '0 1.25rem' // 0 8px
+    padding: '0 1.25rem'
   },
   primaryText: {
-    fontSize: '1.125rem', // 18px
+    fontSize: '1.125rem',
     fontWeight: 700,
-    lineHeight: '1.5rem', // 24px
+    lineHeight: '1.5rem',
     display: 'inline-block', // Ensure the text is treated as a block for truncation
     overflow: 'hidden',
     whiteSpace: 'nowrap',
@@ -25,8 +25,8 @@ export const useChatHeaderStyles = makeStyles({
     maxWidth: '30vw'
   },
   resolveButton: {
-    width: '6.25rem', // 100px
-    height: '2rem', // 32px
-    marginRight: '0.125rem' // 2px
+    width: '6.25rem',
+    height: '2rem',
+    marginRight: '0.125rem'
   }
 });

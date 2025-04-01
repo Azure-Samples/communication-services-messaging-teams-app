@@ -10,8 +10,8 @@ export const useLegalComplianceStyles = makeStyles({
     alignItems: 'center',
     width: '100%',
     height: '100%',
-    padding: '2rem 8rem', // 32px 128px
-    gap: '1.5rem' // 16px
+    padding: '2rem 8rem',
+    gap: '1.5rem'
   },
   sectionContainer: {
     display: 'flex',
@@ -19,16 +19,16 @@ export const useLegalComplianceStyles = makeStyles({
     width: '100%'
   },
   title: {
-    fontSize: '2.125rem', // 34px
+    fontSize: '2.125rem',
     fontWeight: 600,
-    lineHeight: '2.375rem', // 38px
-    margin: '2.5rem 0' // 24px 0
+    lineHeight: '2.375rem',
+    margin: '2.5rem 0'
   },
   description: {
     width: '100%',
-    padding: '0 1rem', // 0 16px
-    fontSize: '1.25rem', // 20px
+    padding: '0 1rem',
+    fontSize: '1.25rem',
     fontWeight: 400,
-    lineHeight: '1.8rem' // 28px
+    lineHeight: '1.8rem'
   }
 });
