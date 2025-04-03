@@ -2,6 +2,8 @@
 // Licensed under the MIT License.
 
 import { makeStyles, tokens } from '@fluentui/react-components';
+import { Theme } from '@fluentui/react';
+import { MessageThreadStyles } from '@azure/communication-react';
 
 export const useChatComponentsStyles = makeStyles({
   container: {
@@ -16,16 +18,19 @@ export const useChatComponentsStyles = makeStyles({
     overflowY: 'auto'
   },
   sendBoxContainer: {
-    padding: '0.75rem 5rem 1.5rem'
+    padding: '0.75rem 5rem 1.5rem',
+    backgroundColor: tokens.colorNeutralBackground3
   }
 });
 
-export const messageThreadStyles = {
-  chatContainer: {
-    backgroundColor: tokens.colorNeutralBackground3,
-    padding: '0.75rem 3.125rem'
-  },
-  chatMessageContainer: {
-    background: tokens.colorNeutralBackground1
-  }
+export const messageThreadStyles = (theme: Theme, isDarkMode: boolean): MessageThreadStyles => {
+  return {
+    chatContainer: {
+      backgroundColor: theme.palette.neutralLighter,
+      padding: '0.75rem 3.125rem'
+    },
+    chatMessageContainer: {
+      background: isDarkMode ? theme.palette.neutralLighterAlt : tokens.colorNeutralBackground1
+    }
+  };
 };
