@@ -123,7 +123,7 @@ export const ChatScreen = (props: ChatScreenProps): JSX.Element => {
           <FluentThemeProvider fluentTheme={isDarkMode ? v8DarkTheme : lightTheme} rootStyle={{ height: 'auto' }}>
             <ChatClientProvider chatClient={statefulChatClient}>
               <ChatThreadClientProvider chatThreadClient={chatThreadClient}>
-                <ChatComponents isDarkMode />
+                <ChatComponents isDarkMode={isDarkMode} />
               </ChatThreadClientProvider>
             </ChatClientProvider>
           </FluentThemeProvider>
