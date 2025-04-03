@@ -25,6 +25,7 @@
     "@types/react-linkify": "^1.0.4",
     "json-stringify-safe": "^5.0.1",
     "mobile-detect": "^1.4.5",
+    "nanoid": "^5.1.5",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-linkify": "^1.0.0-alpha",

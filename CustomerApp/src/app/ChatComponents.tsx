@@ -15,6 +15,7 @@ import { messageThreadStyles, useChatComponentsStyles } from './styles/ChatCompo
 import { Avatar, Label } from '@fluentui/react-components';
 import { useCallback, useEffect, useState } from 'react';
 import { strings } from './utils/constants';
+import { nanoid } from 'nanoid';
 
 interface ChatComponentsProps {
   isResolvedByAgent: boolean;
@@ -52,7 +53,7 @@ function ChatComponents(props: ChatComponentsProps): JSX.Element {
 
   const createSystemMessage = (content: string): CustomMessage => {
     return {
-      messageId: Date.now().toString(),
+      messageId: nanoid(),
       messageType: 'custom',
       content,
       createdOn: new Date()
