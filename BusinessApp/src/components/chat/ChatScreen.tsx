@@ -6,7 +6,9 @@ import {
   ChatClientProvider,
   ChatThreadClientProvider,
   createStatefulChatClient,
-  DEFAULT_COMPONENT_ICONS
+  DEFAULT_COMPONENT_ICONS,
+  FluentThemeProvider,
+  lightTheme
 } from '@azure/communication-react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ChatHeader } from './ChatHeader';
@@ -17,6 +19,9 @@ import { LoadingSpinner } from './LoadingSpinner';
 import { ChatThreadClient } from '@azure/communication-chat';
 import { ChatComponents } from './ChatComponents';
 import { initializeIcons, registerIcons } from '@fluentui/react';
+import config from '../../lib/config';
+import { useTeamsUserCredential } from '@microsoft/teamsfx-react';
+import { v8DarkTheme } from '../../utils/themeUtils';
 
 // Register Fluent UI V8 icons so component icons, such as send button, can be displayed
 initializeIcons();
@@ -39,6 +44,12 @@ export const ChatScreen = (props: ChatScreenProps): JSX.Element => {
   const styles = useChatScreenStyles();
   const [chatThreadClient, setChatThreadClient] = useState<ChatThreadClient | undefined>(undefined);
   const [isLoading, setIsLoading] = useState(true);
+
+  // Access the current theme
+  const { themeString } = useTeamsUserCredential({
+    initiateLoginEndpoint: config.initiateLoginEndpoint,
+    clientId: config.clientId
+  });
 
   // Disables pull down to refresh. Prevents accidental page refresh when scrolling through chat messages
   // Another alternative: set body style touch-action to 'none'. Achieves same result.
@@ -94,6 +105,10 @@ export const ChatScreen = (props: ChatScreenProps): JSX.Element => {
     initializeChatThreadClient();
   }, [statefulChatClient, threadId]);
 
+  const isDarkMode = useMemo(() => {
+    return themeString === 'dark';
+  }, [themeString]);
+
   return (
     <div className={styles.chatScreenContainer}>
       {isLoading || !chatThreadClient ? (
@@ -105,11 +120,13 @@ export const ChatScreen = (props: ChatScreenProps): JSX.Element => {
             threadStatus={threadStatus}
             onResolveChat={() => handleOnResolveChat()}
           />
-          <ChatClientProvider chatClient={statefulChatClient}>
-            <ChatThreadClientProvider chatThreadClient={chatThreadClient}>
-              <ChatComponents />
-            </ChatThreadClientProvider>
-          </ChatClientProvider>
+          <FluentThemeProvider fluentTheme={isDarkMode ? v8DarkTheme : lightTheme} rootStyle={{ height: 'auto' }}>
+            <ChatClientProvider chatClient={statefulChatClient}>
+              <ChatThreadClientProvider chatThreadClient={chatThreadClient}>
+                <ChatComponents isDarkMode={isDarkMode} />
+              </ChatThreadClientProvider>
+            </ChatClientProvider>
+          </FluentThemeProvider>
         </>
       )}
     </div>

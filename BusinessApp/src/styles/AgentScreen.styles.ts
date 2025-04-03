@@ -12,7 +12,7 @@ export const useAgentScreenStyles = makeStyles({
   },
   chatContainer: {
     width: '100%',
-    background: tokens.colorNeutralBackground1Hover,
+    background: tokens.colorNeutralBackground3,
     boxShadow: `0px 0px 8px 0px ${tokens.colorNeutralShadowAmbient}`
   }
 });
