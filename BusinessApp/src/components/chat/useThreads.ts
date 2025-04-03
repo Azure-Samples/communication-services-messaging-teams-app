@@ -115,6 +115,7 @@ export const useThreads = (props: UseThreadsProps): UseThreadsReturn => {
             const nextActiveThreadId = getNextActiveThreadId(threads, threadId);
             setSelectedThreadId(nextActiveThreadId);
           }
+          setSelectedThreadId(undefined);
           setResolvedThreadId(threadId);
         });
 
