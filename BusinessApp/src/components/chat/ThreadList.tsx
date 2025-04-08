@@ -4,7 +4,7 @@ import { useCallback, useEffect } from 'react';
 import { threadStrings } from '../../utils/constants';
 import { formatTimestampForThread } from '../../utils/datetime';
 import { ThreadListHeader } from './ThreadListHeader';
-import { ThreadItem, ThreadItemStatus } from './useThreads';
+import { ThreadItem } from './useThreads';
 import { Label, List, ListItem, Persona } from '@fluentui/react-components';
 import { useThreadListStyles } from '../../styles/ThreadList.styles';
 import { LoadingSpinner } from './LoadingSpinner';

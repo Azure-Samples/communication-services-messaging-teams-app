@@ -21,5 +21,6 @@ export const getAdminUser = (): CommunicationUserIdentifier => {
 };
 export const getToken = (user: CommunicationUserIdentifier, scopes: TokenScope[]): Promise<CommunicationAccessToken> =>
   getIdentityClient().getToken(user, scopes);
+
 export const createUserAndToken = (scopes: TokenScope[]): Promise<CommunicationUserToken> =>
   getIdentityClient().createUserAndToken(scopes);

@@ -8,7 +8,9 @@ export const getNextActiveThreadId = (threads: ThreadItem[], currentThreadId: st
   if (nextActiveThread) {
     return nextActiveThread.id;
   } else {
-    const firstActiveThread = threads.find((thread) => thread.status === ThreadItemStatus.ACTIVE);
+    const firstActiveThread = threads.find(
+      (thread) => thread.id !== currentThreadId && thread.status === ThreadItemStatus.ACTIVE
+    );
     return firstActiveThread?.id;
   }
 };

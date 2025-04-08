@@ -15,7 +15,6 @@ let appSettings: {
   ResourceConnectionString: string;
   EndpointUrl: string;
   AdminUserId: string;
-  AzureBlobStorageConnectionString: string;
   CosmosDBEndpoint: string;
   CosmosDBKey: string;
   AgentUsers: AgentUser[];
@@ -25,7 +24,9 @@ if (
     process.env['ResourceConnectionString'] ||
     process.env['EndpointUrl'] ||
     process.env['AdminUserId'] ||
-    process.env['AzureBlobStorageConnectionString']
+    process.env['CosmosDBEndpoint'] ||
+    process.env['CosmosDBKey'] ||
+    process.env['AgentUsers']
   )
 ) {
   if (!fs.existsSync(appSettingsPath)) {
@@ -60,21 +61,6 @@ export const getAdminUserId = (): string => {
   }
 
   return adminUserId;
-};
-
-export const getAzureBlobStorageEndpoint = (): string => {
-  const uri = new URL(process.env['EndpointUrl'] || appSettings.EndpointUrl);
-  return `${uri.protocol}//${uri.host}`;
-};
-
-export const getAzureBlobStorageConnectionString = (): string => {
-  const accountName = process.env['AzureBlobStorageConnectionString'] || appSettings.AzureBlobStorageConnectionString;
-
-  if (!accountName) {
-    throw new Error('No Azure Blob Storage Connection String provided');
-  }
-
-  return accountName;
 };
 
 export const getAgentUsers = (): AgentUser[] => {

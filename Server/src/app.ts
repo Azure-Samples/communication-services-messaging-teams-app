@@ -11,10 +11,8 @@ import path from 'path';
 import issueToken from './routes/issueToken';
 import refreshToken from './routes/refreshToken';
 import getEndpointUrl from './routes/getEndpointUrl';
-import userConfig from './routes/userConfig';
 import createThread from './routes/createThread';
 import addUser from './routes/addUser';
-import uploadToAzureBlobStorage from './routes/uploadToAzureBlobStorage';
 import agentACSUser from './routes/agentACSUser';
 import agentWorkItem from './routes/agentWorkItem';
 import assignAgentUser from './routes/assignAgentUser';
@@ -71,18 +69,6 @@ app.use('/getEndpointUrl', cors(), getEndpointUrl);
  * purpose: Get ACS token with the given scope
  */
 app.use('/token', cors(), issueToken);
-
-/**
- * route: /userConfig
- * purpose: Add user details to userconfig for chat thread
- */
-app.use('/userConfig', cors(), userConfig);
-
-/**
- * route: /uploadToAzureBlobStorage
- * purpose: Get tokens and endpoints for uploading logs to Azure Blob Storage
- */
-app.use('/uploadToAzureBlobStorage', cors(), uploadToAzureBlobStorage);
 
 /**
  * route: /agentACSUser
