@@ -4,8 +4,8 @@
     "version": "1.0.0",
     "id": "${{TEAMS_APP_ID}}",
     "developer": {
-        "name": "Teams App, Inc.",
-        "websiteUrl": "${{TAB_ENDPOINT}}",
+        "name": "Woodgrove App, Inc.",
+        "websiteUrl": "https://github.com/Azure-Samples/communication-services-messaging-teams-app?tab=readme-ov-file#b2c-customer-agent-messaging-teams-app",
         "privacyUrl": "${{TAB_ENDPOINT}}/index.html#/privacy",
         "termsOfUseUrl": "${{TAB_ENDPOINT}}/index.html#/termsofuse"
     },
@@ -18,8 +18,8 @@
         "full": "Support agent app (sample)"
     },
     "description": {
-        "short": "Short description of Support agent app (sample)",
-        "full": "Full description of Support agent app (sample)"
+        "short": "Enables users to communicate with customers outside of the organization.",
+        "full": "Support agent app (sample) help users to manage their conversation with customers who are using an ACS identity. This app is a sample and is not intended for production use."
     },
     "accentColor": "#FFFFFF",
     "bots": [],
@@ -32,9 +32,7 @@
             "contentUrl": "${{TAB_ENDPOINT}}/index.html#/tab",
             "websiteUrl": "${{TAB_ENDPOINT}}/index.html#/tab",
             "scopes": [
-                "personal",
-                "groupChat",
-                "team"
+                "personal"
             ]
         }
     ],
