@@ -20,7 +20,7 @@ This sample includes three standalone applications: CustomerApp, BusinessApp, an
 ## Prerequisites
 
 - [Visual Studio Code (Stable Build)](https://code.visualstudio.com/Download).
-- [Node.js](https://nodejs.org/), supported versions: 18.
+- [Node.js](https://nodejs.org/), supported versions: 20 | 22.
 - Create an Azure account with an active subscription. For details, see [Create an account for free](https://azure.microsoft.com/free/?WT.mc_id=A261C142F).
 - Create an Azure Communication Services resource. For details, see [Create an Azure Communication Resource](https://docs.microsoft.com/azure/communication-services/quickstarts/create-communication-resource). You'll need to record your resource **connection string** for this sample app.
 - Create an Azure Cosmos DB for NoSQL account. For details, see [Create an Azure Cosmos DB account](https://docs.microsoft.com/azure/cosmos-db/nosql/tutorial-nodejs-web-app#create-account). You'll need to record the **URI** and **PRIMARY KEY** for this sample app.
