@@ -8,7 +8,7 @@
     "sourceMap": true,
     "strict": true,
     "noImplicitAny": false,
-    "strictFunctionTypes": false,
+    "strictFunctionTypes": true,
     "noUnusedLocals": true,
     "noImplicitReturns": true,
     "esModuleInterop": true,
