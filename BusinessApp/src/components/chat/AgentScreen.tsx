@@ -49,6 +49,7 @@ export const AgentScreen = (): JSX.Element => {
         const userInfo = await teamsUserCredential.getUserInfo();
         return userInfo;
       } catch (error) {
+        console.error('Failed to get user info: ', error);
         setErrorMessage(threadStrings.failToGetTeamsUserInfo);
       }
     }
@@ -79,6 +80,7 @@ export const AgentScreen = (): JSX.Element => {
         setToken(token.token);
         setDisplayName(displayName);
       } catch (error) {
+        console.error('Failed to set screen state due to error: ', error);
         setErrorMessage(threadStrings.failToLinkToACSUser);
       }
     };
