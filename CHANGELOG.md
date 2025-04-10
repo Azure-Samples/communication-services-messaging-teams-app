@@ -8,8 +8,6 @@ Fri, 11 April 2025
 
 Initial release of the B2C Customer-Agent Messaging Teams App
 
-- CustomerApp added
-
-- BusinessApp added
-
-- Server app added
+- A customer application has been added, allowing customers to use it for live assistance.
+- A custom Teams application has been added, enabling agents to manage their conversations with customers.
+- A server application has been added to support both the customer app and the custom Teams app.
