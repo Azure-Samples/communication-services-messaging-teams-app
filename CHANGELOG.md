@@ -1,13 +1,15 @@
-## [project-title] Changelog
+# Changelog - B2C Customer-Agent Messaging Teams App
 
-<a name="x.y.z"></a>
-# x.y.z (yyyy-mm-dd)
+## [0.1.0](https://github.com/Azure-Samples/communication-services-messaging-teams-app)
 
-*Features*
-* ...
+Fri, 11 April 2025
 
-*Bug Fixes*
-* ...
+### Features
 
-*Breaking Changes*
-* ...
+Initial release of the B2C Customer-Agent Messaging Teams App
+
+- CustomerApp added
+
+- BusinessApp added
+
+- Server app added
