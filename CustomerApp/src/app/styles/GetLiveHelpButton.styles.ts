@@ -6,11 +6,8 @@ import { makeStyles, tokens } from '@fluentui/react-components';
 export const useGetLiveHelpButtonStyles = makeStyles({
   button: {
     fontWeight: 600,
-    fontSize: '0.875rem',
     lineHeight: '1.375rem',
     letterSpacing: '-0.06em',
-    width: '8.813rem',
-    height: '2.375rem',
     boxShadow: '0px 2px 21px 0px #003C6A33',
     border: 'none',
     borderRadius: '1.125rem',
@@ -21,8 +18,5 @@ export const useGetLiveHelpButtonStyles = makeStyles({
     ':hover': {
       color: tokens.colorCompoundBrandForeground1Hover
     }
-  },
-  chatIcon: {
-    fontSize: '1.25rem'
   }
 });

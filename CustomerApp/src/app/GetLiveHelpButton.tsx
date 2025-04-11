@@ -19,8 +19,9 @@ export const GetLiveHelpButton = (props: GetLiveHelpButtonProps): JSX.Element =>
       id={strings.getLiveHelp}
       aria-label={strings.getLiveHelp}
       className={styles.button}
-      icon={<Chat20Filled className={styles.chatIcon} />}
+      icon={<Chat20Filled />}
       onClick={onGetLiveHelpButtonClick}
+      size="large"
     >
       {strings.getLiveHelp}
     </Button>
