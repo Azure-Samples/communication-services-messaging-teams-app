@@ -29,5 +29,8 @@ export const strings = {
   errorScreenRetryButton: 'Retry',
   pageNotFoundErrorMessage: 'Page not found',
   conversationResolvedByAgent: 'Your conversation has ended.',
-  resumeConversation: 'Resume a conversation by sending a message.'
+  resumeConversation: 'Resume a conversation by sending a message.',
+  welcomeTitle: '👋 Welcome to Customer App Demo',
+  welcomeMessage: 'This page includes a demo widget you can interact with.',
+  welcomeDirectionMessage: '➡️ Look to the bottom right!'
 };
