@@ -8,14 +8,16 @@ This sample includes three standalone applications: CustomerApp, BusinessApp, an
 <br>
 <img src="./Assets/architecture-diagram.png" alt="Flow Chat" width="1024">
 
-1. An Azure Communications Services (ACS) instance that enables the chat experience.
-2. **BusinessApp**: A web application hosted within a custom Teams application and deployed to Teams through an iframe inside the Teams client. Agents utilize this app within their Teams client.
-3. **CustomerApp**: A web application used by customers to interact with agents.
-4. **Server** app: a web API provides the necessary server-side functionality for the BusinessApp and the CustomerApp.
-5. **Database**: An Azure Cosmos database to store metadata related to chat threads, such as their status.
-6. **Identity mapping**: The Azure Communications Services instance is not directly connected to the Teams environment. The Communications Services environment is surfaced through the custom Teams application.
-   The custom Teams application (BusinessApp) leverages Teams’ Single Sign-On (SSO) to retrieve the Teams user ID, which is then used to map to a communication service user ID.
-   The BusinessApp will use this communication service user ID to access the Azure Communication Services environment.
+1. An Azure Communications Services instance that enables the chat experience.
+2. **CustomerApp**: A web application used by customers to interact with agents. Users of this CustomerApp will be assigned an Azure Communication Services identities.
+3. **BusinessApp**: A web application hosted within a custom Teams application and deployed to Teams through an iframe inside the Teams client. Agents utilize this app within their Teams client.
+   - This app leverages Teams’ Single Sign-On (SSO) to retrieve the Teams user ID.
+   - Since the Azure Communications Services instance is not directly connected to the Teams environment, [identity mapping](https://learn.microsoft.com/azure/communication-services/concepts/identity-model#user-identity--mapping) is required to connect the BusinessApp users who have the Teams user ID, to the CustomerApp users who have the Azure Communications Services identity.
+   - For this sample app, an Azure Communications Services identity need to be manually created for each BusinessApp user, then store the identity mapping in the environment variables ([steps are shown below in the AgentUsers section](https://github.com/Azure-Samples/communication-services-messaging-teams-app?tab=readme-ov-file#before-running-the-sample-for-the-first-time)).
+   - Once the linkage is set, the BusinessApp will use the Teams user ID to map to the Azure Communications Services ID, then use the Azure Communications Services ID to retrieve threads and communicate with CustomerApp users.
+4. **Azure Cloud**: Where the CustomerApp and the BusinessApp are hosted.
+5. **Server** app: a web API provides the necessary server-side functionality for the BusinessApp and the CustomerApp.
+6. **Database**: An Azure Cosmos database to store metadata related to chat threads, such as their status.
 
 ## Prerequisites
 
@@ -44,7 +46,7 @@ This sample includes three standalone applications: CustomerApp, BusinessApp, an
   - [/teamsapp.local.yml](./BusinessApp/teamsapp.local.yml) - This overrides `teamsapp.yml` with actions that enable local execution and debugging
   - [/aad.manifest.json](./BusinessApp/aad.manifest.json) - This file defines the configuration of Microsoft Entra app. This template will only provision [single tenant](https://learn.microsoft.com/azure/active-directory/develop/single-and-multi-tenant-apps#who-can-sign-in-to-your-app) Microsoft Entra app
 
-- [CustomerApp](./CustomerApp) - A web app where customers can start an ACS chat without a Microsoft Teams account
+- [CustomerApp](./CustomerApp) - A web app where customers can start an Azure Communications Services chat without a Microsoft Teams account
   - [/index.tsx](./CustomerApp/src/index.tsx) - Entry point of this app
 - [Server](./Server) - A server app that supports the BusinessApp and the CustomerApp
   - [/app.ts](./Server/src/app.ts) - Entry point of this app
@@ -62,14 +64,14 @@ This sample includes three standalone applications: CustomerApp, BusinessApp, an
 1. Fill in the following variables in the newly created `Server/appsettings.json` file:
    1. **ResourceConnectionString**: Use the `Connection String` from the Azure portal. For more information on connection strings, see [Create an Azure Communication Resources](https://docs.microsoft.com/azure/communication-services/quickstarts/create-communication-resource).
    1. **EndpointUrl**: Use the `Endpoint` from the Azure portal. For more information on endpoint strings, see [Create an Azure Communication Resources](https://docs.microsoft.com/azure/communication-services/quickstarts/create-communication-resource).
-   1. **AdminUserId**: Create a new ACS user as a server user to add new users to the chat thread. You can get this value by clicking on `Identities & User Access Tokens` in Azure portal. Generate a user with `Chat` scope. Then use the `Identity` value for this variable. For more information on identity strings, see [Create and manage access tokens](https://docs.microsoft.com/azure/communication-services/quickstarts/identity/access-tokens).
+   1. **AdminUserId**: Create a new Azure Communications Services user as a server user to add new users to the chat thread. You can get this value by clicking on `Identities & User Access Tokens` in Azure portal. Generate a user with `Chat` scope. Then use the `Identity` value for this variable. For more information on identity strings, see [Create and manage access tokens](https://docs.microsoft.com/azure/communication-services/quickstarts/identity/access-tokens).
    1. **CosmosDBEndpoint**: Use the `URI` value from the Azure portal's Cosmos DB account. For more information on Azure Cosmos DB account, see [Create an Azure Cosmos DB account](https://docs.microsoft.com/azure/cosmos-db/nosql/tutorial-nodejs-web-app#create-account).
    1. **CosmosDBKey**: Use the `PRIMARY KEY` value from the Azure portal's Cosmos DB account. For more information on Azure Cosmos DB account, see [Create an Azure Cosmos DB account](https://docs.microsoft.com/azure/cosmos-db/nosql/tutorial-nodejs-web-app#create-account).
    1. **AgentUsers**: An array of agent users that can use the BusinessApp. Each agent user object should contain the following values:
       1. **teamsUserId**:
          1. Login to the Azure portal tenant that you want to build the BusinessApp with (The same Microsoft 365 account should be used for the [Start the BusinessApp](https://github.com/Azure-Samples/communication-services-messaging-teams-app?tab=readme-ov-file#local-run)) step below.
          1. Use the `Object ID` from the Azure portal. For more information on user's object Id, see [Find the user object ID](https://docs.microsoft.com/partner-center/account-settings/find-ids-and-domain-names#find-the-user-object-id).
-      1. **acsUserId**: Each agent should be linked to an ACS user. The BusinessApp will use this credential to retrieve chat threads data and to communicate with customers in the ACS environment.
+      1. **acsUserId**: Each agent should be linked to an Azure Communications Services user. The BusinessApp will use this credential to retrieve chat threads data and to communicate with customers in the Azure Communications Services environment.
          You can get this value by clicking on `Identities & User Access Tokens` in Azure portal. Generate a user with `Chat` scope. Then use the `Identity` value for this variable. For more information on identity strings, see [Create and manage access tokens](https://docs.microsoft.com/azure/communication-services/quickstarts/identity/access-tokens).
       1. **displayName**: Assign a display name for this agent.
 
@@ -95,7 +97,7 @@ This sample includes three standalone applications: CustomerApp, BusinessApp, an
 
 1. Start the BusinessApp
 
-   1. Open the `BusinessApp` as the **top level folder** in VS Code.
+   1. Open a new VS Code instance with `BusinessApp` as the **top level folder**.
    1. Select the Teams Toolkit icon on the left in the VS Code toolbar.
    1. In the Account section, sign in with your [Microsoft 365 account](https://docs.microsoft.com/microsoftteams/platform/toolkit/accounts) if you haven't already.
    1. Press F5 to start debugging which launches your app in Teams using a web browser. Select `Debug in Teams (Edge)` or `Debug in Teams (Chrome)`.
@@ -109,7 +111,7 @@ This sample includes three standalone applications: CustomerApp, BusinessApp, an
    1. Prepare the `App manifest` and `App icons`. For details, see [Teams app package](https://docs.microsoft.com/microsoftteams/platform/concepts/build-and-test/apps-package).
    1. Edit app `Basic information`, `App features`, `Permissions` etc. through Developer Portal. For details, see [To update Manifest file and app package](https://docs.microsoft.com/microsoftteams/platform/toolkit/publish-your-teams-apps-using-developer-portal#to-update-manifest-file-and-app-package).
 1. Deploy the BusinessApp:
-   `BusinessApp` is a Teams App. You can publish it either [using Teams Toolkit](https://docs.microsoft.com/microsoftteams/platform/toolkit/publish) or [using Developer Portal](https://docs.microsoft.com/microsoftteams/platform/toolkit/publish-your-teams-apps-using-developer-portal).
+   `BusinessApp` is a Teams App. You can deploy the BusinessApp following [this instruction](https://learn.microsoft.com/microsoftteams/platform/toolkit/deploy) and publish it either [using Teams Toolkit](https://docs.microsoft.com/microsoftteams/platform/toolkit/publish) or [using Developer Portal](https://docs.microsoft.com/microsoftteams/platform/toolkit/publish-your-teams-apps-using-developer-portal).
 1. Deploy the CustomerApp:
    `CustomerApp` is a React app. You can host it with a hosting provider such as [Azure Static Web Apps](https://docs.microsoft.com/azure/static-web-apps/overview). For details, see [Deploy your web app to Azure Static Web Apps
    ](https://docs.microsoft.com/azure/static-web-apps/deploy-web-framework?tabs=bash&pivots=react).
