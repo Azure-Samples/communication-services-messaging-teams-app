@@ -8,7 +8,7 @@ This sample includes three standalone applications: CustomerApp, BusinessApp, an
 <img src="./Assets/architecture-diagram.png" alt="Architecture Diagram" width="1024">
 
 1. An Azure Communication Services instance that enables the chat experience.
-2. **CustomerApp**: A web application used by customers to interact with agents. Users of this CustomerApp will be assigned an Azure Communication Services identities.
+2. **CustomerApp**: A web application used by customers to interact with agents. Users of this CustomerApp will be assigned Azure Communication Services identities.
 3. **BusinessApp**: A web application hosted within a custom Teams application and deployed to Teams through an iframe inside the Teams client. Agents utilize this app within their Teams client.
    - This app leverages Teams’ Single Sign-On (SSO) to retrieve the Teams user ID.
    - The Azure Communication Services instance is not directly connected to the Teams environment. [Identity mapping](https://learn.microsoft.com/azure/communication-services/concepts/identity-model#user-identity--mapping) is required to connect the BusinessApp users who have the Teams user ID, to the CustomerApp users who have the Azure Communication Services identity.
