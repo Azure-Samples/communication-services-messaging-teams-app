@@ -5,19 +5,28 @@
 This is a sample application to show how we can build a custom [Teams App](https://docs.microsoft.com/microsoftteams/platform/overview#build-apps-with-microsoft-teams-platform) that can interface with an Azure Communication Services instance, enabling the two systems to work together while keeping their backend environments and identity configurations separate.
 
 This sample includes three standalone applications: CustomerApp, BusinessApp, and Server. Together, they provide a comprehensive customer support experience. The overall view of the system is shown below:
-<br>
-<img src="./Assets/architecture-diagram.png" alt="Flow Chat" width="1024">
+<img src="./Assets/architecture-diagram.png" alt="Architecture Diagram" width="1024">
 
-1. An Azure Communications Services instance that enables the chat experience.
+1. An Azure Communication Services instance that enables the chat experience.
 2. **CustomerApp**: A web application used by customers to interact with agents. Users of this CustomerApp will be assigned an Azure Communication Services identities.
 3. **BusinessApp**: A web application hosted within a custom Teams application and deployed to Teams through an iframe inside the Teams client. Agents utilize this app within their Teams client.
    - This app leverages Teams’ Single Sign-On (SSO) to retrieve the Teams user ID.
-   - Since the Azure Communications Services instance is not directly connected to the Teams environment, [identity mapping](https://learn.microsoft.com/azure/communication-services/concepts/identity-model#user-identity--mapping) is required to connect the BusinessApp users who have the Teams user ID, to the CustomerApp users who have the Azure Communications Services identity.
-   - For this sample app, an Azure Communications Services identity need to be manually created for each BusinessApp user, then store the identity mapping in the environment variables ([steps are shown below in the AgentUsers section](https://github.com/Azure-Samples/communication-services-messaging-teams-app?tab=readme-ov-file#before-running-the-sample-for-the-first-time)).
-   - Once the linkage is set, the BusinessApp will use the Teams user ID to map to the Azure Communications Services ID, then use the Azure Communications Services ID to retrieve threads and communicate with CustomerApp users.
+   - The Azure Communication Services instance is not directly connected to the Teams environment. [Identity mapping](https://learn.microsoft.com/azure/communication-services/concepts/identity-model#user-identity--mapping) is required to connect the BusinessApp users who have the Teams user ID, to the CustomerApp users who have the Azure Communication Services identity.
+   - For this sample app, an Azure Communication Services identity needs to be manually created for each BusinessApp user, then store the identity mapping in the environment variables ([steps are shown below in the AgentUsers section](https://github.com/Azure-Samples/communication-services-messaging-teams-app?tab=readme-ov-file#before-running-the-sample-for-the-first-time)).
+   - Once the linkage is set, the BusinessApp will use the Teams user ID to map to the Azure Communication Services ID, then use that ID to retrieve threads and communicate with CustomerApp users.
 4. **Azure Cloud**: Where the CustomerApp and the BusinessApp are hosted.
-5. **Server** app: a web API provides the necessary server-side functionality for the BusinessApp and the CustomerApp.
+5. **Server** app: A web API that provides the necessary server-side functionality for the BusinessApp and the CustomerApp.
 6. **Database**: An Azure Cosmos database to store metadata related to chat threads, such as their status.
+
+## Key Features
+
+<img src="./Assets/feature-demo.png" alt="Feature Demo" width="1024">
+
+- **Seamless Chat Start**: Customers can easily initiate a conversation by entering their name and question, instantly connecting with a random available agent.
+- **Integrated Agent Interface**: Agents manage and respond to customer messages directly within the Microsoft Teams environment.
+- **Effortless Conversation Management**: Agents can handle multiple customer conversations simultaneously and resolve them when complete. Resolved chats are moved to a separate tab, and customers are notified that the conversation has ended.
+- **Chat Continuity**: Customers can resume conversations at any time simply by sending a new message, reactivating the chat.
+- **Easy Exit for Customers**: Customers can exit the chat anytime, which revokes their access and informs the agent of their departure. Agents are instantly notified with a toast message showing which customer has exited, keeping them informed in real-time.
 
 ## Prerequisites
 
@@ -46,7 +55,7 @@ This sample includes three standalone applications: CustomerApp, BusinessApp, an
   - [/teamsapp.local.yml](./BusinessApp/teamsapp.local.yml) - This overrides `teamsapp.yml` with actions that enable local execution and debugging
   - [/aad.manifest.json](./BusinessApp/aad.manifest.json) - This file defines the configuration of Microsoft Entra app. This template will only provision [single tenant](https://learn.microsoft.com/azure/active-directory/develop/single-and-multi-tenant-apps#who-can-sign-in-to-your-app) Microsoft Entra app
 
-- [CustomerApp](./CustomerApp) - A web app where customers can start an Azure Communications Services chat without a Microsoft Teams account
+- [CustomerApp](./CustomerApp) - A web app where customers can start an Azure Communication Services chat without a Microsoft Teams account
   - [/index.tsx](./CustomerApp/src/index.tsx) - Entry point of this app
 - [Server](./Server) - A server app that supports the BusinessApp and the CustomerApp
   - [/app.ts](./Server/src/app.ts) - Entry point of this app
@@ -64,14 +73,14 @@ This sample includes three standalone applications: CustomerApp, BusinessApp, an
 1. Fill in the following variables in the newly created `Server/appsettings.json` file:
    1. **ResourceConnectionString**: Use the `Connection String` from the Azure portal. For more information on connection strings, see [Create an Azure Communication Resources](https://docs.microsoft.com/azure/communication-services/quickstarts/create-communication-resource).
    1. **EndpointUrl**: Use the `Endpoint` from the Azure portal. For more information on endpoint strings, see [Create an Azure Communication Resources](https://docs.microsoft.com/azure/communication-services/quickstarts/create-communication-resource).
-   1. **AdminUserId**: Create a new Azure Communications Services user as a server user to add new users to the chat thread. You can get this value by clicking on `Identities & User Access Tokens` in Azure portal. Generate a user with `Chat` scope. Then use the `Identity` value for this variable. For more information on identity strings, see [Create and manage access tokens](https://docs.microsoft.com/azure/communication-services/quickstarts/identity/access-tokens).
+   1. **AdminUserId**: Create a new Azure Communication Services user as a server user to add new users to the chat thread. You can get this value by clicking on `Identities & User Access Tokens` in Azure portal. Generate a user with `Chat` scope. Then use the `Identity` value for this variable. For more information on identity strings, see [Create and manage access tokens](https://docs.microsoft.com/azure/communication-services/quickstarts/identity/access-tokens).
    1. **CosmosDBEndpoint**: Use the `URI` value from the Azure portal's Cosmos DB account. For more information on Azure Cosmos DB account, see [Create an Azure Cosmos DB account](https://docs.microsoft.com/azure/cosmos-db/nosql/tutorial-nodejs-web-app#create-account).
    1. **CosmosDBKey**: Use the `PRIMARY KEY` value from the Azure portal's Cosmos DB account. For more information on Azure Cosmos DB account, see [Create an Azure Cosmos DB account](https://docs.microsoft.com/azure/cosmos-db/nosql/tutorial-nodejs-web-app#create-account).
    1. **AgentUsers**: An array of agent users that can use the BusinessApp. Each agent user object should contain the following values:
       1. **teamsUserId**:
          1. Login to the Azure portal tenant that you want to build the BusinessApp with (The same Microsoft 365 account should be used for the [Start the BusinessApp](https://github.com/Azure-Samples/communication-services-messaging-teams-app?tab=readme-ov-file#local-run)) step below.
          1. Use the `Object ID` from the Azure portal. For more information on user's object Id, see [Find the user object ID](https://docs.microsoft.com/partner-center/account-settings/find-ids-and-domain-names#find-the-user-object-id).
-      1. **acsUserId**: Each agent should be linked to an Azure Communications Services user. The BusinessApp will use this credential to retrieve chat threads data and to communicate with customers in the Azure Communications Services environment.
+      1. **acsUserId**: Each agent should be linked to an Azure Communication Services user. The BusinessApp will use this credential to retrieve chat threads data and to communicate with customers in the Azure Communication Services environment.
          You can get this value by clicking on `Identities & User Access Tokens` in Azure portal. Generate a user with `Chat` scope. Then use the `Identity` value for this variable. For more information on identity strings, see [Create and manage access tokens](https://docs.microsoft.com/azure/communication-services/quickstarts/identity/access-tokens).
       1. **displayName**: Assign a display name for this agent.
 
