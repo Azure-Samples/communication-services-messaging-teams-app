@@ -13,7 +13,7 @@ This sample includes three standalone applications: CustomerApp, BusinessApp, an
    - This app leverages Teams’ Single Sign-On (SSO) to retrieve the Teams user ID.
    - The Azure Communication Services instance is not directly connected to the Teams environment. [Identity mapping](https://learn.microsoft.com/azure/communication-services/concepts/identity-model#user-identity--mapping) is required to connect the BusinessApp users who have a Teams user ID, to the CustomerApp users' Azure Communication Services identities.
    - For this sample app, an Azure Communication Services identity needs to be manually created for each BusinessApp user, and the identity mapping stored in environment variables ([steps are shown below in the AgentUsers section](https://github.com/Azure-Samples/communication-services-messaging-teams-app?tab=readme-ov-file#before-running-the-sample-for-the-first-time)).
-   - Once the linkage is set, the BusinessApp will use the Teams user ID to map to the Azure Communication Services ID, then use that ID to retrieve threads and communicate with CustomerApp users.
+   - Once the linkage is set, the BusinessApp will use the Teams user ID to retrieve the Azure Communication Services ID, and use that ID to retrieve threads and communicate with CustomerApp users.
 4. **Azure Cloud**: Where the CustomerApp and the BusinessApp are hosted.
 5. **Server** app: A web API that provides the necessary server-side functionality for the BusinessApp and the CustomerApp.
 6. **Database**: An Azure Cosmos database to store metadata related to chat threads, such as their status.
