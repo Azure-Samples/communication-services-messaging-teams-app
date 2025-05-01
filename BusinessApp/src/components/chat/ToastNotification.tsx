@@ -40,5 +40,5 @@ export const ToastNotification = (props: ToastNotificationProps): JSX.Element =>
     }
   }, [dispatchToast, onViewThread, showToast, styles.titleButton, toastBodyMessage, toasterId]);
 
-  return <Toaster toasterId={id} limit={1} />;
+  return <Toaster toasterId={id} limit={1} offset={{ vertical: -8 }} />;
 };

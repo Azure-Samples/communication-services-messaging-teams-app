@@ -20,13 +20,22 @@ This sample includes three standalone applications: CustomerApp, BusinessApp, an
 
 ## Key Features
 
-<img src="./Assets/feature-demo.png" alt="Feature Demo" width="1024">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="./Assets/feature-demo.png" alt="Feature Demo" width="1024" style="margin-left: 8px" style="margin-top: 20px; margin-bottom: 20px;">
 
 - **Seamless Chat Start**: Customers can easily initiate a conversation by entering their name and question, instantly connecting with a random available agent.
+<img src="./Assets/chat-start1.png" alt="Chat start floating button" width="510" style="margin-top: 20px; margin-bottom: 20px;"> <img src="./Assets/chat-start2.png" alt="Chat start window" width="512" style="margin-top: 20px; margin-bottom: 20px;">
+
 - **Integrated Agent Interface**: Agents manage and respond to customer messages directly within the Microsoft Teams environment.
+<img src="./Assets/integrated-interface.png" alt="Integrated Agent Interface" width="512" style="margin: 20px auto;">
+
 - **Effortless Conversation Management**: Agents can handle multiple customer conversations simultaneously and resolve them when complete. Resolved chats are moved to a separate tab, and customers are notified that the conversation has ended.
+<img src="./Assets/conversation-management.png" alt="Effortless Conversation Management" width="1024" style="margin-top: 20px; margin-bottom: 20px;">
+
 - **Chat Continuity**: Customers can resume conversations at any time simply by sending a new message, reactivating the chat.
+<img src="./Assets/chat-continuity.png" alt="Chat Continuity" width="1024" style="margin-top: 20px; margin-bottom: 20px;">
+
 - **Easy Exit for Customers**: Customers can exit the chat anytime, which revokes their access and informs the agent of their departure. Agents are instantly notified with a toast message showing which customer has exited, keeping them informed in real-time.
+<img src="./Assets/customers-exit.png" alt="Easy Exit for Customers" width="1024" style="margin-top: 20px; margin-bottom: 20px;">
 
 ## Prerequisites
 
@@ -107,6 +116,7 @@ This sample includes three standalone applications: CustomerApp, BusinessApp, an
 1. Start the BusinessApp
 
    1. Open a new VS Code instance with `BusinessApp` as the **top level folder**.
+   1. Install the [Teams Toolkit extension](https://marketplace.visualstudio.com/items/?itemName=TeamsDevApp.ms-teams-vscode-extension).
    1. Select the Teams Toolkit icon on the left in the VS Code toolbar.
    1. In the Account section, sign in with your [Microsoft 365 account](https://docs.microsoft.com/microsoftteams/platform/toolkit/accounts) if you haven't already.
    1. Press F5 to start debugging which launches your app in Teams using a web browser. Select `Debug in Teams (Edge)` or `Debug in Teams (Chrome)`.
@@ -122,12 +132,11 @@ This sample includes three standalone applications: CustomerApp, BusinessApp, an
 1. Deploy the BusinessApp:
    `BusinessApp` is a Teams App. You can deploy the BusinessApp following [this instruction](https://learn.microsoft.com/microsoftteams/platform/toolkit/deploy) and publish it either [using Teams Toolkit](https://docs.microsoft.com/microsoftteams/platform/toolkit/publish) or [using Developer Portal](https://docs.microsoft.com/microsoftteams/platform/toolkit/publish-your-teams-apps-using-developer-portal).
 1. Deploy the CustomerApp:
-   `CustomerApp` is a React app. You can host it with a hosting provider such as [Azure Static Web Apps](https://docs.microsoft.com/azure/static-web-apps/overview). For details, see [Deploy your web app to Azure Static Web Apps
-   ](https://docs.microsoft.com/azure/static-web-apps/deploy-web-framework?tabs=bash&pivots=react).
+   `CustomerApp` is a React app. You can host it with a hosting provider such as [Azure Static Web Apps](https://docs.microsoft.com/azure/static-web-apps/overview). For details, see [Deploy your web app to Azure Static Web Apps](https://docs.microsoft.com/azure/static-web-apps/deploy-web-framework?tabs=bash&pivots=react).
 1. Deploy the Server app:
    `Server` app is a Node.js app. You can host it with a hosting provider such as Azure App Service. For details, see [Deploy a Node.js web app in Azure](https://docs.microsoft.com/azure/app-service/quickstart-nodejs?tabs=linux&pivots=development-environment-vscode).
 
-## Add additional features:
+## Add additional features
 
 - File sharing: To enable the file sharing feature, please follow this [quickstart](https://docs.microsoft.com/samples/azure-samples/communication-services-javascript-quickstarts/ui-library-sample---file-sharing-using-ui-components/) as an example.
 
