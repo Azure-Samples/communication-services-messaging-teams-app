@@ -23,7 +23,7 @@ This sample includes three standalone applications: CustomerApp, BusinessApp, an
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="./Assets/feature-demo.png" alt="Feature Demo" width="1024" style="margin-left: 8px" style="margin-top: 20px; margin-bottom: 20px;">
 
 - **Seamless Chat Start**: Customers can easily initiate a conversation by entering their name and question, instantly connecting with a random available agent.
-<img src="./Assets/chat-start1.png" alt="Chat start floating button" width="506" style="margin-top: 20px; margin-bottom: 20px;"> <img src="./Assets/chat-start2.png" alt="Chat start window" width="508" style="margin-top: 20px; margin-bottom: 20px;">
+<img src="./Assets/chat-start1.png" alt="Chat start floating button" width="500" style="margin-top: 20px; margin-bottom: 20px;"> <img src="./Assets/chat-start2.png" alt="Chat start window" width="502" style="margin-top: 20px; margin-bottom: 20px;">
 
 - **Integrated Agent Interface**: Agents manage and respond to customer messages directly within the Microsoft Teams environment.
 <img src="./Assets/integrated-interface.png" alt="Integrated Agent Interface" width="512" style="margin: 20px auto;">
